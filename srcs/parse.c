@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/06 14:07:56 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/06 16:39:18 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	parse(char *line, char **envp)
 	while (i < 10 && envp[i])
 	{
 		printf("%s\n", envp[i]);
+		i++;
 	}
 	return (0);
 }

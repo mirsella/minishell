@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/06 14:10:28 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:53:23 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ int	main(int argc, char **argv, char **envp)
 		if (!line)
 			break ;
 		parse(line, envp);
+		free(line);
 	}
 }
