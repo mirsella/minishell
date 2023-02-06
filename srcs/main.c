@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
+/*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/06 14:08:08 by mirsella         ###   ########.fr       */
+/*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
+/*   Updated: 2023/02/06 14:10:28 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../includes/minishell.h"
 
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+int	main(int argc, char **argv, char **envp)
+{
+	char	*line;
 
-# define PROMPT "minishell> "
-
-int	parse(char *line, char **envp);
-
-#endif
+	(void)argc;
+	(void)argv;
+	line = NULL;
+	while (1)
+	{
+		line = readline(PROMPT);
+		if (!line)
+			break ;
+		parse(line, envp);
+	}
+}

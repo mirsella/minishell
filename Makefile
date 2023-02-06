@@ -1,4 +1,4 @@
-SRCS = $(addprefix srcs/,)
+SRCS = $(addprefix srcs/, main.c parse.c)
 OBJS = $(SRCS:.c=.o)
 
 CC = cc

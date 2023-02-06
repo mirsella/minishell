@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
+/*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/06 14:08:08 by mirsella         ###   ########.fr       */
+/*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
+/*   Updated: 2023/02/06 14:07:56 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../includes/minishell.h"
 
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+int	parse(char *line, char **envp)
+{
+	int	i;
 
-# define PROMPT "minishell> "
-
-int	parse(char *line, char **envp);
-
-#endif
+	i = 0;
+	if (line[0] == '\0')
+		return (1);
+	printf("line: %s\n", line);
+	while (i < 10 && envp[i])
+	{
+		printf("%s\n", envp[i]);
+	}
+	return (0);
+}
