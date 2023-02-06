@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   add_history_filter.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/06 17:39:00 by lgillard         ###   ########.fr       */
+/*   Created: 2023/02/06 17:24:03 by lgillard          #+#    #+#             */
+/*   Updated: 2023/02/06 17:43:37 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+void	add_history_filter(char *line)
 {
-	char	*line;
-
-	(void)argc;
-	(void)argv;
-	line = NULL;
-	while (1)
-	{
-		line = readline(PROMPT);
-		if (!line)
-			break ;
-		add_history_filter(line);
-		parse(line, envp);
-		free(line);
-	}
+	if (!line)
+		return ;
+	printf("line before pass_spaces: '%s'\n", line);
+	line = pass_spaces(line);
+	printf("line after pass_spaces: '%s'\n", line);
+	if (!*line)
+		return ;
+	add_history(line);
 }

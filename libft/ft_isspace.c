@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strsfree.c                                      :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/06 13:39:19 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/06 17:30:51 by mirsella         ###   ########.fr       */
+/*   Created: 2023/02/06 17:17:48 by mirsella          #+#    #+#             */
+/*   Updated: 2023/02/06 17:22:33 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "stdlib.h"
-
-char	**ft_strsfree(char **strs)
+int	ft_isspace(char c)
 {
-	int	i;
+	return ((c >= 9 && c <= 13) || c == 32);
+}
 
-	if (!strs)
-		return (NULL);
-	i = 0;
-	while (strs[i])
-		free(strs[i++]);
-	free(strs);
-	return (strs);
+char	*pass_spaces(char *str)
+{
+	while (ft_isspace(*str))
+		str++;
+	return (str);
 }
