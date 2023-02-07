@@ -1,10 +1,15 @@
-SRCS = $(addprefix srcs/, main.c signals.c)
-SRCS_PARSING = $(addprefix srcs/parsing/, parse.c)
-OBJS = $(SRCS:.c=.o) $(SRCS_PARSING:.c=.o)
+SRCS_MAIN = main.c signals.c close.c
+SRCS_PARSING = parse.c
+SRCS_PROCS = ft_lst.c
+SRCS = $(addprefix srcs/, $(SRCS_MAIN)) \
+		$(addprefix srcs/parsing/, $(SRCS_PARSING)) \
+		$(addprefix srcs/procs/, $(SRCS_PROCS))
+OBJS = $(SRCS:.c=.o)
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-CFLAGS += -g3 -fsanitize=address
+CFLAGS += -g3
+# CFLAGS += -fsanitize=address
 
 LIBFT = libft/libft.a
 NAME = minishell

@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 23:13:50 by mirsella          #+#    #+#             */
-/*   Updated: 2023/01/20 15:28:02 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/07 23:44:52 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_strdup(const char *s1)
 	return (str);
 }
 
-char	**ft_strstrdup(char **strs)
+char	**ft_tabdup(char **strs)
 {
 	char	**new;
 	size_t	i;

@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_splitword.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 23:13:50 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/07 21:29:01 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/07 21:36:59 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 
-static int	count_words(const char *s, const char *charset)
+static int	count_words(const char *s, const char *word)
 {
 	int	i;
 	int	count;
@@ -22,17 +22,17 @@ static int	count_words(const char *s, const char *charset)
 	count = 0;
 	while (s[i])
 	{
-		while (s[i] && ft_strchr(charset, s[i]))
-			i++;
-		if (s[i] && !ft_strchr(charset, s[i]))
+		while (s[i] && ft_strncmp(&s[i], word, ft_strlen(word)) == 0)
+			i += ft_strlen(word);
+		if (s[i] && ft_strncmp(&s[i], word, ft_strlen(word)) != 0)
 			count++;
-		while (s[i] && !ft_strchr(charset, s[i]))
+		while (s[i] && ft_strncmp(&s[i], word, ft_strlen(word)) != 0)
 			i++;
 	}
 	return (count);
 }
 
-static char	*getword(const char *s, int i, const char *charset)
+static char	*getword(const char *s, int i, const char *word)
 {
 	char	*res;
 	int		j;
@@ -40,12 +40,13 @@ static char	*getword(const char *s, int i, const char *charset)
 
 	j = 0;
 	wordlen = 0;
-	while (s[i + wordlen] && !ft_strchr(charset, s[i + wordlen]))
+	while (s[i + wordlen]
+		&& ft_strncmp(&s[i + wordlen], word, ft_strlen(word)) != 0)
 		wordlen++;
 	res = malloc(sizeof(char) * wordlen + 1);
 	if (!res)
 		return (NULL);
-	while (s[i] && !ft_strchr(charset, s[i]))
+	while (s[i] && ft_strncmp(&s[i], word, ft_strlen(word)) != 0)
 	{
 		res[j] = s[i];
 		i++;
@@ -55,29 +56,29 @@ static char	*getword(const char *s, int i, const char *charset)
 	return (res);
 }
 
-char	**ft_split(const char *s, const char *charset)
+char	**ft_splitword(const char *s, const char *word)
 {
 	int		i;
 	int		wordcount;
 	char	**tab;
 
-	tab = calloc(sizeof(char *), (count_words(s, charset) + 1));
+	tab = calloc(sizeof(char *), (count_words(s, word) + 1));
 	if (!tab)
 		return (NULL);
 	i = 0;
 	wordcount = 0;
 	while (s[i])
 	{
-		while (s[i] && ft_strchr(charset, s[i]))
-			i++;
+		while (s[i] && ft_strncmp(&s[i], word, ft_strlen(word)) == 0)
+			i += ft_strlen(word);
 		if (s[i])
 		{
-			tab[wordcount] = getword(s, i, charset);
+			tab[wordcount] = getword(s, i, word);
 			if (!tab[wordcount])
 				return (ft_free_tab(tab), NULL);
 			wordcount++;
 		}
-		while (s[i] && !ft_strchr(charset, s[i]))
+		while (s[i] && ft_strncmp(&s[i], word, ft_strlen(word)) != 0)
 			i++;
 	}
 	tab[wordcount] = 0;

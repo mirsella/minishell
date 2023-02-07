@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 22:35:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/06 17:31:05 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/07 23:44:52 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,31 +58,36 @@ int					ft_ullnbrlen_base(unsigned long long n, int base);
 int					ft_abs(int n);
 long long			ft_llabs(long long n);
 int					ft_printf(const char *format, ...);
-char				**ft_strsfree(char **strs);
-char				**ft_split(char const *s, char c);
-char				*pass_spaces(char *str);
+char				**ft_split(const char *s, const char *charset);
+char				**ft_splitword(const char *s, const char *word);
 char				*ft_itoa(int n);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strdup(const char *s1);
-char				**ft_strstrdup(char **strs);
-char				*ft_strjoin(char const *s1, char const *s2);
+char				**ft_tabdup(char **tab);
+char				*ft_strjoin(const char *s1, const char *s2);
+char				*pass_spaces(char *str);
 char				*ft_strnstr(const char *haystack, const char *needle,
 						size_t len);
 char				*ft_strrchr(const char *s, int c);
-char				*ft_strtrim(char const *s1, char const *set);
-char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-char				*ft_substr(char const *s, unsigned int start, size_t len);
+char				*ft_strtrim(const char *s1, const char *set);
+char				*ft_strmapi(const char *s, char (*f)(unsigned int, char));
+char				*ft_substr(const char *s, unsigned int start, size_t len);
 char				*ft_get_next_line(int fd, int freee);
+char				*ft_free_tab(char **tab);
 size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
 size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t				ft_strlen(const char *s);
+size_t				ft_tablen(char **tab);
 t_list				*ft_lstlast(t_list *lst);
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
 t_list				*ft_list_find(t_list *begin_list, void *data_ref,
 						int (*cmp)(void *, void *));
 t_list				*ft_lstnew(void *content);
+t_list				*ft_lstnew_strs(int size, char **strs);
 t_list				*ft_list_at(t_list *begin_list, unsigned int nbr);
+void				ft_lst_remove_if(t_list **begin_list, void *data_ref,
+						int (*cmp)(void *, void *), void (*free_fct)(void *));
 void				ft_intsort(int *tab, int size);
 void				*ft_calloc(size_t count, size_t size);
 void				*ft_memccpy(void *dest, const void *src, int c, size_t n);
