@@ -1,4 +1,4 @@
-SRCS = $(addprefix srcs/, main.c add_history_filter.c)
+SRCS = $(addprefix srcs/, main.c signals.c)
 SRCS_PARSING = $(addprefix srcs/parsing/, parse.c)
 OBJS = $(SRCS:.c=.o) $(SRCS_PARSING:.c=.o)
 
