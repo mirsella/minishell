@@ -6,33 +6,53 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/07 23:40:01 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/08 19:20:36 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_proc	*new_proc(char *args, t_list *env)
+t_proc	*new_proc_command(char *args, char *path,
+		t_next_pipeline next_pipeline, int pipes[2])
 {
 	t_proc	*new;
 
-	new = malloc(sizeof(t_proc));
+	new = calloc(sizeof(t_proc), 1);
 	if (!new)
 		return (perror("malloc"), NULL);
 	new->args = args;
-	new->env = env;
+	new->path = path;
+	new->next_pipeline = next_pipeline;
+	new->pipes[0] = pipes[0];
+	new->pipes[1] = pipes[1];
 	new->next = NULL;
 	return (new);
 }
 
-void	add_proc(t_proc *proc, char *args, t_list *env)
+t_proc	*new_proc_subshell(t_proc *procs,
+		t_next_pipeline next_pipeline, int pipes[2])
+{
+	t_proc	*new;
+
+	new = calloc(sizeof(t_proc), 1);
+	if (!new)
+		return (perror("malloc"), NULL);
+	new->procs = procs;
+	new->next_pipeline = next_pipeline;
+	new->pipes[0] = pipes[0];
+	new->pipes[1] = pipes[1];
+	new->next = NULL;
+	return (new);
+}
+
+void	push_back_proc(t_proc *procs, t_proc *new)
 {
 	t_proc	*tmp;
 
-	tmp = proc;
+	tmp = procs;
 	while (tmp->next)
 		tmp = tmp->next;
-	tmp->next = new_proc(args, env);
+	tmp->next = new;
 }
 
 void	procs_free(t_proc **proc)
@@ -43,8 +63,12 @@ void	procs_free(t_proc **proc)
 	{
 		tmp = *proc;
 		*proc = (*proc)->next;
-		free(tmp->args);
-		free(tmp->args);
+		if (tmp->args)
+			free(tmp->args);
+		if (tmp->path)
+			free(tmp->path);
+		if (tmp->procs)
+			procs_free(&tmp->procs);
 		free(tmp);
 	}
 	*proc = NULL;

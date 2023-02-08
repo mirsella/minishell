@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/08 18:06:32 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/08 19:08:12 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ int	init_shell(t_data *data, char **envp)
 	g_exit_code = 0;
 	data->original_stdin = dup(STDIN_FILENO);
 	data->original_stdout = dup(STDOUT_FILENO);
-	data->original_stderr = dup(STDERR_FILENO);
-	if (data->original_stdin == -1 || data->original_stdout == -1
-		|| data->original_stderr == -1)
+	if (data->original_stdin == -1 || data->original_stdout == -1)
 		return (perror("dup"), 1);
 	call_sigaction();
 	env = ft_tabdup(envp);

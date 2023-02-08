@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/08 19:03:56 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/08 19:16:37 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,16 @@ typedef enum e_type
 // if type == COMMAND. procs == NULL.
 // else if type == SUBSHELL. args == NULL, path == NULL
 //
-// don't know between pipes or fd_in/out yet,
+// don't know between pipes[2] or fd_in/out yet,
 // we'll see later when we'll implement pipes
+// rappel: pipes[0] == read, pipes[1] == write
 typedef struct s_proc
 {
 	t_type			type;
 	char			*args;
 	char			*path;
 	struct s_proc	*procs;
-	t_next_pipeline	next_pipline;
+	t_next_pipeline	next_pipeline;
 	int				fd_in;
 	int				fd_out;
 	int				pipes[2];
@@ -67,7 +68,6 @@ typedef struct s_data
 {
 	int			original_stdin;
 	int			original_stdout;
-	int			original_stderr;
 	t_list		*env;
 	t_proc		*procs;
 }				t_data;
@@ -79,7 +79,9 @@ int		parse(char *line, char **envp);
 void	call_sigaction(void);
 
 // close.c
+void	free_shell_data(t_data *data);
 void	exit_shell(t_data *data);
+void	exit_shell_error(t_data *data, char *msg);
 
 // ft_lst.c
 t_proc	*new_proc(char *args, t_list *env);
