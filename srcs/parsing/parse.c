@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/07 21:49:08 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/08 19:04:15 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,19 @@ int	parse(char *line, char **envp)
 	printf("line: '%s'\n", line);
 	while (*line)
 	{
-		// first word can be: cmd, redirections, $ variables, 
 	}
 	return (0);
 }
+
+/*
+support for : >, >>, <, <<, |, &&, ||, (), ', "
+parse routine:
+1. check for redirections
+2. check for pipes
+3. check for && and ||
+4. check for ()
+5. check for $ variables
+6. check for ' and "
+7. check for cmd
+
+*/

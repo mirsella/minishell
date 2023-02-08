@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:13:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/07 16:48:00 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/08 19:04:38 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,5 @@ void	call_sigaction(void)
 	sa.sa_sigaction = sig_handler;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL);
-	// sigaction(SIGQUIT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 }
