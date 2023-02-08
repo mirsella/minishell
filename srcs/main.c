@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/08 19:08:12 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/08 23:05:45 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,21 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	bzero(&data, sizeof(t_data));
 	if (init_shell(&data, envp))
-		return (1);
+		exit_shell(&data);
 	line = NULL;
 	while (1)
 	{
 		line = readline(PROMPT);
 		if (!line)
-		{
-			ft_putstr_fd("exit", STDERR_FILENO);
 			break ;
-		}
 		pass_spaces(line);
 		if (!*line)
-			break ;
+			continue ;
 		add_history(line);
-		parse(line, envp);
+		if (parse(line, envp))
+		{
+			printf("parsing error\n");
+		}
 		free(line);
 	}
 	exit_shell(&data);

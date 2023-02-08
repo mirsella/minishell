@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/08 19:20:36 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/08 22:55:20 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ t_proc	*new_proc_subshell(t_proc *procs,
 	return (new);
 }
 
-void	push_back_proc(t_proc *procs, t_proc *new)
+void	push_back_proc(t_proc *procs, t_proc *proc)
 {
 	t_proc	*tmp;
 
 	tmp = procs;
 	while (tmp->next)
 		tmp = tmp->next;
-	tmp->next = new;
+	tmp->next = proc;
 }
 
 void	procs_free(t_proc **proc)
@@ -69,6 +69,14 @@ void	procs_free(t_proc **proc)
 			free(tmp->path);
 		if (tmp->procs)
 			procs_free(&tmp->procs);
+		if (tmp->fd_in != -1)
+			close(tmp->fd_in);
+		if (tmp->fd_out != -1)
+			close(tmp->fd_out);
+		if (tmp->pipes[0] != -1)
+			close(tmp->pipes[0]);
+		if (tmp->pipes[1] != -1)
+			close(tmp->pipes[1]);
 		free(tmp);
 	}
 	*proc = NULL;

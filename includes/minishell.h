@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/08 19:16:37 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/08 23:50:04 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_proc
 	int				fd_out;
 	int				pipes[2];
 	pid_t			pid;
+	int				status;
 	struct s_proc	*next;
 }				t_proc;
 
@@ -73,7 +74,7 @@ typedef struct s_data
 }				t_data;
 
 // parse.c
-int		parse(char *line, char **envp);
+int		parse(t_data *data, char *line);
 
 // signals.c
 void	call_sigaction(void);
@@ -84,8 +85,11 @@ void	exit_shell(t_data *data);
 void	exit_shell_error(t_data *data, char *msg);
 
 // ft_lst.c
-t_proc	*new_proc(char *args, t_list *env);
-void	add_proc(t_proc *proc, char *args, t_list *env);
+t_proc	*new_proc_command(char *args, char *path,
+			t_next_pipeline next_pipeline, int pipes[2]);
+t_proc	*new_proc_subshell(t_proc *procs,
+			t_next_pipeline next_pipeline, int pipes[2]);
+void	push_back_proc(t_proc *procs, t_proc *proc);
 void	procs_free(t_proc **proc);
 
 extern int	g_exit_code;

@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:49:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/08 19:16:05 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/08 22:24:58 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void	free_shell_data(t_data *data)
 void	exit_shell(t_data *data)
 {
 	free_shell_data(data);
-	exit(0);
+	exit(g_exit_code);
 }
 
 void	exit_shell_error(t_data *data, char *msg)
 {
 	perror(msg);
 	free_shell_data(data);
-	exit(1);
+	exit(g_exit_code);
 }
