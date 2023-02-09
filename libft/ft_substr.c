@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 23:13:50 by mirsella          #+#    #+#             */
-/*   Updated: 2022/11/13 15:02:44 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/09 15:07:20 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,3 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	str[i] = '\0';
 	return (str);
 }
-
-// #include "stdio.h"
-// int main()
-// {
-// 	char *str;
-// 	char *s;
-// 	str = ft_strdup("0123456789");
-//	s = ft_substr(str, 9, 10);
-// 	printf("'%s'", s);
-// 	return (0);
-// }

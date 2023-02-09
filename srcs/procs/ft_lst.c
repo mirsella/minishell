@@ -6,42 +6,21 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/08 22:55:20 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/09 20:41:10 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <unistd.h>
 
-t_proc	*new_proc_command(char *args, char *path,
-		t_next_pipeline next_pipeline, int pipes[2])
+t_proc	*new_proc(void)
 {
 	t_proc	*new;
 
 	new = calloc(sizeof(t_proc), 1);
 	if (!new)
 		return (perror("malloc"), NULL);
-	new->args = args;
-	new->path = path;
-	new->next_pipeline = next_pipeline;
-	new->pipes[0] = pipes[0];
-	new->pipes[1] = pipes[1];
-	new->next = NULL;
-	return (new);
-}
-
-t_proc	*new_proc_subshell(t_proc *procs,
-		t_next_pipeline next_pipeline, int pipes[2])
-{
-	t_proc	*new;
-
-	new = calloc(sizeof(t_proc), 1);
-	if (!new)
-		return (perror("malloc"), NULL);
-	new->procs = procs;
-	new->next_pipeline = next_pipeline;
-	new->pipes[0] = pipes[0];
-	new->pipes[1] = pipes[1];
-	new->next = NULL;
+	new->type = COMMAND;
 	return (new);
 }
 
@@ -69,14 +48,10 @@ void	procs_free(t_proc **proc)
 			free(tmp->path);
 		if (tmp->procs)
 			procs_free(&tmp->procs);
-		if (tmp->fd_in != -1)
+		if (tmp->fd_in > 2)
 			close(tmp->fd_in);
-		if (tmp->fd_out != -1)
+		if (tmp->fd_out > 2)
 			close(tmp->fd_out);
-		if (tmp->pipes[0] != -1)
-			close(tmp->pipes[0]);
-		if (tmp->pipes[1] != -1)
-			close(tmp->pipes[1]);
 		free(tmp);
 	}
 	*proc = NULL;

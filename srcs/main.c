@@ -6,11 +6,12 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/08 23:05:45 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/09 22:04:49 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdlib.h>
 #include <unistd.h>
 
 int	g_exit_code;
@@ -23,43 +24,87 @@ int	init_shell(t_data *data, char **envp)
 	data->original_stdin = dup(STDIN_FILENO);
 	data->original_stdout = dup(STDOUT_FILENO);
 	if (data->original_stdin == -1 || data->original_stdout == -1)
-		return (perror("dup"), 1);
+		return (perror("dup"), -1);
 	call_sigaction();
 	env = ft_tabdup(envp);
 	if (!env)
-		return (perror("malloc"), 1);
+		return (perror("malloc"), -1);
 	data->env = ft_lstnew_strs(ft_tablen(env), env);
 	free(env);
 	if (!data->env)
-		return (perror("malloc"), 1);
+		return (perror("malloc"), -1);
 	return (0);
 }
 
-int	main(int argc, char **argv, char **envp)
+// dev function
+void	print_procs(t_proc *procs, int layer)
 {
-	t_data	data;
+	t_proc	*tmp;
+	char	*next_pipeline;
+
+	tmp = procs;
+	while (tmp)
+	{
+		if (tmp->next_pipeline == PIPE)
+			next_pipeline = "PIPE";
+		else if (tmp->next_pipeline == OR)
+			next_pipeline = "OR";
+		else if (tmp->next_pipeline == AND)
+			next_pipeline = "AND";
+		else
+			next_pipeline = "INVALID";
+		if (tmp->type == SUBSHELL)
+		{
+			printf("%*cSUBSHELL: next_pipeline type: %s\n", layer, ' ',
+				next_pipeline);
+			print_procs(tmp->procs, layer + 4);
+		}
+		else
+			printf("%*cCOMMAND: %s, next_pipeline type: %s\n", layer, ' ',
+				tmp->path, next_pipeline);
+
+		tmp = tmp->next;
+	}
+}
+
+int	prompt_loop(t_data *data)
+{
 	char	*line;
 
-	(void)argc;
-	(void)argv;
-	bzero(&data, sizeof(t_data));
-	if (init_shell(&data, envp))
-		exit_shell(&data);
 	line = NULL;
 	while (1)
 	{
 		line = readline(PROMPT);
 		if (!line)
 			break ;
-		pass_spaces(line);
-		if (!*line)
-			continue ;
-		add_history(line);
-		if (parse(line, envp))
+		if (!*(line + ft_skip_spaces(line)))
 		{
-			printf("parsing error\n");
+			free(line);
+			continue ;
 		}
+		if (!ft_isspace(*line))
+			add_history(line);
+		// detect unclosed quotes and throw error
+		if (parse(data, line, data->procs) < 0)
+			break ;
+		print_procs(data->procs, 0);
+		// execute(data);
+		procs_free(&data->procs);
 		free(line);
 	}
+	free(line);
+	return (0);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_data	data;
+
+	(void)argc;
+	(void)argv;
+	bzero(&data, sizeof(t_data));
+	if (init_shell(&data, envp))
+		exit_shell(&data);
+	prompt_loop(&data);
 	exit_shell(&data);
 }

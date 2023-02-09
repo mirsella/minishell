@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:13:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/08 19:04:38 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/09 15:57:51 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 void	sig_handler(int signo, siginfo_t *info, void *context)
 {
 	(void)context;
+	(void)info;
 	if (signo == SIGINT)
 	{
 		ft_putchar('\n');
@@ -27,8 +28,6 @@ void	sig_handler(int signo, siginfo_t *info, void *context)
 	}
 	else if (signo == SIGQUIT)
 	{
-		printf("signal %d from %d\n", signo, info->si_pid);
-		g_exit_code = 131;
 	}
 }
 

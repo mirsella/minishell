@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/08 23:50:04 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/09 21:20:10 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 # include "errno.h" // errno
 # include <sys/types.h> // pid_t
 
-# define PROMPT "minishell> "
+# define PROMPT "minishell$ "
 
 typedef enum e_next_pipeline
 {
+	INVALID,
 	PIPE,
 	AND,
 	OR,
@@ -34,8 +35,8 @@ typedef enum e_next_pipeline
 
 typedef enum e_type
 {
-	SUBSHELL,
 	COMMAND,
+	SUBSHELL,
 }				t_type;
 
 // represent a command or a subshell
@@ -49,7 +50,7 @@ typedef enum e_type
 typedef struct s_proc
 {
 	t_type			type;
-	char			*args;
+	t_list			*args;
 	char			*path;
 	struct s_proc	*procs;
 	t_next_pipeline	next_pipeline;
@@ -57,7 +58,7 @@ typedef struct s_proc
 	int				fd_out;
 	int				pipes[2];
 	pid_t			pid;
-	int				status;
+	int				exit_status;
 	struct s_proc	*next;
 }				t_proc;
 
@@ -74,23 +75,30 @@ typedef struct s_data
 }				t_data;
 
 // parse.c
-int		parse(t_data *data, char *line);
+int				parse(t_data *data, char *line, t_proc *proc);
+
+// pipeline_type.c
+int				next_pipeline(char *line);
+int				skip_pipeline(t_next_pipeline pipeline_type);
+t_next_pipeline	get_pipeline_type(char *line);
 
 // signals.c
-void	call_sigaction(void);
+void			call_sigaction(void);
 
 // close.c
-void	free_shell_data(t_data *data);
-void	exit_shell(t_data *data);
-void	exit_shell_error(t_data *data, char *msg);
+void			free_shell_data(t_data *data);
+void			exit_shell(t_data *data);
+void			print_error(char *msg, char optional);
+void			exit_shell_error(t_data *data, char *msg);
 
 // ft_lst.c
-t_proc	*new_proc_command(char *args, char *path,
-			t_next_pipeline next_pipeline, int pipes[2]);
-t_proc	*new_proc_subshell(t_proc *procs,
-			t_next_pipeline next_pipeline, int pipes[2]);
-void	push_back_proc(t_proc *procs, t_proc *proc);
-void	procs_free(t_proc **proc);
+t_proc			*new_proc(void);
+void			push_back_proc(t_proc *procs, t_proc *proc);
+void			procs_free(t_proc **proc);
+
+// skipping.c
+int				skip_quotes(char *line);
+int				skip_parentheses(char *line);
 
 extern int	g_exit_code;
 
