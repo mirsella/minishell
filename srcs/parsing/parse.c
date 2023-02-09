@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/09 00:00:34 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/09 09:40:10 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,14 @@
 int	parse(t_data *data, char *line)
 {
 	printf("line: '%s'\n", line);
-	// take the substring from start to first meta char: |, &&, ||
+	// take the substring from start to first meta char: |, &&, ||. jump past (), "", ''
 	while ()
 	{
 		// check for redirections: <, <<, >, >>. jump past (), "", ''. stop at |, &&, ||, \0. expand var  and quotes which are after redir char. replace redir chars with spaces.
 		// if parentheses, call parser recursively with the content of the parentheses. replace parentheses with spaces.
 		// else there should be a command here
-		//  - expand quotes and vars
-		//  - copy the command to the struct
-		//  - copy args to the struct
+		//  - for each word (separated by spaces, but not in quotes or parentheses), append to the t_list args
+		//  - expand quotes and vars for each el in the list. we can use ft_lstmap
 		// should be end of the string
 	}
 	return (0);
