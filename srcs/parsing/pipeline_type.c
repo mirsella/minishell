@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 18:10:11 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/09 20:45:12 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/09 23:57:46 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,26 @@
 
 int	next_pipeline(char *line)
 {
-	int		i;
+	int	i;
+	int	ret;
 
 	i = 0;
 	while (line[i] && line[i] != '|' && line[i] != '&')
 	{
 		if (line[i] == '(')
-			i += skip_parentheses(line + i);
+		{
+			ret = skip_parenthesis(line + i);
+			if (ret == -1)
+				return (-1);
+			i += ret;
+		}
 		else if (line[i] == '"' || line[i] == '\'')
-			i += skip_quotes(line + i);
+		{
+			ret = skip_quotes(line + i);
+			if (ret == -1)
+				return (-1);
+			i += ret;
+		}
 		else
 			i++;
 	}

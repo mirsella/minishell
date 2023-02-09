@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 17:30:13 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/09 17:48:06 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/10 00:17:26 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	skip_quotes(char *line)
 	return (-1);
 }
 
-int	skip_parentheses(char *line)
+int	skip_parenthesis(char *line)
 {
 	int	i;
 	int	ret;
@@ -36,7 +36,7 @@ int	skip_parentheses(char *line)
 	{
 		if (line[i] == '(')
 		{
-			ret = skip_parentheses(line + i);
+			ret = skip_parenthesis(line + i);
 			if (ret == -1)
 				return (-1);
 			i += ret - 1;
@@ -45,7 +45,7 @@ int	skip_parentheses(char *line)
 		{
 			ret = skip_quotes(line + i);
 			if (ret == -1)
-				return (-1);
+				return (-2);
 			i += ret - 1;
 		}
 		i++;

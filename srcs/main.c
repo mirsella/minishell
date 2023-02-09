@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/09 22:04:49 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/10 00:01:29 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	print_procs(t_proc *procs, int layer)
 		else
 			printf("%*cCOMMAND: %s, next_pipeline type: %s\n", layer, ' ',
 				tmp->path, next_pipeline);
-
 		tmp = tmp->next;
 	}
 }
@@ -74,23 +73,21 @@ int	prompt_loop(t_data *data)
 	line = NULL;
 	while (1)
 	{
+		if (line)
+			free(line);
 		line = readline(PROMPT);
 		if (!line)
 			break ;
 		if (!*(line + ft_skip_spaces(line)))
-		{
-			free(line);
 			continue ;
-		}
-		if (!ft_isspace(*line))
-			add_history(line);
-		// detect unclosed quotes and throw error
+		add_history_filter(line);
+		if (check_unclosed(line))
+			continue ;
 		if (parse(data, line, data->procs) < 0)
 			break ;
 		print_procs(data->procs, 0);
 		// execute(data);
 		procs_free(&data->procs);
-		free(line);
 	}
 	free(line);
 	return (0);

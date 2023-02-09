@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/09 21:20:10 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/10 00:14:39 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,11 @@ void			call_sigaction(void);
 // close.c
 void			free_shell_data(t_data *data);
 void			exit_shell(t_data *data);
-void			print_error(char *msg, char optional);
 void			exit_shell_error(t_data *data, char *msg);
+
+// logging.c
+void			print_syntax_error(char *message, char optional);
+void			print_error(char *msg, char optional);
 
 // ft_lst.c
 t_proc			*new_proc(void);
@@ -98,7 +101,11 @@ void			procs_free(t_proc **proc);
 
 // skipping.c
 int				skip_quotes(char *line);
-int				skip_parentheses(char *line);
+int				skip_parenthesis(char *line);
+
+// prompt_loop_utils.c
+void			add_history_filter(char *line);
+int				check_unclosed(char *line);
 
 extern int	g_exit_code;
 

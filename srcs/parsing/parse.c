@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/09 21:56:11 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/09 23:25:47 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ int	handle_command_or_subshell(t_data *data, char *line, t_proc *proc)
 	if (*line == '(')
 	{
 		proc->type = SUBSHELL;
-		tmp = ft_substr(line, 1, skip_parentheses(line));
+		tmp = ft_substr(line, 1, skip_parenthesis(line));
 		if (!tmp)
 			return (-1);
-		tmp[skip_parentheses(line) - 2] = ' ';
+		tmp[skip_parenthesis(line) - 2] = ' ';
 		parse(data, tmp, proc);
 		free(tmp);
 	}
@@ -80,8 +80,3 @@ int	parse(t_data *data, char *line, t_proc *last_proc)
 	}
 	return (0);
 }
-/*
-   support for : >, >>, <, <<, |, &&, ||, (), ', "
-ex: ls -l > file.txt && cat file.txt | grep -i "hello" > file2.txt
-ex: << EOF (ls -l > file.txt) && (cat file.txt) | (grep -i "hello") > file2.txt
-*/
