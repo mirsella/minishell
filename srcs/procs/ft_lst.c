@@ -6,12 +6,29 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/09 20:41:10 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/10 16:01:57 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <unistd.h>
+
+t_proc	*create_and_push_proc(t_data *data, t_proc *last_proc)
+{
+	t_proc	*new;
+
+	new = new_proc();
+	if (!new)
+		return (NULL);
+	if (!last_proc)
+		data->procs = new;
+	else if (last_proc->type == COMMAND
+			|| (last_proc->type == SUBSHELL && last_proc->procs))
+		last_proc->next = new;
+	else if (last_proc->type == SUBSHELL && !last_proc->procs)
+		last_proc->procs = new;
+	return (new);
+}
 
 t_proc	*new_proc(void)
 {

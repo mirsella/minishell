@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/10 00:14:39 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/10 16:37:04 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 # include "readline/readline.h" // readline
 # include "readline/history.h" // add_history
 # include "signal.h" // sigaction
-# include "unistd.h" // fork, execve, chdir, getcwd, access, close, dup2, pipe
+# include "unistd.h" // fork, execve, chdir, getcwd, access, dup2, pipe
+# include "fcntl.h" // open flags
 # include "errno.h" // errno
 # include <sys/types.h> // pid_t
 
@@ -76,11 +77,15 @@ typedef struct s_data
 
 // parse.c
 int				parse(t_data *data, char *line, t_proc *proc);
+int				ismeta(char c);
 
 // pipeline_type.c
 int				next_pipeline(char *line);
 int				skip_pipeline(t_next_pipeline pipeline_type);
 t_next_pipeline	get_pipeline_type(char *line);
+
+// redirections.c
+int				handle_redirections(t_data *data, char *line, t_proc *proc);
 
 // signals.c
 void			call_sigaction(void);
@@ -92,9 +97,11 @@ void			exit_shell_error(t_data *data, char *msg);
 
 // logging.c
 void			print_syntax_error(char *message, char optional);
-void			print_error(char *msg, char optional);
+void			print_error(char *msg, char *optional);
+void			print_error_char(char *msg, char optional);
 
 // ft_lst.c
+t_proc			*create_and_push_proc(t_data *data, t_proc *last_proc);
 t_proc			*new_proc(void);
 void			push_back_proc(t_proc *procs, t_proc *proc);
 void			procs_free(t_proc **proc);
