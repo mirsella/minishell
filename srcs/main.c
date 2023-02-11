@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/11 21:20:50 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/11 21:24:18 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ int	main(int argc, char **argv, char **envp)
 	bzero(&data, sizeof(t_data));
 	if (init_shell(&data, envp))
 		exit_shell(&data);
-	printf("%s: %s\n", argv[1], get_env_value(data.env, argv[1]));
 	prompt_loop(&data);
 	exit_shell(&data);
 }

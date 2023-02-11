@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/11 21:20:13 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/11 21:29:39 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ typedef struct s_data
 
 // parse.c
 int				parse(t_data *data, char *line, t_proc *proc);
-int				ismeta(char c);
 
 // pipeline_type.c
 int				next_pipeline(char *line);

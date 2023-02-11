@@ -6,17 +6,11 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/10 16:37:11 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/11 21:32:00 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	ismeta(char c)
-{
-	return (c == '|' || c == '<' || c == '&' || c == '('
-			|| c == ')' || c == '>');
-}
 
 int	handle_command_or_subshell(t_data *data, char *line, t_proc *proc)
 {

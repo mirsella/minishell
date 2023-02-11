@@ -6,11 +6,16 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 18:10:11 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/09 23:57:46 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/11 21:38:22 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	ismeta(char c)
+{
+	return (c == '|' || c == '&');
+}
 
 int	next_pipeline(char *line)
 {
@@ -18,7 +23,7 @@ int	next_pipeline(char *line)
 	int	ret;
 
 	i = 0;
-	while (line[i] && line[i] != '|' && line[i] != '&')
+	while (line[i] && !ismeta(line[i]))
 	{
 		if (line[i] == '(')
 		{
@@ -42,22 +47,12 @@ int	next_pipeline(char *line)
 
 t_next_pipeline	get_pipeline_type(char *line)
 {
-	if (*line == '|' && *(line + 1) != '|')
+	if (*line == '|' && !ismeta(*(line + 1)))
 		return (PIPE);
-	if (*line == '|' && *(line + 1) == '|')
-	{
-		if (*(line + 2) == '|')
-			return (INVALID);
-		else
-			return (OR);
-	}
-	if (*line == '&' && *(line + 1) == '&')
-	{
-		if (*(line + 2) == '&')
-			return (INVALID);
-		else
-			return (AND);
-	}
+	if (ft_strncmp(line, "||", 2) == 0 && !ismeta(*(line + 2)))
+		return (OR);
+	if (ft_strncmp(line, "&&", 2) == 0 && !ismeta(*(line + 2)))
+		return (AND);
 	return (INVALID);
 }
 

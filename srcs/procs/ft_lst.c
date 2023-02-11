@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/10 16:01:57 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/11 21:38:40 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_proc	*create_and_push_proc(t_data *data, t_proc *last_proc)
 	if (!last_proc)
 		data->procs = new;
 	else if (last_proc->type == COMMAND
-			|| (last_proc->type == SUBSHELL && last_proc->procs))
+		|| (last_proc->type == SUBSHELL && last_proc->procs))
 		last_proc->next = new;
 	else if (last_proc->type == SUBSHELL && !last_proc->procs)
 		last_proc->procs = new;
