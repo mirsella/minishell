@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/10 16:37:04 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/11 21:20:13 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,9 @@ int				skip_parenthesis(char *line);
 // prompt_loop_utils.c
 void			add_history_filter(char *line);
 int				check_unclosed(char *line);
+
+// env.c
+char			*get_env_value(t_list *env, char *variable);
 
 extern int	g_exit_code;
 
