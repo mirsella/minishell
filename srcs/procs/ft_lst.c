@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 16:59:07 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 22:55:03 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	procs_free(t_proc **proc)
 		tmp = *proc;
 		*proc = (*proc)->next;
 		if (tmp->args)
-			free(tmp->args);
+			ft_lstclear(&tmp->args, free);
 		if (tmp->path)
 			free(tmp->path);
 		if (tmp->procs)

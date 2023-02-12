@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 17:54:15 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 22:45:53 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 # include "unistd.h" // fork, execve, chdir, getcwd, access, dup2, pipe
 # include "fcntl.h" // open flags
 # include "errno.h" // errno
-# include <sys/types.h> // pid_t
+# include "sys/types.h" // pid_t
+# include "dirent.h" // opendir, readdir, closedir
 
 # define PROMPT "minishell$ "
 
@@ -127,12 +128,20 @@ int				output_redirection(t_data *data, char *line, t_proc *proc);
 char			*expand_var(t_list *env, char *str, int *index);
 char			*expand_single_quote(char *str, int *index);
 char			*expand_double_quote(t_list *env, char *str, int *index);
-char			*expand_wildcard(t_data *data, char *str, int *index);
 char			*expand_everything(t_list *env, char *str);
+
+// parsing/expand_wildcard.c
+char			*expand_wildcards(char *line);
+
+// parsing/wildcard.c
+char			*get_dir_content(void);
 
 // parsing/parse_command.c
 char			*get_next_token(char *line, int *index);
 int				parse_command(t_data *data, char *line, t_proc *proc);
+
+// parsing/get_full_path.c
+char			*get_full_path(t_list *env, char *cmd);
 
 extern int	g_exit_code;
 

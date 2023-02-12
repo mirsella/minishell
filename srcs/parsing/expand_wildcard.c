@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   expand_wildcard.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/13 16:18:11 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 20:54:27 by mirsella         ###   ########.fr       */
+/*   Created: 2023/02/12 21:44:30 by mirsella          #+#    #+#             */
+/*   Updated: 2023/02/12 22:11:41 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "stdlib.h"
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-t_list	*ft_lstnew(void *content)
+char	*expand_wildcards(char *line)
 {
-	t_list	*new;
+	// char	*str;
 
-	new = malloc(sizeof(t_list));
-	if (!new)
-		return (NULL);
-	new->content = content;
-	new->next = NULL;
-	return (new);
+	// str = get_dir_content();
+	// if (!str)
+	// 	return (NULL);
+	return (ft_strdup(line));
 }

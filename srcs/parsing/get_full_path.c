@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   get_full_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/13 16:18:11 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 20:54:27 by mirsella         ###   ########.fr       */
+/*   Created: 2023/02/12 22:45:08 by mirsella          #+#    #+#             */
+/*   Updated: 2023/02/12 22:45:53 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "stdlib.h"
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-t_list	*ft_lstnew(void *content)
+char	*get_full_path(t_list *env, char *cmd)
 {
-	t_list	*new;
-
-	new = malloc(sizeof(t_list));
-	if (!new)
-		return (NULL);
-	new->content = content;
-	new->next = NULL;
-	return (new);
+	(void)env;
+	// TODO: implement this function
+	return (ft_strdup(cmd));
 }
