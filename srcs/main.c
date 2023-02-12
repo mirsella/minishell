@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/12 01:15:01 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:59:13 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	prompt_loop(t_data *data)
 	while (1)
 	{
 		free(line);
+		procs_free(&data->procs);
 		line = readline(PROMPT);
 		if (!line)
 			break ;
@@ -88,7 +89,6 @@ int	prompt_loop(t_data *data)
 			continue ;
 		print_procs(data->procs, 0);
 		// execute(data);
-		procs_free(&data->procs);
 	}
 	free(line);
 	return (0);

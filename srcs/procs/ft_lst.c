@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 01:15:40 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:59:07 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	procs_free(t_proc **proc)
 {
 	t_proc	*tmp;
 
+	if (!proc || !*proc)
+		return ;
 	while (*proc)
 	{
 		tmp = *proc;

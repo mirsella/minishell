@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/12 01:19:23 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:54:23 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	parse(t_data *data, char *line)
 		if (!proc || !cmd)
 			return (-1);
 		proc->next_pipeline = get_pipeline_type(line + next_pipeline(line));
+		printf("cmd: '%s'\n", cmd);
 		ret = parse_redirections(data, cmd, proc);
 		if (ret)
 			return (ret);

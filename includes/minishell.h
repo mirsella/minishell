@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 01:16:05 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:16:31 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int				output_redirection(t_data *data, char *line, t_proc *proc);
 
 // parsing/expand.c
 char			*expand_var(t_data *data, char *str, int *index);
-char			*expand_single_quote(t_data *data, char *str, int *index);
+char			*expand_single_quote(char *str, int *index);
 char			*expand_double_quote(t_data *data, char *str, int *index);
 char			*expand_wildcard(t_data *data, char *str, int *index);
 char			*expand_everything(t_data *data, char *str);

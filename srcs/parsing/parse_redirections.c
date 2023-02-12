@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 15:38:38 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 01:24:00 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:55:54 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int	parse_redirections(t_data *data, char *line, t_proc *proc)
 	while (*line)
 	{
 		line += ft_skip_spaces(line);
+		if (!*line)
+			break ;
 		if (*line == '>')
 		{
 			ret = output_redirection(data, line + 1, proc);
