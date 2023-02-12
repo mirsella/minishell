@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/11 21:24:18 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 01:15:01 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,22 +69,23 @@ void	print_procs(t_proc *procs, int layer)
 int	prompt_loop(t_data *data)
 {
 	char	*line;
+	int		ret;
 
 	line = NULL;
 	while (1)
 	{
-		if (line)
-			free(line);
+		free(line);
 		line = readline(PROMPT);
 		if (!line)
 			break ;
 		if (!*(line + ft_skip_spaces(line)))
 			continue ;
 		add_history_filter(line);
-		if (check_unclosed(line))
-			continue ;
-		if (parse(data, line, data->procs) < 0)
+		ret = parse(data, line);
+		if (ret < 0)
 			break ;
+		else if (ret > 0)
+			continue ;
 		print_procs(data->procs, 0);
 		// execute(data);
 		procs_free(&data->procs);

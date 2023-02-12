@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/11 21:29:39 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 01:16:05 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,14 @@ typedef struct s_data
 	t_proc		*procs;
 }				t_data;
 
-// parse.c
-int				parse(t_data *data, char *line, t_proc *proc);
+// parsing/parse.c
+int				parse(t_data *data, char *line);
 
-// pipeline_type.c
+// parsing/pipeline_type.c
+int				is_nextpipeline_possible(t_next_pipeline next_pipeline, char *line);
 int				next_pipeline(char *line);
 int				skip_pipeline(t_next_pipeline pipeline_type);
 t_next_pipeline	get_pipeline_type(char *line);
-
-// redirections.c
-int				handle_redirections(t_data *data, char *line, t_proc *proc);
 
 // signals.c
 void			call_sigaction(void);
@@ -99,22 +97,37 @@ void			print_syntax_error(char *message, char optional);
 void			print_error(char *msg, char *optional);
 void			print_error_char(char *msg, char optional);
 
-// ft_lst.c
+// proc/ft_lst.c
 t_proc			*create_and_push_proc(t_data *data, t_proc *last_proc);
 t_proc			*new_proc(void);
+t_proc			*get_last_proc(t_proc *procs);
 void			push_back_proc(t_proc *procs, t_proc *proc);
 void			procs_free(t_proc **proc);
 
-// skipping.c
+// parsing/skipping.c
 int				skip_quotes(char *line);
 int				skip_parenthesis(char *line);
 
-// prompt_loop_utils.c
+// parsing/prompt_loop_utils.c
 void			add_history_filter(char *line);
 int				check_unclosed(char *line);
 
 // env.c
 char			*get_env_value(t_list *env, char *variable);
+
+// parsing/parse_redirections.c
+char			*get_word_expand(t_data *data, char *line, int *ret);
+int				parse_redirections(t_data *data, char *line, t_proc *proc);
+
+// parsing/handle_redirections.c
+int				output_redirection(t_data *data, char *line, t_proc *proc);
+
+// parsing/expand.c
+char			*expand_var(t_data *data, char *str, int *index);
+char			*expand_single_quote(t_data *data, char *str, int *index);
+char			*expand_double_quote(t_data *data, char *str, int *index);
+char			*expand_wildcard(t_data *data, char *str, int *index);
+char			*expand_everything(t_data *data, char *str);
 
 extern int	g_exit_code;
 

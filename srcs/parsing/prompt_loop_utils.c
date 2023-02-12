@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 23:14:50 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/10 00:28:15 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 00:38:31 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	check_unclosed_parenthesis(char *line)
 {
 	int	ret;
 
+	ret = 0;
 	if (*line == '(')
 	{
 		ret = skip_parenthesis(line);
