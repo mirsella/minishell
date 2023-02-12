@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 15:38:38 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 00:53:24 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 01:24:00 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	parse_redirections(t_data *data, char *line, t_proc *proc)
 			ret = output_redirection(data, line + 1, proc);
 			line += remove_redirections(line);
 		}
+		// still need to parse input redirections here
 		else
 			line++;
 		if (ret)
