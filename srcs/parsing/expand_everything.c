@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 21:57:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 22:17:24 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 23:47:10 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ char	*expand_everything(t_list *env, char *line)
 	str = ft_strdup("");
 	if (!str)
 		return (perror("malloc"), NULL);
-	tmp = expand_wildcards(line);
-	if (!tmp)
-		return (NULL);
-	line = tmp;
+	// tmp = expand_wildcards(line);
+	// if (!tmp)
+	// 	return (NULL);
+	// line = tmp;
 	while (line[i])
 	{
 		expanded = expand_individual(line + i, &i, env);
@@ -57,6 +57,6 @@ char	*expand_everything(t_list *env, char *line)
 		free(str);
 		str = tmp;
 	}
-	free(line);
+	// free(line);
 	return (str);
 }
