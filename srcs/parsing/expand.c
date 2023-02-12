@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 23:42:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 16:50:21 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 20:35:45 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,23 @@ static int	ismeta(char c)
 		|| c == '(' || c == '\'' || c == '"' || c == '$');
 }
 
-char	*expand_var(t_data *data, char *str, int *index)
+char	*expand_var(t_list *env, char *str, int *index)
 {
 	int		stop;
 	char	*var;
 	char	*tmp;
 
 	stop = 1;
-	// *index += 1;
 	while (str[stop] && !ismeta(str[stop]) && !isspace(str[stop]))
 		stop++;
 	if (stop == 1)
 		return ((*index)++, ft_strdup("$"));
 	*index += stop;
-	tmp = ft_substr(str, 1, stop);
-	var = get_env_value(data->env, tmp);
+	tmp = ft_substr(str, 1, stop - 1);
+	var = get_env_value(env, tmp);
 	free(tmp);
 	if (var == NULL)
 		return (ft_strdup(""));
-	printf("returning %s\n", var);
 	return (ft_strdup(var));
 }
 
@@ -46,61 +44,73 @@ char	*expand_single_quote(char *str, int *index)
 	char	*tmp;
 
 	stop = 1;
-	// *index += 1;
 	while (str[stop] && str[stop] != '\'')
 		stop++;
-	if (str[stop] != '\'')
-		return (NULL);
-	*index += stop;
-	tmp = ft_substr(str, 0, stop);
+	*index += stop + 1;
+	tmp = ft_substr(str, 1, stop - 1);
 	return (tmp);
 }
 
-char	*expand_double_quote(t_data *data, char *str, int *index)
+struct s_chars
 {
-	int		stop;
 	char	*tmp;
-	char	*new;
+	char	*str;
+	char	*expanded;
+};
 
-	stop = 1;
-	// *index += 1;
-	while (str[stop] && str[stop] != '"')
+char	*expand_double_quote(t_list *env, char *str, int *index)
+{
+	int				i;
+	struct s_chars	chars;
+
+	i = 1;
+	chars.str = ft_strdup("");
+	if (!chars.str)
+		return (perror("malloc"), NULL);
+	while (str[i] && str[i] != '"')
 	{
-			tmp = new;
-			if (str[stop] == '$')
-				new = ft_strjoin(tmp, expand_var(data, str + stop, &stop));
-			else
-				new = ft_strjoin(tmp, (char [2]){str[stop], 0});
-			free(tmp);
+		if (str[i] == '$')
+			chars.expanded = expand_var(env, str + i, &i);
+		else
+			chars.expanded = ft_strdup((char [2]){str[i++], 0});
+		if (!chars.expanded)
+			return (perror("malloc"), NULL);
+		chars.tmp = ft_strjoin(chars.str, chars.expanded);
+		free(chars.expanded);
+		free(chars.str);
+		if (!chars.tmp)
+			return (perror("malloc"), NULL);
+		chars.str = chars.tmp;
 	}
-	if (str[stop] != '"')
-		return (NULL);
-	*index += stop;
-	return (new);
+	*index += i + 1;
+	return (chars.str);
 }
 
-char	*expand_everything(t_data *data, char *str)
+char	*expand_everything(t_list *env, char *str)
 {
-	int		i;
-	char	*new;
-	char	*tmp;
+	int				i;
+	struct s_chars	chars;
 
 	i = 0;
-	new = ft_strdup("");
+	chars.str = ft_strdup("");
+	if (!chars.str)
+		return (perror("malloc"), NULL);
 	while (str[i])
 	{
 		if (str[i] == '\'')
-			tmp = expand_single_quote(str + i, &i);
+			chars.expanded = expand_single_quote(str + i, &i);
 		else if (str[i] == '"')
-			tmp = expand_double_quote(data, str + i, &i);
+			chars.expanded = expand_double_quote(env, str + i, &i);
 		else if (str[i] == '$')
-			tmp = expand_var(data, str + i, &i);
+			chars.expanded = expand_var(env, str + i, &i);
 		else
-			tmp = ft_strjoin(new, (char [2]){str[i++], 0});
-		if (!tmp)
-			return (free(new), NULL);
-		free(new);
-		new = tmp;
+			chars.expanded = ft_strdup((char [2]){str[i++], 0});
+		if (!chars.expanded)
+			return (perror("malloc"), NULL);
+		chars.tmp = ft_strjoin(chars.str, chars.expanded);
+		free(chars.expanded);
+		free(chars.str);
+		chars.str = chars.tmp;
 	}
-	return (new);
+	return (chars.str);
 }

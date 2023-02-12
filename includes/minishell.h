@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 16:16:31 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 17:54:15 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ typedef struct s_data
 int				parse(t_data *data, char *line);
 
 // parsing/pipeline_type.c
-int				is_nextpipeline_possible(t_next_pipeline next_pipeline, char *line);
+int				is_nextpipeline_possible(
+					t_next_pipeline next_pipeline, char *line);
 int				next_pipeline(char *line);
 int				skip_pipeline(t_next_pipeline pipeline_type);
 t_next_pipeline	get_pipeline_type(char *line);
@@ -93,9 +94,9 @@ void			exit_shell(t_data *data);
 void			exit_shell_error(t_data *data, char *msg);
 
 // logging.c
-void			print_syntax_error(char *message, char optional);
-void			print_error(char *msg, char *optional);
-void			print_error_char(char *msg, char optional);
+int				print_syntax_error(char *message, char optional);
+int				print_error(char *msg, char *optional);
+int				print_error_char(char *msg, char optional);
 
 // proc/ft_lst.c
 t_proc			*create_and_push_proc(t_data *data, t_proc *last_proc);
@@ -123,11 +124,15 @@ int				parse_redirections(t_data *data, char *line, t_proc *proc);
 int				output_redirection(t_data *data, char *line, t_proc *proc);
 
 // parsing/expand.c
-char			*expand_var(t_data *data, char *str, int *index);
+char			*expand_var(t_list *env, char *str, int *index);
 char			*expand_single_quote(char *str, int *index);
-char			*expand_double_quote(t_data *data, char *str, int *index);
+char			*expand_double_quote(t_list *env, char *str, int *index);
 char			*expand_wildcard(t_data *data, char *str, int *index);
-char			*expand_everything(t_data *data, char *str);
+char			*expand_everything(t_list *env, char *str);
+
+// parsing/parse_command.c
+char			*get_next_token(char *line, int *index);
+int				parse_command(t_data *data, char *line, t_proc *proc);
 
 extern int	g_exit_code;
 

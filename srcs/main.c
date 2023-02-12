@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/12 16:59:13 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 18:39:28 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,13 @@ void	print_procs(t_proc *procs, int layer)
 			print_procs(tmp->procs, layer + 4);
 		}
 		else
+		{
 			printf("%*cCOMMAND: %s, next_pipeline type: %s\n", layer, ' ',
 				tmp->path, next_pipeline);
+			if (tmp->args)
+				printf("%*cargs: [%s, ..., %s]\n", layer, ' ',
+					(char *)tmp->args->content, (char *)ft_lstlast(tmp->args)->content);
+		}
 		tmp = tmp->next;
 	}
 }
@@ -91,6 +96,7 @@ int	prompt_loop(t_data *data)
 		// execute(data);
 	}
 	free(line);
+	procs_free(&data->procs);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 22:35:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/09 21:38:28 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 17:45:50 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ char				*ft_itoa(int n);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strdup(const char *s1);
 char				**ft_tabdup(char **tab);
+char				**ft_lst_to_tab(t_list *lst);
 char				*ft_strjoin(const char *s1, const char *s2);
 int					ft_skip_spaces(char *str);
 char				*ft_strnstr(const char *haystack, const char *needle,
@@ -73,7 +74,7 @@ char				*ft_strtrim(const char *s1, const char *set);
 char				*ft_strmapi(const char *s, char (*f)(unsigned int, char));
 char				*ft_substr(const char *s, unsigned int start, size_t len);
 char				*ft_get_next_line(int fd, int freee);
-char				*ft_free_tab(char **tab);
+void				ft_free_tab(char **tab);
 size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
 size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t				ft_strlen(const char *s);
@@ -81,11 +82,11 @@ size_t				ft_tablen(char **tab);
 t_list				*ft_lstlast(t_list *lst);
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
-t_list				*ft_list_find(t_list *begin_list, void *data_ref,
+t_list				*ft_lstfind(t_list *begin_list, void *data_ref,
 						int (*cmp)(void *, void *));
 t_list				*ft_lstnew(void *content);
 t_list				*ft_lstnew_strs(int size, char **strs);
-t_list				*ft_list_at(t_list *begin_list, unsigned int nbr);
+t_list				*ft_lstat(t_list *begin_list, unsigned int nbr);
 void				ft_lst_remove_if(t_list **begin_list, void *data_ref,
 						int (*cmp)(void *, void *), void (*free_fct)(void *));
 void				ft_intsort(int *tab, int size);

@@ -1,0 +1,102 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_command.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
+/*   Updated: 2023/02/12 20:25:59 by mirsella         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
+
+char	*get_next_token(char *line, int *index)
+{
+	char	*token;
+	int		i;
+
+	i = 0;
+	while (line[i] && !ft_isspace(line[i]))
+		i++;
+	token = ft_substr(line, 0, i);
+	if (!token)
+		return (perror("malloc"), NULL);
+	*index += i;
+	return (token);
+}
+
+t_list	*new_lst_expand(t_list *env, char *str)
+{
+	char	*tmp;
+	t_list	*lst;
+
+	tmp = expand_everything(env, str);
+	if (!tmp)
+		return (NULL);
+	lst = ft_lstnew(str);
+	if (!lst)
+	{
+		free(tmp);
+		return (perror("malloc"), NULL);
+	}
+	return (lst);
+}
+
+char	*get_full_path(t_list *env, char *cmd)
+{
+	(void)env;
+	// TODO: implement this function
+	return (ft_strdup(cmd));
+}
+
+int	parse_arguments(t_data *data, char *line, t_proc *proc)
+{
+	int		i;
+	char	*tmp;
+	t_list	*lst;
+
+	i = 0;
+	while (line[i])
+	{
+		i += ft_skip_spaces(line + i);
+		if (!line[i])
+			break ;
+		tmp = get_next_token(line + i, &i);
+		if (!tmp)
+			return (perror("malloc"), -1);
+		lst = new_lst_expand(data->env, tmp);
+		if (!lst)
+		{
+			free(tmp);
+			return (perror("malloc"), -1);
+		}
+		ft_lstadd_back(&proc->args, lst);
+	}
+	return (0);
+}
+
+int	parse_command(t_data *data, char *line, t_proc *proc)
+{
+	char	*cmd;
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	tmp = get_next_token(line, &i);
+	if (!tmp)
+		return (perror("malloc"), -1);
+	cmd = expand_everything(data->env, tmp);
+	if (!cmd)
+		return (free(tmp), -1);
+	free(tmp);
+	proc->path = get_full_path(data->env, cmd);
+	free(cmd);
+	if (!proc->path)
+	{
+		free(proc->path);
+		return (perror("malloc"), -1);
+	}
+	return (parse_arguments(data, line + i, proc));
+}

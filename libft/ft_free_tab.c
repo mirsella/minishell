@@ -6,16 +6,18 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 20:18:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/07 20:28:43 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/12 17:41:43 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "stdlib.h"
 
-char	*ft_free_tab(char **tab)
+void	ft_free_tab(char **tab)
 {
 	int	i;
 
+	if (!tab)
+		return ;
 	i = 0;
 	while (tab[i])
 	{
@@ -23,5 +25,4 @@ char	*ft_free_tab(char **tab)
 		i++;
 	}
 	free(tab);
-	return (NULL);
 }
