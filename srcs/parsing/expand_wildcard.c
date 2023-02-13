@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 21:44:30 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 21:23:28 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 21:51:01 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,17 @@ char	*get_wildcard(char *line, int *i, t_list *env)
 	char	*pattern;
 	int		j;
 
+	j = 0;
 	pattern = get_pattern(line, &j, env);
-	str = get_matching_files(pattern);
-	free(pattern);
-	if (!str)
+	if (!pattern)
 		return (NULL);
 	*i += j;
+	str = get_matching_files(pattern);
+	if (!str)
+		return (free(pattern), NULL);
+	free(pattern);
+	if (!*str)
+		return (free(str), ft_strndup(line, j));
 	return (str);
 }
 
