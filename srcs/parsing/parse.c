@@ -6,13 +6,14 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/13 18:26:18 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 21:53:36 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	init_cmd_and_proc(t_proc **proc, char **cmd, t_data *data, t_proc *last_proc)
+int	init_cmd_and_proc(t_proc **proc, char **cmd,
+	t_data *data, t_proc *last_proc)
 {
 	*proc = NULL;
 	*cmd = ft_substr(*cmd, 0, next_pipeline(*cmd));

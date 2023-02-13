@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:25:45 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 21:22:52 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 21:55:11 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ struct s_chars
 	char	*joined;
 };
 
-int ismatching(const char *pattern, const char *string)
+int	ismatching(const char *pattern, const char *string)
 {
 	if (!*pattern)
 		return (!*string);
-	if (*pattern == '*') 
+	if (*pattern == '*')
 	{
 		while (*pattern == '*')
 			pattern++;
@@ -60,14 +60,15 @@ char	*get_matching_files(char *pattern)
 {
 	struct s_chars	chars;
 	t_list			*files;
+	t_list			*tmp;
 
 	files = get_lst_of_dir(".");
 	if (!files)
 		return (NULL);
-	t_list *tmp = files;
 	chars.str = ft_strdup("");
 	if (!chars.str)
 		return (NULL);
+	tmp = files;
 	while (tmp)
 	{
 		chars.tmp = get_match(pattern, tmp);

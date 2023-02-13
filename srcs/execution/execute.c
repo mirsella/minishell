@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 18:10:25 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 21:56:00 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,20 @@ void	print_procs(t_proc *procs, int layer)
 		if (tmp->type == SUBSHELL)
 		{
 			printf("%*cSUBSHELL: next_pipeline type: %s\n", layer, ' ',
-					next_pipeline);
+				next_pipeline);
 			print_procs(tmp->procs, layer + 4);
 		}
 		else
 		{
 			printf("%*cCOMMAND: %s, next_pipeline type: %s\n", layer, ' ',
-					tmp->path, next_pipeline);
+				tmp->path, next_pipeline);
 			if (tmp->args)
 			{
 				args = tmp->args;
 				while (args)
 				{
-					printf("%*cARG: %s\n", layer + 2, ' ', (char *)args->content);
+					printf("%*cARG: %s\n", layer + 2, ' ',
+						(char *)args->content);
 					args = args->next;
 				}
 			}
@@ -59,4 +60,3 @@ int	execute(t_data *data)
 	print_procs(data->procs, 0);
 	return (0);
 }
-
