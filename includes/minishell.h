@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 21:06:23 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 22:06:17 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "signal.h" // sigaction
 # include "unistd.h" // fork, execve, chdir, getcwd, access, dup2, pipe
 # include "fcntl.h" // open flags
+# include "sys/stat.h" // stat
 # include "errno.h" // errno
 # include "sys/types.h" // pid_t
 # include "dirent.h" // opendir, readdir, closedir
@@ -148,7 +149,8 @@ char			*get_next_token(char *line, int *index);
 int				parse_command(t_data *data, char *line, t_proc *proc);
 
 // parsing/get_full_path.c
-char			*get_full_path(t_list *env, char *cmd);
+int				isbuiltin(char *cmd);
+int				get_full_path(t_list *env, char **cmd);
 
 // execution/execute.c
 int				execute(t_data *data);

@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:25:45 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 21:55:11 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 22:48:18 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ char	*get_match(char *pattern, t_list *file)
 	char	*str;
 
 	str = NULL;
+	if (*(char *)file->content == '.' && *pattern != '.')
+		return (ft_strdup(""));
 	if (!ismatching(pattern, file->content))
 		return (ft_strdup(""));
 	if (file->next)

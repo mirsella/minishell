@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 19:23:55 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 22:45:07 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,9 @@ int	parse_arguments(t_data *data, char *line, t_proc *proc)
 
 int	parse_command(t_data *data, char *line, t_proc *proc)
 {
-	char	*cmd;
 	char	*tmp;
 	int		i;
+	int		ret;
 
 	i = 0;
 	line = expand_wildcards(line, data->env);
@@ -114,14 +114,15 @@ int	parse_command(t_data *data, char *line, t_proc *proc)
 	tmp = get_next_token(line, &i);
 	if (!tmp)
 		return (-1);
-	cmd = expand_everything(data->env, tmp);
-	if (!cmd)
-		return (free(tmp), -1);
+	proc->path = expand_everything(data->env, tmp);
 	free(tmp);
-	proc->path = get_full_path(data->env, cmd);
-	free(cmd);
 	if (!proc->path)
-		return (free(line), perror("malloc"), -1);
+		return (-1);
+	ret = get_full_path(data->env, &proc->path);
+	if (ret)
+		return (free(line), ret);
+	if (!proc->path)
+		return (free(line), -1);
 	if (parse_arguments(data, line + i, proc) == -1)
 		return (free(line), -1);
 	return (free(line), 0);
