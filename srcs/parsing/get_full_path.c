@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 22:45:08 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 22:50:48 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 22:51:58 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,16 @@ char	*test_paths(char **paths, char *cmd)
 	return (ft_strdup(""));
 }
 
-char	*search_PATH(t_list *env, char *cmd)
+char	*search_path(t_list *env, char *cmd)
 {
-	char	*PATH;
+	char	*path;
 	char	**paths;
 	char	*tmp;
 
-	PATH = get_env_value(env, "PATH");
-	if (!PATH)
+	path = get_env_value(env, "PATH");
+	if (!path)
 		return (ft_strdup(""));
-	paths = ft_split(PATH, ":");
+	paths = ft_split(path, ":");
 	if (!paths)
 		return (perror("malloc"), NULL);
 	tmp = test_paths(paths, cmd);
@@ -94,7 +94,7 @@ int	get_full_path(t_list *env, char **cmd)
 		return (0);
 	if (is_file_executable(*cmd))
 		return (0);
-	tmp = search_PATH(env, *cmd);
+	tmp = search_path(env, *cmd);
 	if (!tmp)
 		return (perror("malloc"), -1);
 	if (!*tmp)
