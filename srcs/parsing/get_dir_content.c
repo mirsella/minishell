@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildcard.c                                         :+:      :+:    :+:   */
+/*   get_dir_content.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 16:14:35 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 23:58:27 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 11:26:23 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ t_list	*get_lst_of_dir(char *path)
 	struct dirent	*dirent;
 	DIR				*dir;
 
-	// should sort files by ascii order
 	files = NULL;
 	dir = open_dir(path);
 	if (!dir)
@@ -63,44 +62,12 @@ t_list	*get_lst_of_dir(char *path)
 			return (perror("readdir"), NULL);
 		if (!dirent)
 			break ;
-		if (dirent->d_name[0] == '.')
-			continue ;
 		tmp = ft_lstadd_back_dup(&files, dirent->d_name);
 		if (!tmp)
 			return (perror("malloc"), NULL);
 	}
 	if (closedir(dir))
 		return (perror("closedir"), NULL);
+	ft_lstsort(&files, strcmp);
 	return (files);
-}
-
-char	*get_dir_content(void)
-{
-	t_list			*files;
-	t_list			*tmp;
-	int				size;
-	char			*str;
-
-	files = get_lst_of_dir(".");
-	if (!files)
-		return (NULL);
-	size = 0;
-	tmp = files;
-	while (tmp)
-	{
-		size += ft_strlen(tmp->content) + 1;
-		tmp = tmp->next;
-	}
-	str = calloc(sizeof(char), size + 1);
-	if (!str)
-		return (perror("malloc"), NULL);
-	tmp = files;
-	while (tmp)
-	{
-		ft_strlcat(str, tmp->content, size + 1);
-		ft_strlcat(str, " ", size + 1);
-		tmp = tmp->next;
-	}
-	ft_lstclear(&files, free);
-	return (str);
 }

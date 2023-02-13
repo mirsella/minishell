@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 23:54:43 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 19:23:55 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	parse_command(t_data *data, char *line, t_proc *proc)
 	int		i;
 
 	i = 0;
-	line = expand_wildcards(line);
+	line = expand_wildcards(line, data->env);
 	if (!line)
 		return (-1);
 	tmp = get_next_token(line, &i);
@@ -121,12 +121,8 @@ int	parse_command(t_data *data, char *line, t_proc *proc)
 	proc->path = get_full_path(data->env, cmd);
 	free(cmd);
 	if (!proc->path)
-	{
-		free(proc->path);
-		return (perror("malloc"), -1);
-	}
+		return (free(line), perror("malloc"), -1);
 	if (parse_arguments(data, line + i, proc) == -1)
-		return (-1);
-	free(line);
-	return (0);
+		return (free(line), -1);
+	return (free(line), 0);
 }

@@ -1,35 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   close.c                                            :+:      :+:    :+:   */
+/*   ft_lstsort.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/07 22:49:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 12:29:43 by mirsella         ###   ########.fr       */
+/*   Created: 2023/02/13 09:47:15 by mirsella          #+#    #+#             */
+/*   Updated: 2023/02/13 11:12:11 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-void	free_shell_data(t_data *data)
+void	ft_lstsort(t_list **lst, int (*cmp)(void *, void *))
 {
-	if (data->env)
-		ft_lstclear(&data->env, free);
-	if (data->procs)
-		procs_free(&data->procs);
-	rl_clear_history();
-}
+	t_list	*tmp;
+	t_list	*tmp2;
+	void	*content;
 
-void	exit_shell(t_data *data)
-{
-	free_shell_data(data);
-	exit(g_exit_code);
-}
-
-void	exit_shell_error(t_data *data, char *msg)
-{
-	print_error(msg, 0);
-	free_shell_data(data);
-	exit(g_exit_code);
+	tmp = *lst;
+	while (tmp)
+	{
+		tmp2 = tmp->next;
+		while (tmp2)
+		{
+			if (cmp(tmp->content, tmp2->content) > 0)
+			{
+				content = tmp->content;
+				tmp->content = tmp2->content;
+				tmp2->content = content;
+			}
+			tmp2 = tmp2->next;
+		}
+		tmp = tmp->next;
+	}
 }

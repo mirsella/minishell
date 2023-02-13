@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 23:42:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 22:22:55 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 12:23:28 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ struct s_chars
 static int	ismeta(char c)
 {
 	return (c == '>' || c == '<' || c == '|' || c == '&'
-		|| c == '(' || c == '\'' || c == '"' || c == '$');
+		|| c == '*' || c == '\'' || c == '"' || c == '$');
 }
 
 char	*expand_var(t_list *env, char *line, int *index)

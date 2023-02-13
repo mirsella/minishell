@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lst.c                                           :+:      :+:    :+:   */
+/*   ft_lstproc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 22:55:03 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 18:12:54 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 #include <unistd.h>
 
 t_proc	*create_and_push_proc(t_data *data, t_proc *last_proc)
@@ -38,6 +38,15 @@ t_proc	*new_proc(void)
 	if (!new)
 		return (perror("malloc"), NULL);
 	new->type = COMMAND;
+	new->fd_in = STDIN_FILENO;
+	new->fd_out = STDOUT_FILENO;
+	new->pipes[0] = -1;
+	new->pipes[1] = -1;
+	new->next = NULL;
+	new->args = NULL;
+	new->procs = NULL;
+	new->pid = -1;
+	new->exit_status = -1;
 	return (new);
 }
 

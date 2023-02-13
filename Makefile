@@ -1,10 +1,10 @@
-SRCS_MAIN = main.c signals.c close.c logging.c env.c
+SRCS_MAIN = main.c signals.c close.c logging.c env.c ft_lstproc.c
 SRCS_PARSING = parse.c skipping.c pipeline_type.c prompt_loop_utils.c parse_redirections.c handle_redirections.c parse_command.c get_full_path.c \
-			   expand_everything.c expand.c expand_wildcard.c wildcard.c 
-SRCS_PROCS = ft_lst.c
+			   expand_everything.c expand.c expand_wildcard.c wildcard_match.c get_dir_content.c
+SRCS_EXECUTION = execute.c
 SRCS = $(addprefix srcs/, $(SRCS_MAIN)) \
 	   $(addprefix srcs/parsing/, $(SRCS_PARSING)) \
-	   $(addprefix srcs/procs/, $(SRCS_PROCS))
+	   $(addprefix srcs/execution/, $(SRCS_EXECUTION))
 OBJS = $(SRCS:.c=.o)
 
 CC = cc

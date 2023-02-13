@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 22:45:53 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 21:06:23 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,12 @@ typedef struct s_data
 	int			original_stdin;
 	int			original_stdout;
 	t_list		*env;
+	t_list		*dir_content;
 	t_proc		*procs;
 }				t_data;
 
 // parsing/parse.c
-int				parse(t_data *data, char *line);
+int				parse(t_data *data, char *line, t_proc *last_proc);
 
 // parsing/pipeline_type.c
 int				is_nextpipeline_possible(
@@ -124,17 +125,23 @@ int				parse_redirections(t_data *data, char *line, t_proc *proc);
 // parsing/handle_redirections.c
 int				output_redirection(t_data *data, char *line, t_proc *proc);
 
+// parsing/expand_everything.c
+char			*expand_individual(char *line, int *i, t_list *env);
+char			*expand_everything(t_list *env, char *str);
+
 // parsing/expand.c
 char			*expand_var(t_list *env, char *str, int *index);
 char			*expand_single_quote(char *str, int *index);
 char			*expand_double_quote(t_list *env, char *str, int *index);
-char			*expand_everything(t_list *env, char *str);
 
 // parsing/expand_wildcard.c
-char			*expand_wildcards(char *line);
+char			*expand_wildcards(char *line, t_list *env);
 
-// parsing/wildcard.c
-char			*get_dir_content(void);
+// parsing/get_dir_content.c
+t_list			*get_lst_of_dir(char *path);
+
+// parsing/wildcard_match.c
+char			*get_matching_files(char *pattern);
 
 // parsing/parse_command.c
 char			*get_next_token(char *line, int *index);
@@ -142,6 +149,9 @@ int				parse_command(t_data *data, char *line, t_proc *proc);
 
 // parsing/get_full_path.c
 char			*get_full_path(t_list *env, char *cmd);
+
+// execution/execute.c
+int				execute(t_data *data);
 
 extern int	g_exit_code;
 

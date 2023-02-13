@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 22:35:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 21:14:03 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 11:11:48 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int					ft_isprint(int c);
 int					ft_lstsize(t_list *lst);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
+int					ft_strcmp(const char *s1, const char *s2);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
 int					ft_putchar(char c);
@@ -63,6 +64,7 @@ char				**ft_splitword(const char *s, const char *word);
 char				*ft_itoa(int n);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strdup(const char *s1);
+char				*ft_strndup(const char *s1, size_t n);
 char				**ft_tabdup(char **tab);
 char				**ft_lst_to_tab(t_list *lst);
 char				*ft_strjoin(const char *s1, const char *s2);
@@ -100,9 +102,10 @@ void				*ft_memmove(void *dest, const void *src, size_t n);
 void				*ft_memset(void *b, int c, size_t len);
 void				ft_bzero(void *s, size_t n);
 void				ft_lstadd_back(t_list **alst, t_list *newel);
+void				ft_lstsort(t_list **lst, int (*cmp)());
 void				ft_lstadd_front(t_list **alst, t_list *newel);
-void				ft_lstclear(t_list **lst, void (*del)(void*));
-void				ft_lstdelone(t_list *lst, void (*del)(void*));
+void				ft_lstclear(t_list **lst, void (*del)(void *));
+void				ft_lstdelone(t_list *lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 void				ft_putchar_fd(char c, int fd);
 void				ft_putendl_fd(char *s, int fd);

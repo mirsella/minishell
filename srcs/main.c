@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/12 18:39:28 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/13 18:21:26 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,41 +36,6 @@ int	init_shell(t_data *data, char **envp)
 	return (0);
 }
 
-// dev function
-void	print_procs(t_proc *procs, int layer)
-{
-	t_proc	*tmp;
-	char	*next_pipeline;
-
-	tmp = procs;
-	while (tmp)
-	{
-		if (tmp->next_pipeline == PIPE)
-			next_pipeline = "PIPE";
-		else if (tmp->next_pipeline == OR)
-			next_pipeline = "OR";
-		else if (tmp->next_pipeline == AND)
-			next_pipeline = "AND";
-		else
-			next_pipeline = "INVALID";
-		if (tmp->type == SUBSHELL)
-		{
-			printf("%*cSUBSHELL: next_pipeline type: %s\n", layer, ' ',
-				next_pipeline);
-			print_procs(tmp->procs, layer + 4);
-		}
-		else
-		{
-			printf("%*cCOMMAND: %s, next_pipeline type: %s\n", layer, ' ',
-				tmp->path, next_pipeline);
-			if (tmp->args)
-				printf("%*cargs: [%s, ..., %s]\n", layer, ' ',
-					(char *)tmp->args->content, (char *)ft_lstlast(tmp->args)->content);
-		}
-		tmp = tmp->next;
-	}
-}
-
 int	prompt_loop(t_data *data)
 {
 	char	*line;
@@ -87,13 +52,13 @@ int	prompt_loop(t_data *data)
 		if (!*(line + ft_skip_spaces(line)))
 			continue ;
 		add_history_filter(line);
-		ret = parse(data, line);
+		ret = parse(data, line, NULL);
 		if (ret < 0)
 			break ;
 		else if (ret > 0)
 			continue ;
-		print_procs(data->procs, 0);
-		// execute(data);
+		if (execute(data) < 0)
+			break ;
 	}
 	free(line);
 	procs_free(&data->procs);
