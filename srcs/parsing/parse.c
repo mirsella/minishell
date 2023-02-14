@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/13 21:53:36 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 21:37:23 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	parse_command_or_subshell(t_data *data, char *line, t_proc *proc)
 		if (!tmp)
 			return (perror("malloc"), -1);
 		tmp[skip_parenthesis(line) - 2] = ' ';
-		parse(data, tmp, proc);
+		handle_line(data, tmp, proc);
 		free(tmp);
 	}
 	else

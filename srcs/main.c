@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/13 18:21:26 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 21:38:31 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,37 @@ int	init_shell(t_data *data, char **envp)
 	return (0);
 }
 
+// return > 0 mean parsing error, show new prompt
+// return < 0 mean fatal error, exit
+int	handle_line(t_data *data, char *line, t_proc *last_proc)
+{
+	char			*cmd;
+	t_proc			*proc;
+	int				ret;
+
+	if (check_unclosed(line))
+		return (1);
+	while (*line)
+	{
+		cmd = line;
+		if (init_cmd_and_proc(&proc, &cmd, data, last_proc) < 0)
+			return (-1);
+		proc->next_pipeline = get_pipeline_type(line + next_pipeline(line));
+		ret = parse_redirections(data, cmd, proc);
+		if (ret)
+			return (free(cmd), ret);
+		ret = parse_command_or_subshell(data, cmd, proc);
+		if (ret)
+			return (free(cmd), ret);
+		free(cmd);
+		line += next_pipeline(line) + skip_pipeline(proc->next_pipeline);
+		if (!is_nextpipeline_possible(proc->next_pipeline, line))
+			return (1);
+		last_proc = proc;
+	}
+	return (0);
+}
+
 int	prompt_loop(t_data *data)
 {
 	char	*line;
@@ -52,7 +83,7 @@ int	prompt_loop(t_data *data)
 		if (!*(line + ft_skip_spaces(line)))
 			continue ;
 		add_history_filter(line);
-		ret = parse(data, line, NULL);
+		ret = handle_line(data, line, NULL);
 		if (ret < 0)
 			break ;
 		else if (ret > 0)

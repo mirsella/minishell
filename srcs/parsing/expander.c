@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 23:42:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 15:23:43 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 19:25:43 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*expand_single_quote(char *line, int *index)
 	return (tmp);
 }
 
-char	*expand_double_quote(t_list *env, char *line, int *index)
+char	*expand_double_quote(char *line, int *index, t_list *env)
 {
 	int				i;
 	struct s_chars	chars;
@@ -82,6 +82,6 @@ char	*expand_double_quote(t_list *env, char *line, int *index)
 			return (perror("malloc"), NULL);
 		chars.str = chars.tmp;
 	}
-	*index += i;
+	*index += i + 1;
 	return (chars.str);
 }

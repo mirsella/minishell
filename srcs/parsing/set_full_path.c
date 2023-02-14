@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_full_path.c                                    :+:      :+:    :+:   */
+/*   set_full_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 22:45:08 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 14:12:58 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 16:08:36 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,23 +66,22 @@ char	*search_path(t_list *env, char *cmd)
 	return (tmp);
 }
 
-int	set_full_path(t_list *env, char **cmd)
+int	set_full_path(t_list *env, char *cmd, char **full_path)
 {
 	char	*tmp;
 
-	if (isbuiltin(*cmd))
+	if (isbuiltin(cmd))
 		return (0);
-	if (is_file_executable(*cmd))
+	if (is_file_executable(cmd))
 		return (0);
-	tmp = search_path(env, *cmd);
+	tmp = search_path(env, cmd);
 	if (!tmp)
 		return (perror("malloc"), -1);
 	if (!*tmp)
 	{
 		free(tmp);
-		return (print_error(*cmd, "command not found"), 1);
+		return (print_error(cmd, "command not found"), 1);
 	}
-	free(*cmd);
-	*cmd = tmp;
+	*full_path = tmp;
 	return (0);
 }

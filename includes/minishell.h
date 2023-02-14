@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 14:13:05 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 21:35:28 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include "dirent.h" // opendir, readdir, closedir
 
 # define PROMPT "minishell$ "
+
+extern int	g_exit_code;
 
 typedef enum e_next_pipeline
 {
@@ -78,8 +80,14 @@ typedef struct s_data
 	t_proc		*procs;
 }				t_data;
 
+// main.c
+int				handle_line(t_data *data, char *line, t_proc *last_proc);
+
 // parsing/parse.c
 int				parse(t_data *data, char *line, t_proc *last_proc);
+int				parse_command_or_subshell(t_data *data, char *line, t_proc *proc);
+int				init_cmd_and_proc(t_proc **proc, char **cmd,
+					t_data *data, t_proc *last_proc);
 
 // parsing/pipeline_type.c
 int				is_nextpipeline_possible(
@@ -127,16 +135,20 @@ int				parse_redirections(t_data *data, char *line, t_proc *proc);
 int				output_redirection(t_data *data, char *line, t_proc *proc);
 
 // parsing/handle_expantion.c
-char			*expand_vars(t_list *env, char *line);
-char			*expand_everything(t_list *env, char *str);
+// char			*expand_vars(t_list *env, char *line);
+char			*expand_wildcard_and_var(char *line, t_list *env, int *index);
+char			*expand_everything(char *str, t_list *env);
+char			*expand_one(char *line, t_list *env, int *index);
 
 // parsing/expanders.c
 char			*expand_var(t_list *env, char *str, int *index);
 char			*expand_single_quote(char *str, int *index);
-char			*expand_double_quote(t_list *env, char *str, int *index);
+char			*expand_double_quote(char *str, int *index, t_list *env);
 
 // parsing/expand_wildcard.c
-char			*expand_wildcards(char *line, t_list *env);
+int				is_wildcard(char *line, t_list *env);
+char			*expand_wildcard(char *line, int *i, t_list *env);
+// char			*expand_wildcards(char *line, t_list *env);
 
 // parsing/get_dir_content.c
 t_list			*get_lst_of_dir(char *path);
@@ -149,14 +161,12 @@ char			*get_next_token(char *line, int *index);
 int				parse_command(t_data *data, char *line, t_proc *proc);
 
 // parsing/set_full_path.c
-int				set_full_path(t_list *env, char **cmd);
+int				set_full_path(t_list *env, char *cmd, char **full_path);
 
 // execution/execute.c
 int				execute(t_data *data);
 
 // builtin/builtin.c
 int				isbuiltin(char *cmd);
-
-extern int	g_exit_code;
 
 #endif
