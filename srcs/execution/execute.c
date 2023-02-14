@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 12:21:57 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 22:02:19 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	print_procs(t_proc *procs, int layer)
 
 int	execute(t_data *data)
 {
+	printf("----------------------\n");
 	print_procs(data->procs, 0);
+	printf("----------------------\n");
 	return (0);
 }

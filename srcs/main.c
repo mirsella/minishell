@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/14 21:38:31 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 22:12:22 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,19 @@ int	handle_line(t_data *data, char *line, t_proc *last_proc)
 	}
 	return (0);
 }
+
+// (cat doc | grep mot) && cat doc
+// grep a doc || (cat doc | grep mot)
+// cat doc | grep mot && (cat doc | grep mot)
+// (cat doc && grep mot) && cat doc
+
+int	handle_line(t_data *data, char *line, t_proc *last_proc);
+// while line is not empty
+//   parse each pipe until a && or || or end of line. if we stumble upon a subshell, we recursive call handle_line on it
+//   call execute on the pipeline
+//   if execute return 1, we return 1 it means the last command and next_pipeline type is not compatible
+//   if execute return 0, we continue the loop
+//   skip the && or || and continue the loop
 
 int	prompt_loop(t_data *data)
 {

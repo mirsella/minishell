@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 21:35:28 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 22:37:29 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,11 @@ typedef struct s_data
 int				handle_line(t_data *data, char *line, t_proc *last_proc);
 
 // parsing/parse.c
-int				parse(t_data *data, char *line, t_proc *last_proc);
+char			*get_next_token(char *line, int *index);
 int				parse_command_or_subshell(t_data *data, char *line, t_proc *proc);
 int				init_cmd_and_proc(t_proc **proc, char **cmd,
 					t_data *data, t_proc *last_proc);
+int				parse(t_data *data, char *line, t_proc *last_proc);
 
 // parsing/pipeline_type.c
 int				is_nextpipeline_possible(
@@ -157,7 +158,6 @@ t_list			*get_lst_of_dir(char *path);
 char			*get_matching_files(char *pattern);
 
 // parsing/parse_command.c
-char			*get_next_token(char *line, int *index);
 int				parse_command(t_data *data, char *line, t_proc *proc);
 
 // parsing/set_full_path.c
