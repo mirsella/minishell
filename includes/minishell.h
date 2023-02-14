@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 22:56:58 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 14:13:05 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,11 @@ int				parse_redirections(t_data *data, char *line, t_proc *proc);
 // parsing/handle_redirections.c
 int				output_redirection(t_data *data, char *line, t_proc *proc);
 
-// parsing/expand_everything.c
-char			*expand_individual(char *line, int *i, t_list *env);
+// parsing/handle_expantion.c
+char			*expand_vars(t_list *env, char *line);
 char			*expand_everything(t_list *env, char *str);
 
-// parsing/expand.c
+// parsing/expanders.c
 char			*expand_var(t_list *env, char *str, int *index);
 char			*expand_single_quote(char *str, int *index);
 char			*expand_double_quote(t_list *env, char *str, int *index);
@@ -148,8 +148,8 @@ char			*get_matching_files(char *pattern);
 char			*get_next_token(char *line, int *index);
 int				parse_command(t_data *data, char *line, t_proc *proc);
 
-// parsing/get_full_path.c
-int				get_full_path(t_list *env, char **cmd);
+// parsing/set_full_path.c
+int				set_full_path(t_list *env, char **cmd);
 
 // execution/execute.c
 int				execute(t_data *data);

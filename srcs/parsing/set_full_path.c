@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 22:45:08 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 22:56:37 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 14:12:58 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*search_path(t_list *env, char *cmd)
 	return (tmp);
 }
 
-int	get_full_path(t_list *env, char **cmd)
+int	set_full_path(t_list *env, char **cmd)
 {
 	char	*tmp;
 

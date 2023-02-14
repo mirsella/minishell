@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 22:56:25 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 22:56:37 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 15:34:09 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,3 @@ int	isbuiltin(char *cmd)
 	else
 		return (0);
 }
-

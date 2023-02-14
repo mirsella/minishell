@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
+/*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 23:42:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 12:23:28 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 15:23:43 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ struct s_chars
 static int	ismeta(char c)
 {
 	return (c == '>' || c == '<' || c == '|' || c == '&'
-		|| c == '*' || c == '\'' || c == '"' || c == '$');
+		|| c == '\'' || c == '"' || c == '$');
 }
 
 char	*expand_var(t_list *env, char *line, int *index)
@@ -34,13 +34,13 @@ char	*expand_var(t_list *env, char *line, int *index)
 	stop = 1;
 	while (line[stop] && !ismeta(line[stop]) && !isspace(line[stop]))
 		stop++;
-	if (stop == 1)
-		return ((*index)++, ft_strdup("$"));
 	*index += stop;
+	if (stop == 1)
+		return (ft_strdup("$"));
 	tmp = ft_substr(line, 1, stop - 1);
 	var = get_env_value(env, tmp);
 	free(tmp);
-	if (var == NULL)
+	if (!var)
 		return (ft_strdup(""));
 	return (ft_strdup(var));
 }

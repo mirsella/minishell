@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 21:44:30 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 21:51:01 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 15:32:55 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ struct s_chars
 	char	*joined;
 };
 
-int	ismeta(char c)
+static int	ismeta(char c)
 {
-	if (c == '|' || c == '&')
+	if (c == '>' || c == '<')
 		return (1);
 	return (0);
 }
@@ -53,9 +53,13 @@ char	*get_pattern(char *line, int *index, t_list *env)
 	chars.str = NULL;
 	while (line[i] && !isspace(line[i]) && !ismeta(line[i]))
 	{
-		chars.tmp = expand_individual(line + i, &i, env);
+		chars.joined = get_next_token(line + i, &i);
+		if (!chars.joined)
+			return (free(chars.str), NULL);
+		chars.tmp = expand_everything(env, chars.joined);
+		free(chars.joined);
 		if (!chars.tmp)
-			return (NULL);
+			return (free(chars.str), NULL);
 		chars.joined = ft_strjoin_free(chars.str, chars.tmp);
 		if (!chars.joined)
 			return (NULL);
