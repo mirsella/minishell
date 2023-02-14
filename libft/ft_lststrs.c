@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 20:54:36 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 20:58:48 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 11:45:49 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,12 @@ char	**ft_lst_to_tab(t_list *lst)
 	i = 0;
 	while (lst)
 	{
-		tab[i] = lst->content;
+		tab[i] = ft_strdup(lst->content);
+		if (!tab[i])
+		{
+			ft_free_tab(tab);
+			return (NULL);
+		}
 		lst = lst->next;
 		i++;
 	}

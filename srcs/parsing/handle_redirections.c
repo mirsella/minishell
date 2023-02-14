@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 22:31:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 00:55:23 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/14 11:36:30 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	ismeta(char c)
 	return (c == '>' || c == '<' || c == '|' || c == '&' || c == '(');
 }
 
-int	open_file(char *filename, t_proc *proc, int append_flag)
+int	open_writing_file(char *filename, t_proc *proc, int append_flag)
 {
 	int	fd;
 
@@ -53,8 +53,7 @@ int	output_redirection(t_data *data, char *line, t_proc *proc)
 		return (ret);
 	if (!filename)
 		return (-1);
-	printf("filename: '%s'\n", filename);
-	proc->fd_out = open_file(filename, proc, append);
+	proc->fd_out = open_writing_file(filename, proc, append);
 	if (proc->fd_out == -1)
 		return (1);
 	free(filename);
