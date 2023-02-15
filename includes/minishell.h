@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 22:37:29 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 11:56:07 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ typedef struct s_proc
 // each element have 2 t_proc of type COMMAND, one for ls and one for grep
 typedef struct s_data
 {
-	int			original_stdin;
-	int			original_stdout;
 	t_list		*env;
 	t_list		*dir_content;
 	t_proc		*procs;

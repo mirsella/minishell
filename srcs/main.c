@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/14 22:12:22 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 11:56:15 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ int	init_shell(t_data *data, char **envp)
 	char	**env;
 
 	g_exit_code = 0;
-	data->original_stdin = dup(STDIN_FILENO);
-	data->original_stdout = dup(STDOUT_FILENO);
-	if (data->original_stdin == -1 || data->original_stdout == -1)
-		return (perror("dup"), -1);
 	call_sigaction();
 	env = ft_tabdup(envp);
 	if (!env)
@@ -36,49 +32,55 @@ int	init_shell(t_data *data, char **envp)
 	return (0);
 }
 
-// return > 0 mean parsing error, show new prompt
-// return < 0 mean fatal error, exit
+char	*get_pipelines(char *line, int *index)
+{
+	int				i;
+	char			*cmd;
+	t_next_pipeline	next_pipeline_type;
+
+	i = 0;
+	while (line[i])
+	{
+		i += next_pipeline(line + i);
+		next_pipeline_type = get_pipeline_type(line + i);
+		if (next_pipeline_type == OR || next_pipeline_type == AND)
+			break ;
+		i += skip_pipeline(next_pipeline_type);
+
+	}
+	cmd = ft_substr(line, 0, i);
+	if (!cmd)
+		return (perror("malloc"), NULL);
+	*index += i;
+	return (cmd);
+}
+
 int	handle_line(t_data *data, char *line, t_proc *last_proc)
 {
 	char			*cmd;
-	t_proc			*proc;
+	int				i;
 	int				ret;
 
-	if (check_unclosed(line))
+	if (check_unclosed(line)) // shoud also check for syntax error like & or ||| or &&& or |\0
 		return (1);
-	while (*line)
+	i = 0;
+	while (line[i])
 	{
-		cmd = line;
-		if (init_cmd_and_proc(&proc, &cmd, data, last_proc) < 0)
+		cmd = get_pipelines(line + i, &i);
+		if (!cmd)
 			return (-1);
-		proc->next_pipeline = get_pipeline_type(line + next_pipeline(line));
-		ret = parse_redirections(data, cmd, proc);
-		if (ret)
-			return (free(cmd), ret);
-		ret = parse_command_or_subshell(data, cmd, proc);
-		if (ret)
-			return (free(cmd), ret);
+		ret = parse(data, cmd, last_proc);
 		free(cmd);
-		line += next_pipeline(line) + skip_pipeline(proc->next_pipeline);
-		if (!is_nextpipeline_possible(proc->next_pipeline, line))
-			return (1);
-		last_proc = proc;
+		if (ret)
+			return (ret);
+		ret = execute(data);
+		if (ret)
+			return (ret);
+		procs_free(&data->procs);
+		i += skip_pipeline(get_pipeline_type(line + i));
 	}
 	return (0);
 }
-
-// (cat doc | grep mot) && cat doc
-// grep a doc || (cat doc | grep mot)
-// cat doc | grep mot && (cat doc | grep mot)
-// (cat doc && grep mot) && cat doc
-
-int	handle_line(t_data *data, char *line, t_proc *last_proc);
-// while line is not empty
-//   parse each pipe until a && or || or end of line. if we stumble upon a subshell, we recursive call handle_line on it
-//   call execute on the pipeline
-//   if execute return 1, we return 1 it means the last command and next_pipeline type is not compatible
-//   if execute return 0, we continue the loop
-//   skip the && or || and continue the loop
 
 int	prompt_loop(t_data *data)
 {
@@ -101,8 +103,6 @@ int	prompt_loop(t_data *data)
 			break ;
 		else if (ret > 0)
 			continue ;
-		if (execute(data) < 0)
-			break ;
 	}
 	free(line);
 	procs_free(&data->procs);

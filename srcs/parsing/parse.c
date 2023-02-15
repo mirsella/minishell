@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/14 22:37:09 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 11:50:47 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,29 @@ int	parse_command_or_subshell(t_data *data, char *line, t_proc *proc)
 	return (0);
 }
 
-// return > 0 mean parsing error, show new prompt
-// return < 0 mean fatal error, exit
+int	parse(t_data *data, char *line, t_proc *last_proc)
+{
+	char			*cmd;
+	t_proc			*proc;
+	int				ret;
 
-// while line and next_pipeline == PIPE (if it's && or || we return))
-//   parse each pipeline
-//   skip the | and continue the loop
-int	parse(t_data *data, char *line, t_proc *last_proc);
+	while (*line)
+	{
+		cmd = line;
+		if (init_cmd_and_proc(&proc, &cmd, data, last_proc) < 0)
+			return (-1);
+		proc->next_pipeline = get_pipeline_type(line + next_pipeline(line));
+		ret = parse_redirections(data, cmd, proc);
+		if (ret)
+			return (free(cmd), ret);
+		ret = parse_command_or_subshell(data, cmd, proc);
+		if (ret)
+			return (free(cmd), ret);
+		free(cmd);
+		line += next_pipeline(line) + skip_pipeline(proc->next_pipeline);
+		if (!is_nextpipeline_possible(proc->next_pipeline, line))
+			return (1);
+		last_proc = proc;
+	}
+	return (0);
+}
