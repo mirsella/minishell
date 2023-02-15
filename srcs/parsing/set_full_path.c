@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 22:45:08 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 23:04:05 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:34:52 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ int	is_file_executable(char *path)
 			return (0);
 		return (perror("stat"), -1);
 	}
-	if (S_ISREG(buf.st_mode) && (buf.st_mode & S_IXUSR))
-		return (1);
-	return (0);
+	if (!S_ISREG(buf.st_mode))
+		return (print_error(path, "not a regular file"), 0);
+	if (!(buf.st_mode & S_IXUSR))
+		return (print_error(path, "not executable"), 0);
+	return (1);
 }
 
 char	*test_paths(char **paths, char *cmd)

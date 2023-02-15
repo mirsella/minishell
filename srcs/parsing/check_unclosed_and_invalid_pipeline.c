@@ -1,23 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt_loop_utils.c                                :+:      :+:    :+:   */
+/*   check_unclosed_and_invalid_pipeline.c              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 23:14:50 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 00:38:31 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:13:42 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// only add to history if the line doesn't start with a space
-void	add_history_filter(char *line)
-{
-	if (!ft_isspace(*line))
-		add_history(line);
-}
 
 int	check_unclosed_parenthesis(char *line)
 {
@@ -58,6 +51,53 @@ int	check_unclosed(char *line)
 		}
 		else
 			line++;
+	}
+	return (0);
+}
+
+static int	ismeta(char c)
+{
+	return (c == '|' || c == '&');
+}
+
+int	skip_token(char *line)
+{
+	int	i;
+
+	i = 0;
+	if (line[i] == '(')
+		i += skip_parenthesis(line + i);
+	else if (line[i] == '"' || line[i] == '\'')
+		i += skip_quotes(line + i);
+	else
+		i++;
+	return (i);
+}
+
+int	check_unclosed_and_invalid_pipeline(char *line)
+{
+	int				seen_word;
+	t_next_pipeline	type;
+
+	if (check_unclosed(line) < 0)
+		return (1);
+	while (*line)
+	{
+		seen_word = 0;
+		while (*line && !ismeta(*line))
+		{
+			if (!ft_isspace(*line))
+				seen_word = 1;
+			line += skip_token(line);
+		}
+		if (!seen_word && (ismeta(*line) || *line == 0))
+			return (print_syntax_error("near unexpected token ", *line), 1);
+		if (!*line)
+			break ;
+		type = get_pipeline_type(line);
+		if (type == INVALID || (*(line + skip_pipeline(type)) == 0))
+			return (print_syntax_error("near unexpected token ", *line), 1);
+		line += skip_pipeline(type);
 	}
 	return (0);
 }

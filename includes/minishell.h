@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 22:22:39 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:15:39 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ int				parse(char *line, t_list *env, t_proc **first, t_proc *last_proc);
 char			*get_next_token(char *line, int *index);
 
 // parsing/pipeline_type.c
-int				is_nextpipeline_possible(
-					t_next_pipeline next_pipeline, char *line);
 int				next_pipeline(char *line);
 int				skip_pipeline(t_next_pipeline pipeline_type);
 t_next_pipeline	get_pipeline_type(char *line);
@@ -97,9 +95,8 @@ void			procs_free(t_proc **proc);
 int				skip_quotes(char *line);
 int				skip_parenthesis(char *line);
 
-// parsing/prompt_loop_utils.c
-void			add_history_filter(char *line);
-int				check_unclosed(char *line);
+// parsing/check_unclosed_and_invalid_pipeline.c
+int				check_unclosed_and_invalid_pipeline(char *line);
 
 // env.c
 char			*get_env_value(t_list *env, char *variable);

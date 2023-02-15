@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 15:38:38 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 18:16:31 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:19:54 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,13 @@ char	*get_redirect_word_expand(char *line, int *ret, t_list *env)
 	char	*tmp;
 
 	if (*(line + ft_skip_spaces(line)) == 0)
-		return (*ret = 1,
-			(char [2]){print_syntax_error("empty redirect", 0), 0});
+		return (*ret = 1, print_syntax_error("near empty redirect", 0), NULL);
 	stop = 0;
 	while (line[stop] && !ismeta(line[stop]) && !ft_isspace(line[stop]))
 	{
 		if (line[stop] == '*' || line[stop] == '(')
-			return (*ret = 1, print_syntax_error("ambiguous redirect ", line[stop]),
-					(char [2]){line[stop], 0});
+			return (*ret = 1, print_syntax_error("ambiguous redirect ",
+					line[stop]), NULL);
 		if (line[stop] == '\'' || line[stop] == '"')
 			stop += skip_quotes(line);
 		else if (line[stop] == '(')
@@ -40,11 +39,12 @@ char	*get_redirect_word_expand(char *line, int *ret, t_list *env)
 			stop++;
 	}
 	tmp = ft_substr(line, 0, stop);
-	line = expand_everything(tmp, env);
-	free(tmp);
-	if (!line)
+	if (!tmp)
 		return (*ret = 1, perror("malloc"), NULL);
-	return (*ret = 0, line);
+	line = expand_everything(tmp, env);
+	if (!line)
+		return (*ret = 1, free(tmp), perror("malloc"), NULL);
+	return (*ret = 0, free(tmp), line);
 }
 
 int	remove_redirections(char *line)

@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/15 22:22:56 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:38:06 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ char	*get_next_token(char *line, int *index)
 	return (token);
 }
 
-int	init_cmd_and_proc(t_proc **first, t_proc **last_proc, t_proc **proc, char **cmd)
+int	init_cmd_and_proc(t_proc **first, t_proc **last_proc,
+	t_proc **proc, char **cmd)
 {
 	*proc = NULL;
 	*cmd = ft_substr(*cmd, 0, next_pipeline(*cmd));
@@ -45,7 +46,8 @@ int	init_cmd_and_proc(t_proc **first, t_proc **last_proc, t_proc **proc, char **
 	return (0);
 }
 
-int	parse_command_or_subshell(char *line, t_list *env, t_proc **first, t_proc *proc)
+int	parse_command_or_subshell(char *line, t_list *env, t_proc **first,
+	t_proc *proc)
 {
 	char	*tmp;
 	int		ret;
@@ -53,7 +55,6 @@ int	parse_command_or_subshell(char *line, t_list *env, t_proc **first, t_proc *p
 	line += ft_skip_spaces(line);
 	if (!*line && proc->fd_out == STDOUT_FILENO && proc->fd_in == STDIN_FILENO)
 		return (print_syntax_error("no command given", 0), 1);
-	ret = 0;
 	if (*line == '(')
 	{
 		proc->type = SUBSHELL;
@@ -66,7 +67,11 @@ int	parse_command_or_subshell(char *line, t_list *env, t_proc **first, t_proc *p
 	}
 	else
 	{
-		// ret = parse_command(line, proc, env);
+		// will be removed, used to test the parser. parse_command will be called
+		// when executing the t_proc in the execute function
+		ret = parse_command(line, proc, env);
+		if (ret)
+			return (ret);
 		proc->type = COMMAND;
 		proc->line = ft_strdup(line);
 		if (!proc->line)
@@ -81,7 +86,7 @@ int	parse(char *line, t_list *env, t_proc **first, t_proc *last_proc)
 	t_proc			*proc;
 	int				ret;
 
-	if (check_unclosed(line)) // and should check for invalid pipeline like &&& or |\0. then we can remove is next_pipeline_possible
+	if (check_unclosed_and_invalid_pipeline(line))
 		return (1);
 	while (*line)
 	{
@@ -97,8 +102,6 @@ int	parse(char *line, t_list *env, t_proc **first, t_proc *last_proc)
 		if (ret)
 			return (ret);
 		line += next_pipeline(line) + skip_pipeline(proc->next_pipeline);
-		if (!is_nextpipeline_possible(proc->next_pipeline, line))
-			return (1);
 		last_proc = proc;
 	}
 	return (0);

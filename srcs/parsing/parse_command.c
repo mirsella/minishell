@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 18:17:04 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:31:32 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	parse_command(char *line, t_proc *proc, t_list *env)
 	ret = set_full_path(env, cmd, &full_path);
 	free(cmd);
 	if (ret)
-		return (free(full_path), ret);
+		return (ret);
 	proc->path = full_path;
 	return (0);
 }

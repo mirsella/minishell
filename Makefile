@@ -1,5 +1,5 @@
 SRCS_MAIN = main.c signals.c close.c logging.c env.c ft_lstproc.c
-SRCS_PARSING = parse.c skipping.c pipeline_type.c prompt_loop_utils.c parse_redirections.c handle_redirections.c parse_command.c set_full_path.c \
+SRCS_PARSING = parse.c skipping.c pipeline_type.c check_unclosed_and_invalid_pipeline.c parse_redirections.c handle_redirections.c parse_command.c set_full_path.c \
 			   handle_expantion.c expander.c expand_wildcard.c wildcard_match.c get_dir_content.c
 SRCS_EXECUTION = execute.c
 SRCS_BUILTIN = builtin.c

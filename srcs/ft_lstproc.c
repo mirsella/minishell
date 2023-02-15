@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 22:25:52 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 23:10:07 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,12 @@ int	create_and_push_proc(t_proc **first, t_proc **last_proc, t_proc **proc)
 		*first = new;
 	if (*last_proc && (*last_proc)->type == COMMAND)
 		(*last_proc)->next = new;
-	else if (*last_proc && (*last_proc)->type == SUBSHELL && (*last_proc)->procs)
+	else if (*last_proc
+		&& (*last_proc)->type == SUBSHELL && (*last_proc)->procs)
 		(*last_proc)->next = new;
-	else if (*last_proc && (*last_proc)->type == SUBSHELL && !(*last_proc)->procs)
+	else if (*last_proc
+		&& (*last_proc)->type == SUBSHELL && !(*last_proc)->procs)
 		(*last_proc)->procs = new;
-	// else if ((*last_proc)->type == COMMAND
-	// 		|| ((*last_proc)->type == SUBSHELL && (*last_proc)->procs))
-	// 	(*last_proc)->next = new;
-	// else if ((*last_proc)->type == SUBSHELL && !(*last_proc)->procs)
-	// 	(*last_proc)->procs = new;
 	*last_proc = new;
 	return (0);
 }
