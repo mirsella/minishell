@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/15 19:36:24 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 22:22:02 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,58 +32,37 @@ int	init_shell(t_list **env, char **envp)
 	return (0);
 }
 
-int	handle_line(char *line, t_list *env)
-{
-	char	*cmd;
-	int		i;
-	int		ret;
-	t_proc	*procs;
-	t_next_pipeline	next_pipeline_type;
-
-	if (check_unclosed(line)) // shoud also check for syntax error like & or ||| or &&& or |\0
-		return (1);
-	procs = NULL;
-	i = 0;
-	while (line[i])
-	{
-		cmd = get_pipelines(line + i, &i, &next_pipeline_type);
-		if (!cmd)
-			return (-1);
-		ret = parse(cmd, &procs, env);
-		free(cmd);
-		if (ret)
-			return (procs_free(&procs), ret);
-		ret = execute(procs, env);
-		procs_free(&procs);
-		if (ret)
-			return (ret);
-		i += skip_pipeline(get_pipeline_type(line + i));
-	}
-	return (0);
-}
-
 int	prompt_loop(t_list *env)
 {
 	char	*line;
 	int		ret;
+	t_proc	*procs;
 
+	procs = NULL;
 	line = NULL;
 	while (1)
 	{
 		free(line);
+		procs_free(&procs);
 		line = readline(PROMPT);
 		if (!line)
 			break ;
 		if (!*(line + ft_skip_spaces(line)))
 			continue ;
 		add_history_filter(line);
-		ret = handle_line(line, env);
+		ret = parse(line, env, &procs, NULL);
+		if (ret < 0)
+			break ;
+		else if (ret > 0)
+			continue ;
+		ret = execute(procs, env);
 		if (ret < 0)
 			break ;
 		else if (ret > 0)
 			continue ;
 	}
 	free(line);
+	procs_free(&procs);
 	return (0);
 }
 

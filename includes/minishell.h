@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 21:02:25 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 22:22:39 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,11 @@ typedef enum e_type
 // represent a command or a subshell
 //
 // if type == COMMAND. procs == NULL.
-// else if type == SUBSHELL. args == NULL, path == NULL
-//
-// don't know between pipes[2] or fd_in/out yet,
-// we'll see later when we'll implement pipes
-// rappel: pipes[0] == read, pipes[1] == write
+// else if type == SUBSHELL. args == NULL, path == NULL, line == NULL.
 typedef struct s_proc
 {
 	t_type			type;
+	char			*line;
 	t_list			*args;
 	char			*path;
 	struct s_proc	*procs;
@@ -67,15 +64,9 @@ typedef struct s_proc
 	struct s_proc	*next;
 }				t_proc;
 
-// main.c
-int				handle_line(char *line, t_list *env);
-
 // parsing/parse.c
+int				parse(char *line, t_list *env, t_proc **first, t_proc *last_proc);
 char			*get_next_token(char *line, int *index);
-int				parse_command_or_subshell(char *line, t_proc *proc, t_list *env);
-int				parse(char *line, t_proc **proc, t_list *env);
-// char			*get_pipelines(char *line, int *index);
-char			*get_pipelines(char *line, int *index, t_next_pipeline *last_pipeline_type);
 
 // parsing/pipeline_type.c
 int				is_nextpipeline_possible(
@@ -98,7 +89,7 @@ int				print_error(char *msg, char *optional);
 int				print_error_char(char *msg, char optional);
 
 // lstproc.c
-int				create_and_push_proc(t_proc **last_proc, t_proc **proc);
+int				create_and_push_proc(t_proc **first, t_proc **last_proc, t_proc **proc);
 t_proc			*new_proc(void);
 void			procs_free(t_proc **proc);
 
@@ -148,6 +139,7 @@ int				parse_command(char *line, t_proc *proc, t_list *env);
 int				set_full_path(t_list *env, char *cmd, char **full_path);
 
 // execution/execute.c
+void			print_procs(t_proc *procs, int layer);
 int				execute(t_proc *procs, t_list *env);
 
 // builtin/builtin.c

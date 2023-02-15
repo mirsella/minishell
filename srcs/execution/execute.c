@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 18:37:35 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 21:56:14 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	print_procs(t_proc *procs, int layer)
 		else
 		{
 			printf("%*cCOMMAND: %s, next_pipeline: %s, fd_in: %d, fd_out: %d,\n", layer, ' ',
-				tmp->path, next_pipeline, tmp->fd_in, tmp->fd_out);
+				tmp->line, next_pipeline, tmp->fd_in, tmp->fd_out);
 			if (tmp->args)
 			{
 				args = tmp->args;
@@ -58,7 +58,6 @@ void	print_procs(t_proc *procs, int layer)
 int	execute(t_proc *procs, t_list *env)
 {
 	(void)env;
-	printf("----------------------\n");
 	print_procs(procs, 0);
 	return (0);
 }

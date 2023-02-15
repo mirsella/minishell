@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/15 19:35:04 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 22:22:56 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,61 +34,26 @@ char	*get_next_token(char *line, int *index)
 	return (token);
 }
 
-char	*get_pipelines(char *line, int *index, t_next_pipeline *last_pipeline_type)
+int	init_cmd_and_proc(t_proc **first, t_proc **last_proc, t_proc **proc, char **cmd)
 {
-	int				i;
-	char			*cmd;
-	t_next_pipeline	next_pipeline_type;
-
-	i = 0;
-	while (line[i])
-	{
-		i += next_pipeline(line + i);
-		next_pipeline_type = get_pipeline_type(line + i);
-		if (next_pipeline_type == OR || next_pipeline_type == AND)
-			break ;
-		i += skip_pipeline(next_pipeline_type);
-
-	}
-	cmd = ft_substr(line, 0, i);
-	if (!cmd)
-		return (perror("malloc"), NULL);
-	*last_pipeline_type = next_pipeline_type;
-	*index += i;
-	return (cmd);
-}
-
-int	init_cmd_and_proc(t_proc **last_proc, t_proc **proc, char **cmd)
-{
+	*proc = NULL;
 	*cmd = ft_substr(*cmd, 0, next_pipeline(*cmd));
 	if (!cmd)
 		return (perror("malloc"), -1);
-	create_and_push_proc(last_proc, proc);
-	if (!proc)
-	{
-		free(*cmd);
-		*cmd = NULL;
-		return (perror("malloc"), -1);
-	}
+	if (create_and_push_proc(first, last_proc, proc))
+		return (free(*cmd), -1);
 	return (0);
 }
 
-// ((ls && pwd) | grep mot) && cat doc
-// ((ls && pwd) && grep mot) && cat doc
-// (false) && true
-// (true) && true
-// (true) && false
-// (cat doc | grep mot) && cat doc
-// ls | (grep a)
-// ls | (grep a && pwd)
-int	parse_command_or_subshell(char *line, t_proc *proc, t_list *env)
+int	parse_command_or_subshell(char *line, t_list *env, t_proc **first, t_proc *proc)
 {
 	char	*tmp;
 	int		ret;
 
 	line += ft_skip_spaces(line);
 	if (!*line && proc->fd_out == STDOUT_FILENO && proc->fd_in == STDIN_FILENO)
-		return (print_syntax_error("empty command", 0), 1);
+		return (print_syntax_error("no command given", 0), 1);
+	ret = 0;
 	if (*line == '(')
 	{
 		proc->type = SUBSHELL;
@@ -96,39 +61,45 @@ int	parse_command_or_subshell(char *line, t_proc *proc, t_list *env)
 		if (!tmp)
 			return (perror("malloc"), -1);
 		tmp[skip_parenthesis(line) - 2] = ' ';
-		ret = handle_line(tmp, env);
+		ret = parse(tmp, env, first, proc);
 		free(tmp);
 	}
 	else
 	{
+		// ret = parse_command(line, proc, env);
 		proc->type = COMMAND;
-		ret = parse_command(line, proc, env);
+		proc->line = ft_strdup(line);
+		if (!proc->line)
+			return (perror("malloc"), -1);
 	}
 	return (ret);
 }
 
-int	parse(char *line, t_proc **procs, t_list *env)
+int	parse(char *line, t_list *env, t_proc **first, t_proc *last_proc)
 {
-	char		*cmd;
-	t_proc		**last_proc;
-	t_proc		*proc;
-	int			ret;
+	char			*cmd;
+	t_proc			*proc;
+	int				ret;
 
-	last_proc = procs;
+	if (check_unclosed(line)) // and should check for invalid pipeline like &&& or |\0. then we can remove is next_pipeline_possible
+		return (1);
 	while (*line)
 	{
 		cmd = line;
-		if (init_cmd_and_proc(last_proc, &proc, &cmd) < 0)
+		if (init_cmd_and_proc(first, &last_proc, &proc, &cmd))
 			return (-1);
 		proc->next_pipeline = get_pipeline_type(line + next_pipeline(line));
 		ret = parse_redirections(cmd, proc, env);
 		if (ret)
 			return (free(cmd), ret);
-		ret = parse_command_or_subshell(cmd, proc, env);
-		if (ret)
-			return (free(cmd), ret);
+		ret = parse_command_or_subshell(cmd, env, first, proc);
 		free(cmd);
+		if (ret)
+			return (ret);
 		line += next_pipeline(line) + skip_pipeline(proc->next_pipeline);
+		if (!is_nextpipeline_possible(proc->next_pipeline, line))
+			return (1);
+		last_proc = proc;
 	}
 	return (0);
 }
