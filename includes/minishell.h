@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 11:56:07 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 21:02:25 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,30 +63,19 @@ typedef struct s_proc
 	int				fd_out;
 	int				pipes[2];
 	pid_t			pid;
-	int				exit_status;
+	int				exit_code;
 	struct s_proc	*next;
 }				t_proc;
 
-// t_proc *procs: represent the commands or subshell to exec.
-// ex : (ls | grep a) && (ls | grep b) would be :
-// 2 elements in the list of type SUBSHELL:
-// each element have 2 t_proc of type COMMAND, one for ls and one for grep
-typedef struct s_data
-{
-	t_list		*env;
-	t_list		*dir_content;
-	t_proc		*procs;
-}				t_data;
-
 // main.c
-int				handle_line(t_data *data, char *line, t_proc *last_proc);
+int				handle_line(char *line, t_list *env);
 
 // parsing/parse.c
 char			*get_next_token(char *line, int *index);
-int				parse_command_or_subshell(t_data *data, char *line, t_proc *proc);
-int				init_cmd_and_proc(t_proc **proc, char **cmd,
-					t_data *data, t_proc *last_proc);
-int				parse(t_data *data, char *line, t_proc *last_proc);
+int				parse_command_or_subshell(char *line, t_proc *proc, t_list *env);
+int				parse(char *line, t_proc **proc, t_list *env);
+// char			*get_pipelines(char *line, int *index);
+char			*get_pipelines(char *line, int *index, t_next_pipeline *last_pipeline_type);
 
 // parsing/pipeline_type.c
 int				is_nextpipeline_possible(
@@ -99,20 +88,18 @@ t_next_pipeline	get_pipeline_type(char *line);
 void			call_sigaction(void);
 
 // close.c
-void			free_shell_data(t_data *data);
-void			exit_shell(t_data *data);
-void			exit_shell_error(t_data *data, char *msg);
+void			free_shell_data(t_list *env);
+void			exit_shell(t_list *env);
+void			exit_shell_error(t_list *env, char *msg);
 
 // logging.c
 int				print_syntax_error(char *message, char optional);
 int				print_error(char *msg, char *optional);
 int				print_error_char(char *msg, char optional);
 
-// proc/ft_lst.c
-t_proc			*create_and_push_proc(t_data *data, t_proc *last_proc);
+// lstproc.c
+int				create_and_push_proc(t_proc **last_proc, t_proc **proc);
 t_proc			*new_proc(void);
-t_proc			*get_last_proc(t_proc *procs);
-void			push_back_proc(t_proc *procs, t_proc *proc);
 void			procs_free(t_proc **proc);
 
 // parsing/skipping.c
@@ -127,14 +114,13 @@ int				check_unclosed(char *line);
 char			*get_env_value(t_list *env, char *variable);
 
 // parsing/parse_redirections.c
-char			*get_word_expand(t_data *data, char *line, int *ret);
-int				parse_redirections(t_data *data, char *line, t_proc *proc);
+char			*get_redirect_word_expand(char *line, int *ret, t_list *env);
+int				parse_redirections(char *line, t_proc *proc, t_list *env);
 
 // parsing/handle_redirections.c
-int				output_redirection(t_data *data, char *line, t_proc *proc);
+int				output_redirection(char *line, t_proc *proc, t_list *env);
 
 // parsing/handle_expantion.c
-// char			*expand_vars(t_list *env, char *line);
 char			*expand_wildcard_and_var(char *line, t_list *env, int *index);
 char			*expand_everything(char *str, t_list *env);
 char			*expand_one(char *line, t_list *env, int *index);
@@ -156,13 +142,13 @@ t_list			*get_lst_of_dir(char *path);
 char			*get_matching_files(char *pattern);
 
 // parsing/parse_command.c
-int				parse_command(t_data *data, char *line, t_proc *proc);
+int				parse_command(char *line, t_proc *proc, t_list *env);
 
 // parsing/set_full_path.c
 int				set_full_path(t_list *env, char *cmd, char **full_path);
 
 // execution/execute.c
-int				execute(t_data *data);
+int				execute(t_proc *procs, t_list *env);
 
 // builtin/builtin.c
 int				isbuiltin(char *cmd);

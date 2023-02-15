@@ -6,30 +6,28 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:49:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 12:29:43 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 18:25:06 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_shell_data(t_data *data)
+void	free_shell_data(t_list *env)
 {
-	if (data->env)
-		ft_lstclear(&data->env, free);
-	if (data->procs)
-		procs_free(&data->procs);
+	if (env)
+		ft_lstclear(&env, free);
 	rl_clear_history();
 }
 
-void	exit_shell(t_data *data)
+void	exit_shell(t_list *env)
 {
-	free_shell_data(data);
+	free_shell_data(env);
 	exit(g_exit_code);
 }
 
-void	exit_shell_error(t_data *data, char *msg)
+void	exit_shell_error(t_list *env, char *msg)
 {
 	print_error(msg, 0);
-	free_shell_data(data);
+	free_shell_data(env);
 	exit(g_exit_code);
 }

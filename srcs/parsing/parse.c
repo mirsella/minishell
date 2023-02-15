@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/15 11:50:47 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 19:35:04 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,37 @@ char	*get_next_token(char *line, int *index)
 	return (token);
 }
 
-int	init_cmd_and_proc(t_proc **proc, char **cmd,
-	t_data *data, t_proc *last_proc)
+char	*get_pipelines(char *line, int *index, t_next_pipeline *last_pipeline_type)
 {
-	*proc = NULL;
+	int				i;
+	char			*cmd;
+	t_next_pipeline	next_pipeline_type;
+
+	i = 0;
+	while (line[i])
+	{
+		i += next_pipeline(line + i);
+		next_pipeline_type = get_pipeline_type(line + i);
+		if (next_pipeline_type == OR || next_pipeline_type == AND)
+			break ;
+		i += skip_pipeline(next_pipeline_type);
+
+	}
+	cmd = ft_substr(line, 0, i);
+	if (!cmd)
+		return (perror("malloc"), NULL);
+	*last_pipeline_type = next_pipeline_type;
+	*index += i;
+	return (cmd);
+}
+
+int	init_cmd_and_proc(t_proc **last_proc, t_proc **proc, char **cmd)
+{
 	*cmd = ft_substr(*cmd, 0, next_pipeline(*cmd));
 	if (!cmd)
 		return (perror("malloc"), -1);
-	*proc = create_and_push_proc(data, last_proc);
-	if (!*proc)
+	create_and_push_proc(last_proc, proc);
+	if (!proc)
 	{
 		free(*cmd);
 		*cmd = NULL;
@@ -51,7 +73,15 @@ int	init_cmd_and_proc(t_proc **proc, char **cmd,
 	return (0);
 }
 
-int	parse_command_or_subshell(t_data *data, char *line, t_proc *proc)
+// ((ls && pwd) | grep mot) && cat doc
+// ((ls && pwd) && grep mot) && cat doc
+// (false) && true
+// (true) && true
+// (true) && false
+// (cat doc | grep mot) && cat doc
+// ls | (grep a)
+// ls | (grep a && pwd)
+int	parse_command_or_subshell(char *line, t_proc *proc, t_list *env)
 {
 	char	*tmp;
 	int		ret;
@@ -66,41 +96,39 @@ int	parse_command_or_subshell(t_data *data, char *line, t_proc *proc)
 		if (!tmp)
 			return (perror("malloc"), -1);
 		tmp[skip_parenthesis(line) - 2] = ' ';
-		handle_line(data, tmp, proc);
+		ret = handle_line(tmp, env);
 		free(tmp);
 	}
 	else
 	{
-		ret = parse_command(data, line, proc);
-		if (ret)
-			return (ret);
+		proc->type = COMMAND;
+		ret = parse_command(line, proc, env);
 	}
-	return (0);
+	return (ret);
 }
 
-int	parse(t_data *data, char *line, t_proc *last_proc)
+int	parse(char *line, t_proc **procs, t_list *env)
 {
-	char			*cmd;
-	t_proc			*proc;
-	int				ret;
+	char		*cmd;
+	t_proc		**last_proc;
+	t_proc		*proc;
+	int			ret;
 
+	last_proc = procs;
 	while (*line)
 	{
 		cmd = line;
-		if (init_cmd_and_proc(&proc, &cmd, data, last_proc) < 0)
+		if (init_cmd_and_proc(last_proc, &proc, &cmd) < 0)
 			return (-1);
 		proc->next_pipeline = get_pipeline_type(line + next_pipeline(line));
-		ret = parse_redirections(data, cmd, proc);
+		ret = parse_redirections(cmd, proc, env);
 		if (ret)
 			return (free(cmd), ret);
-		ret = parse_command_or_subshell(data, cmd, proc);
+		ret = parse_command_or_subshell(cmd, proc, env);
 		if (ret)
 			return (free(cmd), ret);
 		free(cmd);
 		line += next_pipeline(line) + skip_pipeline(proc->next_pipeline);
-		if (!is_nextpipeline_possible(proc->next_pipeline, line))
-			return (1);
-		last_proc = proc;
 	}
 	return (0);
 }

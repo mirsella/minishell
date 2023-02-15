@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 23:17:55 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 18:17:04 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,13 @@ int	parse_arguments(char *line, t_proc *proc, t_list *env)
 	return (0);
 }
 
-int	parse_command(t_data *data, char *line, t_proc *proc)
+int	parse_command(char *line, t_proc *proc, t_list *env)
 {
 	int		ret;
 	char	*cmd;
 	char	*full_path;
 
-	ret = parse_arguments(line, proc, data->env);
+	ret = parse_arguments(line, proc, env);
 	if (ret)
 		return (ret);
 	if (!proc->args)
@@ -108,7 +108,7 @@ int	parse_command(t_data *data, char *line, t_proc *proc)
 	if (!cmd)
 		return (perror("malloc"), -1);
 	full_path = NULL;
-	ret = set_full_path(data->env, cmd, &full_path);
+	ret = set_full_path(env, cmd, &full_path);
 	free(cmd);
 	if (ret)
 		return (free(full_path), ret);

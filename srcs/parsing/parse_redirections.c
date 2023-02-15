@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 15:38:38 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/12 17:59:17 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 18:16:31 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	ismeta(char c)
 	return (c == '>' || c == '<' || c == '|' || c == '&');
 }
 
-char	*get_word_expand(t_data *data, char *line, int *ret)
+char	*get_redirect_word_expand(char *line, int *ret, t_list *env)
 {
 	int		stop;
 	char	*tmp;
@@ -30,8 +30,8 @@ char	*get_word_expand(t_data *data, char *line, int *ret)
 	while (line[stop] && !ismeta(line[stop]) && !ft_isspace(line[stop]))
 	{
 		if (line[stop] == '*' || line[stop] == '(')
-			return (*ret = 1, (char [2]){print_syntax_error(
-					"ambiguous redirect ", line[stop]), 0});
+			return (*ret = 1, print_syntax_error("ambiguous redirect ", line[stop]),
+					(char [2]){line[stop], 0});
 		if (line[stop] == '\'' || line[stop] == '"')
 			stop += skip_quotes(line);
 		else if (line[stop] == '(')
@@ -40,7 +40,7 @@ char	*get_word_expand(t_data *data, char *line, int *ret)
 			stop++;
 	}
 	tmp = ft_substr(line, 0, stop);
-	line = expand_everything(data->env, tmp);
+	line = expand_everything(tmp, env);
 	free(tmp);
 	if (!line)
 		return (*ret = 1, perror("malloc"), NULL);
@@ -74,7 +74,7 @@ int	remove_redirections(char *line)
 	return (i);
 }
 
-int	parse_redirections(t_data *data, char *line, t_proc *proc)
+int	parse_redirections(char *line, t_proc *proc, t_list *env)
 {
 	int	ret;
 
@@ -86,7 +86,7 @@ int	parse_redirections(t_data *data, char *line, t_proc *proc)
 			break ;
 		if (*line == '>')
 		{
-			ret = output_redirection(data, line + 1, proc);
+			ret = output_redirection(line + 1, proc, env);
 			line += remove_redirections(line);
 		}
 		// still need to parse input redirections here

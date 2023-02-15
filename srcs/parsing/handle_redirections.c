@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 22:31:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 11:36:30 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/15 18:15:54 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	open_writing_file(char *filename, t_proc *proc, int append_flag)
 	return (fd);
 }
 
-int	output_redirection(t_data *data, char *line, t_proc *proc)
+int	output_redirection(char *line, t_proc *proc, t_list *env)
 {
 	char	*filename;
 	int		append;
@@ -48,7 +48,7 @@ int	output_redirection(t_data *data, char *line, t_proc *proc)
 	line += ft_skip_spaces(line + append);
 	if (ismeta(*line))
 		return (print_syntax_error("unexpected token ", *(line)), 1);
-	filename = get_word_expand(data, line, &ret);
+	filename = get_redirect_word_expand(line, &ret, env);
 	if (ret)
 		return (ret);
 	if (!filename)
