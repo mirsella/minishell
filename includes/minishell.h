@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 14:07:24 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:20:34 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ typedef struct s_proc
 }				t_proc;
 
 // parsing/parse.c
-int				parse(char *line, t_list *env, t_proc **first, t_proc *last_proc);
+int				parse(char *line, t_list *env, t_proc **first,
+					t_proc *last_proc);
 char			*get_next_token(char *line, int *index);
 
 // parsing/pipeline_type.c
@@ -87,7 +88,8 @@ int				print_error(char *msg, char *optional);
 int				print_error_char(char *msg, char optional);
 
 // lstproc.c
-int				create_and_push_proc(t_proc **first, t_proc **last_proc, t_proc **proc);
+int				create_and_push_proc(
+					t_proc **first, t_proc **last_proc, t_proc **proc);
 t_proc			*new_proc(void);
 void			procs_free(t_proc **proc);
 
@@ -110,7 +112,7 @@ int				output_redirection(char *line, t_proc *proc, t_list *env);
 int				input_redirection(char *line, t_proc *proc, t_list *env);
 
 // parsing/heredoc.c
-int	heredoc_redirection(char *line, t_proc *proc, t_list *env);
+int				heredoc_redirection(char *line, t_proc *proc, t_list *env);
 
 // parsing/handle_expantion.c
 char			*expand_wildcard_and_var(char *line, t_list *env, int *index);
