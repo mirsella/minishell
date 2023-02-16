@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/15 23:38:06 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:38:50 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ int	parse_command_or_subshell(char *line, t_list *env, t_proc **first,
 	line += ft_skip_spaces(line);
 	if (!*line && proc->fd_out == STDOUT_FILENO && proc->fd_in == STDIN_FILENO)
 		return (print_syntax_error("no command given", 0), 1);
+	ret = 0;
+	proc->line = ft_strdup(line);
+	if (!proc->line)
+		return (perror("malloc"), -1);
 	if (*line == '(')
 	{
 		proc->type = SUBSHELL;
@@ -67,15 +71,7 @@ int	parse_command_or_subshell(char *line, t_list *env, t_proc **first,
 	}
 	else
 	{
-		// will be removed, used to test the parser. parse_command will be called
-		// when executing the t_proc in the execute function
-		ret = parse_command(line, proc, env);
-		if (ret)
-			return (ret);
 		proc->type = COMMAND;
-		proc->line = ft_strdup(line);
-		if (!proc->line)
-			return (perror("malloc"), -1);
 	}
 	return (ret);
 }
@@ -94,9 +90,6 @@ int	parse(char *line, t_list *env, t_proc **first, t_proc *last_proc)
 		if (init_cmd_and_proc(first, &last_proc, &proc, &cmd))
 			return (-1);
 		proc->next_pipeline = get_pipeline_type(line + next_pipeline(line));
-		ret = parse_redirections(cmd, proc, env);
-		if (ret)
-			return (free(cmd), ret);
 		ret = parse_command_or_subshell(cmd, env, first, proc);
 		free(cmd);
 		if (ret)

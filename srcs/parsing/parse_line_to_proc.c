@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_command.c                                    :+:      :+:    :+:   */
+/*   parse_line_to_proc.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 23:31:32 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:36:08 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 struct s_chars {
 	char	*str;
@@ -114,4 +111,23 @@ int	parse_command(char *line, t_proc *proc, t_list *env)
 		return (ret);
 	proc->path = full_path;
 	return (0);
+}
+
+int	parse_line_to_proc(char *line, t_proc *proc, t_list *env)
+{
+	int	ret;
+
+	ret = 0;
+	if (proc->type == SUBSHELL)
+	{
+		ret = parse_redirections(proc->line, proc, env);
+	}
+	else
+	{
+		ret = parse_redirections(line, proc, env);
+		if (ret)
+			return (ret);
+		ret = parse_command(proc->line, proc, env);
+	}
+	return (ret);
 }

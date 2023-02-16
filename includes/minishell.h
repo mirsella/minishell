@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 23:15:39 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:07:24 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,10 @@ int				parse_redirections(char *line, t_proc *proc, t_list *env);
 
 // parsing/handle_redirections.c
 int				output_redirection(char *line, t_proc *proc, t_list *env);
+int				input_redirection(char *line, t_proc *proc, t_list *env);
+
+// parsing/heredoc.c
+int	heredoc_redirection(char *line, t_proc *proc, t_list *env);
 
 // parsing/handle_expantion.c
 char			*expand_wildcard_and_var(char *line, t_list *env, int *index);
@@ -131,12 +135,13 @@ char			*get_matching_files(char *pattern);
 
 // parsing/parse_command.c
 int				parse_command(char *line, t_proc *proc, t_list *env);
+int				parse_line_to_proc(char *line, t_proc *proc, t_list *env);
 
 // parsing/set_full_path.c
 int				set_full_path(t_list *env, char *cmd, char **full_path);
 
 // execution/execute.c
-void			print_procs(t_proc *procs, int layer);
+int				print_procs(t_proc *procs, t_list *env, int layer);
 int				execute(t_proc *procs, t_list *env);
 
 // builtin/builtin.c

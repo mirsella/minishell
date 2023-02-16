@@ -6,18 +6,19 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 21:56:14 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:35:48 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // dev function
-void	print_procs(t_proc *procs, int layer)
+int	print_procs(t_proc *procs, t_list *env, int layer)
 {
 	t_proc	*tmp;
 	t_list	*args;
 	char	*next_pipeline;
+	int		ret;
 
 	tmp = procs;
 	while (tmp)
@@ -30,22 +31,27 @@ void	print_procs(t_proc *procs, int layer)
 			next_pipeline = "AND";
 		else
 			next_pipeline = "INVALID";
+		ret = parse_line_to_proc(tmp->line, tmp, env);
+		if (ret)
+			return (ret);
 		if (tmp->type == SUBSHELL)
 		{
 			printf("%*cSUBSHELL: next_pipeline: %s, fd_in: %d, fd_out: %d\n", layer, ' ',
 				next_pipeline, tmp->fd_in, tmp->fd_out);
-			print_procs(tmp->procs, layer + 4);
+			ret = print_procs(tmp->procs, env, layer + 4);
+			if (ret)
+				return (ret);
 		}
 		else
 		{
-			printf("%*cCOMMAND: %s, next_pipeline: %s, fd_in: %d, fd_out: %d,\n", layer, ' ',
-				tmp->line, next_pipeline, tmp->fd_in, tmp->fd_out);
+			printf("%*cCOMMAND: '%s', next_pipeline: %s, fd_in: %d, fd_out: %d,\n", layer, ' ',
+				tmp->path, next_pipeline, tmp->fd_in, tmp->fd_out);
 			if (tmp->args)
 			{
 				args = tmp->args;
 				while (args)
 				{
-					printf("%*cARG: %s\n", layer + 2, ' ',
+					printf("%*cARG: '%s'\n", layer + 2, ' ',
 						(char *)args->content);
 					args = args->next;
 				}
@@ -53,11 +59,12 @@ void	print_procs(t_proc *procs, int layer)
 		}
 		tmp = tmp->next;
 	}
+	return (0);
 }
 
 int	execute(t_proc *procs, t_list *env)
 {
 	(void)env;
-	print_procs(procs, 0);
+	print_procs(procs, env, 0);
 	return (0);
 }
