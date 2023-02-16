@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 23:57:13 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 00:33:16 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	add_word_to_lst(char *word, t_proc *proc)
 int	remove_quote_add_to_lst(char *line, t_proc *proc)
 {
 	struct s_chars	chars;
-	int		i;
+	int				i;
 
 	i = 0;
 	while (line[i])
@@ -63,7 +63,7 @@ int	remove_quote_add_to_lst(char *line, t_proc *proc)
 int	parse_arguments(char *line, t_proc *proc, t_list *env)
 {
 	struct s_chars	chars;
-	int		i;
+	int				i;
 
 	line = expand_vars(line, env);
 	if (!line)

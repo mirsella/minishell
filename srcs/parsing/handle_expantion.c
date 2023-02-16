@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 21:57:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 00:17:31 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 00:31:42 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,11 @@ char	*expand_vars(char *line, t_list *env)
 		else if (line[i] == '"')
 			chars.tmp = expand_vars_in_double_quote(line + i, &i, env);
 		else if (line[i] == '\'')
-		{
 			chars.tmp = ft_substr(line, i, skip_quotes(line + i));
-			i += skip_quotes(line + i);
-		}
 		else
 			chars.tmp = ft_strdup((char []){line[i++], 0});
+		if (line[i] == '\'')
+			i += skip_quotes(line + i);
 		if (!chars.tmp)
 			return (free(chars.str), perror("malloc"), NULL);
 		chars.joined = ft_strjoin_free(chars.str, chars.tmp);

@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 00:19:37 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 00:32:20 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 		line = readline("> ");
 		if (!line)
 			return (printf("minishell: warning: %s. wanted `%s'\n",
-				"here-document delimited by end-of-line", delim), 0);
+					"here-document delimited by end-of-line", delim), 0);
 		if (ft_strcmp(line, delim) == 0)
 			return (free(line), 0);
 		if (expand)

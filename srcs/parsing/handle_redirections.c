@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 22:31:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 00:28:24 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 00:32:10 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ int	input_redirection(char *line, t_proc *proc, t_list *env)
 	line += heredoc;
 	line += ft_skip_spaces(line);
 	if (ismeta(*line) || *line == 0)
-		return (print_syntax_error("unexpected token near empty redirect ", *(line)), 1);
+		return (print_syntax_error("unexpected token near empty redirect ",
+				*(line)), 1);
 	if (heredoc)
 		ret = heredoc_redirection(line, proc, env);
 	else
