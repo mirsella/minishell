@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 22:52:23 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 23:57:13 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,33 @@ int	add_word_to_lst(char *word, t_proc *proc)
 	return (0);
 }
 
-int	add_words_to_lst(char *words, t_proc *proc)
+int	remove_quote_add_to_lst(char *line, t_proc *proc)
 {
-	char	*tmp;
+	struct s_chars	chars;
 	int		i;
 
 	i = 0;
-	while (words[i])
+	while (line[i])
 	{
-		tmp = get_next_token(words + i, &i);
-		if (!tmp)
+		chars.tmp = get_next_token(line + i, &i);
+		if (!chars.tmp)
 			return (perror("malloc"), -1);
-		if (add_word_to_lst(tmp, proc))
-			return (free(tmp), -1);
-		free(tmp);
-		i += ft_skip_spaces(words + i);
+		chars.str = remove_quotes(chars.tmp);
+		free(chars.tmp);
+		if (!chars.str)
+			return (perror("malloc"), -1);
+		if (add_word_to_lst(chars.str, proc))
+			return (free(chars.str), -1);
+		free(chars.str);
+		i += ft_skip_spaces(line + i);
 	}
 	return (0);
 }
 
-// a="foo bar" replace $a with 'foo' 'bar'
+// expand variable
+// word splitting
+// wildcard
+// quote removal
 int	parse_arguments(char *line, t_proc *proc, t_list *env)
 {
 	struct s_chars	chars;
@@ -62,21 +69,18 @@ int	parse_arguments(char *line, t_proc *proc, t_list *env)
 	if (!line)
 		return (perror("malloc"), -1);
 	i = 0;
-	printf("expanded var '%s'\n", line);
 	while (line[i])
 	{
-		chars.tmp = get_next_token(line + i, &i);
+		chars.str = get_next_token(line + i, &i);
+		if (!chars.str)
+			return (free(line), perror("malloc"), -1);
+		chars.tmp = expand_wildcards(chars.str);
+		free(chars.str);
 		if (!chars.tmp)
 			return (free(line), perror("malloc"), -1);
-		chars.str = expand_everything(chars.tmp, env);
-		if (!chars.str)
-			return (free(chars.tmp), free(line), perror("malloc"), -1);
-		if (is_wildcard(chars.tmp, env))
-			add_words_to_lst(chars.str, proc);
-		else
-			add_word_to_lst(chars.str, proc);
+		if (remove_quote_add_to_lst(chars.tmp, proc))
+			return (free(line), free(chars.tmp), -1);
 		free(chars.tmp);
-		free(chars.str);
 		i += ft_skip_spaces(line + i);
 	}
 	free(line);

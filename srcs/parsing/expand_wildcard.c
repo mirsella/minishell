@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 21:44:30 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 23:17:55 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 00:01:56 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,15 @@ struct s_chars
 	char	*joined;
 };
 
-int	is_wildcard(char *line, t_list *env)
+int	is_wildcard(char *line)
 {
 	int		i;
-	char	*tmp;
 
 	i = 0;
 	while (line[i] && !isspace(line[i]) && line[i] != '*')
 	{
 		if (line[i] == '\'' || line[i] == '"')
 			i += skip_quotes(line + i);
-		else if (line[i] == '$')
-		{
-			tmp = expand_var(env, line + i, &i);
-			if (!tmp)
-				return (0);
-			if (ft_strchr(tmp, '*'))
-				return (free(tmp), 1);
-			free(tmp);
-		}
 		else
 			i++;
 	}
@@ -47,7 +37,7 @@ int	is_wildcard(char *line, t_list *env)
 	return (0);
 }
 
-char	*get_pattern(char *line, int *index, t_list *env)
+char	*get_pattern(char *line, int *index)
 {
 	int				i;
 	struct s_chars	chars;
@@ -56,14 +46,10 @@ char	*get_pattern(char *line, int *index, t_list *env)
 	chars.str = ft_strdup("");
 	if (!chars.str)
 		return (perror("malloc"), NULL);
-	while (line[i])
+	while (line[i] && !isspace(line[i]))
 	{
-		if (line[i] == '\'')
-			chars.tmp = expand_single_quote(line + i, &i);
-		else if (line[i] == '"')
-			chars.tmp = expand_double_quote(line + i, &i, env);
-		else if (line[i] == '$')
-			chars.tmp = expand_var(env, line + i, &i);
+		if (line[i] == '\'' || line[i] == '"')
+			chars.tmp = get_in_quote(line + i, &i);
 		else
 			chars.tmp = ft_strdup((char []){line[i++], 0});
 		if (!chars.tmp)
@@ -75,14 +61,14 @@ char	*get_pattern(char *line, int *index, t_list *env)
 	return (chars.str);
 }
 
-char	*expand_wildcard(char *line, int *index, t_list *env)
+char	*expand_wildcard(char *line, int *index)
 {
 	char	*str;
 	char	*pattern;
 	int		i;
 
 	i = 0;
-	pattern = get_pattern(line, &i, env);
+	pattern = get_pattern(line, &i);
 	if (!pattern)
 		return (NULL);
 	*index += i;
@@ -92,5 +78,35 @@ char	*expand_wildcard(char *line, int *index, t_list *env)
 	free(pattern);
 	if (!*str)
 		return (free(str), ft_strndup(line, i));
+	return (str);
+}
+
+char	*expand_wildcards(char *line)
+{
+	int		i;
+	char	*str;
+	char	*tmp;
+
+	i = 0;
+	str = ft_strdup("");
+	if (!str)
+		return (perror("malloc"), NULL);
+	while (line[i])
+	{
+		if (is_wildcard(line + i))
+			tmp = expand_wildcard(line + i, &i);
+		else if (line[i] == '\'' || line[i] == '"')
+		{
+			tmp = ft_substr(line, i, skip_quotes(line + i));
+			i += skip_quotes(line + i);
+		}
+		else
+			tmp = ft_strdup((char []){line[i++], 0});
+		if (!tmp)
+			return (free(str), NULL);
+		str = ft_strjoin_free(str, tmp);
+		if (!str)
+			return (perror("malloc"), NULL);
+	}
 	return (str);
 }

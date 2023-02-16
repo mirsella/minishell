@@ -6,12 +6,13 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 17:34:29 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 00:19:37 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 struct	s_chars {
@@ -42,10 +43,10 @@ int	set_heredoc_delim(char *line, char **delim, int *expand)
 		else
 			chars.tmp = ft_substr(line++, 0, 1);
 		if (!chars.tmp)
-			return (-1);
+			return (perror("malloc"), -1);
 		chars.joined = ft_strjoin_free(chars.str, chars.tmp);
 		if (!chars.joined)
-			return (-1);
+			return (perror("malloc"), -1);
 		chars.str = chars.joined;
 	}
 	*delim = chars.str;
@@ -86,6 +87,8 @@ void	print_fd(int fd)
 	int		ret;
 
 	ret = 1;
+	printf("printing heredoc at fd %d\n", fd);
+	printf("you should disable this function if you want the fd to not be empty for the execution\n");
 	while (ret)
 	{
 		ret = read(fd, buf, 1024);
@@ -106,7 +109,6 @@ int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 	if (pipe(pipes) == -1)
 		return (-1);
 	proc->fd_in = pipes[0];
-	(void)env;
 	read_until_delim(delim, expand, pipes[1], env);
 	free(delim);
 	close(pipes[1]);
