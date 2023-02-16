@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 18:32:42 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 22:52:23 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,75 +18,68 @@ struct s_chars {
 	char	*joined;
 };
 
-int	add_word_to_lst(char *line, t_proc *proc, t_list *env)
+int	add_word_to_lst(char *word, t_proc *proc)
 {
 	t_list	*tmp;
-	char	*expanded;
+	char	*str;
 
-	expanded = expand_everything(line, env);
-	if (!expanded)
-		return (-1);
-	tmp = ft_lstnew(expanded);
+	str = ft_strdup(word);
+	if (!str)
+		return (perror("malloc"), -1);
+	tmp = ft_lstnew(str);
 	if (!tmp)
 		return (perror("malloc"), -1);
 	ft_lstadd_back(&proc->args, tmp);
 	return (0);
 }
 
-int	add_next_token_to_lst_as_tokens(
-		char *line, t_list **args, t_list *env, int *index)
-{
-	struct s_chars	chars;
-	t_list			*tmplst;
-	int				i;
-
-	i = 0;
-	chars.tmp = get_next_token(line, index);
-	if (!chars.tmp)
-		return (perror("malloc"), -1);
-	chars.str = expand_everything(chars.tmp, env);
-	free(chars.tmp);
-	if (!chars.str)
-		return (perror("malloc"), -1);
-	while (chars.str[i])
-	{
-		chars.tmp = get_next_token(chars.str + i, &i);
-		if (!chars.tmp)
-			return (perror("malloc"), -1);
-		tmplst = ft_lstnew(chars.tmp);
-		if (!tmplst)
-			return (perror("malloc"), -1);
-		ft_lstadd_back(args, tmplst);
-		i += ft_skip_spaces(chars.str + i);
-	}
-	free(chars.str);
-	return (0);
-}
-
-int	parse_arguments(char *line, t_proc *proc, t_list *env)
+int	add_words_to_lst(char *words, t_proc *proc)
 {
 	char	*tmp;
 	int		i;
 
 	i = 0;
+	while (words[i])
+	{
+		tmp = get_next_token(words + i, &i);
+		if (!tmp)
+			return (perror("malloc"), -1);
+		if (add_word_to_lst(tmp, proc))
+			return (free(tmp), -1);
+		free(tmp);
+		i += ft_skip_spaces(words + i);
+	}
+	return (0);
+}
+
+// a="foo bar" replace $a with 'foo' 'bar'
+int	parse_arguments(char *line, t_proc *proc, t_list *env)
+{
+	struct s_chars	chars;
+	int		i;
+
+	line = expand_vars(line, env);
+	if (!line)
+		return (perror("malloc"), -1);
+	i = 0;
+	printf("expanded var '%s'\n", line);
 	while (line[i])
 	{
-		if (line[i] == '\'' || line[i] == '"')
-		{
-			tmp = get_next_token(line + i, &i);
-			if (!tmp)
-				return (perror("malloc"), -1);
-			if (add_word_to_lst(tmp, proc, env))
-				return (free(tmp), -1);
-			free(tmp);
-		}
+		chars.tmp = get_next_token(line + i, &i);
+		if (!chars.tmp)
+			return (free(line), perror("malloc"), -1);
+		chars.str = expand_everything(chars.tmp, env);
+		if (!chars.str)
+			return (free(chars.tmp), free(line), perror("malloc"), -1);
+		if (is_wildcard(chars.tmp, env))
+			add_words_to_lst(chars.str, proc);
 		else
-		{
-			if (add_next_token_to_lst_as_tokens(line + i, &proc->args, env, &i))
-				return (-1);
-		}
+			add_word_to_lst(chars.str, proc);
+		free(chars.tmp);
+		free(chars.str);
 		i += ft_skip_spaces(line + i);
 	}
+	free(line);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 21:57:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 17:32:09 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 21:42:57 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,32 +40,6 @@ char	*expand_one(char *line, t_list *env, int *index)
 	if (!tmp)
 		return (NULL);
 	return (tmp);
-}
-
-char	*expand_vars(char *line, t_list *env)
-{
-	int				i;
-	struct s_chars	chars;
-
-	i = 0;
-	chars.str = ft_strdup("");
-	if (!chars.str)
-		return (perror("malloc"), NULL);
-	while (line[i])
-	{
-		if (line[i] == '$')
-			chars.tmp = expand_var(env, line + i, &i);
-		else
-		{
-			chars.tmp = ft_substr(line + i, 0, 1);
-			i++;
-		}
-		if (!chars.tmp)
-			return (free(chars.str), NULL);
-		chars.joined = ft_strjoin_free(chars.str, chars.tmp);
-		chars.str = chars.joined;
-	}
-	return (chars.str);
 }
 
 char	*expand_everything(char *line, t_list *env)
