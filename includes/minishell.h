@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 16:20:34 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 17:14:46 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int				input_redirection(char *line, t_proc *proc, t_list *env);
 int				heredoc_redirection(char *line, t_proc *proc, t_list *env);
 
 // parsing/handle_expantion.c
-char			*expand_wildcard_and_var(char *line, t_list *env, int *index);
+char			*expand_vars(char *line, t_list *env);
 char			*expand_everything(char *str, t_list *env);
 char			*expand_one(char *line, t_list *env, int *index);
 

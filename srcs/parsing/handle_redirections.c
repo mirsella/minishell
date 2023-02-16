@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 22:31:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 14:08:32 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 17:35:45 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,22 +82,20 @@ int	input_redirection(char *line, t_proc *proc, t_list *env)
 	heredoc = 0;
 	if (*line == '<')
 		heredoc = 1;
+	line += heredoc;
 	line += ft_skip_spaces(line);
-	if (ismeta(*line))
-		return (print_syntax_error("unexpected token ", *(line)), 1);
+	if (ismeta(*line) || *line == 0)
+		return (print_syntax_error("unexpected token near empty redirect ", *(line)), 1);
 	if (heredoc)
+		proc->fd_in = heredoc_redirection(line, proc, env);
+	else
 	{
-		printf("heredoc!\n");
-		// proc->fd_in = heredoc_redirection(line, proc, env);
-		// if (proc->fd_in == -1)
-		// 	return (-1);
-		return (0);
+		filename = get_redirect_word_expand(line, &ret, env);
+		if (ret)
+			return (ret);
+		proc->fd_in = open_reading_file(filename, proc);
+		free(filename);
 	}
-	filename = get_redirect_word_expand(line, &ret, env);
-	if (ret)
-		return (ret);
-	proc->fd_in = open_reading_file(filename, proc);
-	free(filename);
 	if (proc->fd_in == -1)
 		return (1);
 	return (0);

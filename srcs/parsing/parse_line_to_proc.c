@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 14:36:08 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:32:42 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,7 @@ int	parse_line_to_proc(char *line, t_proc *proc, t_list *env)
 
 	ret = 0;
 	if (proc->type == SUBSHELL)
-	{
 		ret = parse_redirections(proc->line, proc, env);
-	}
 	else
 	{
 		ret = parse_redirections(line, proc, env);

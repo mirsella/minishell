@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 15:38:38 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/16 13:13:22 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:04:24 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ char	*get_redirect_word_expand(char *line, int *ret, t_list *env)
 					line[stop]), NULL);
 		if (line[stop] == '\'' || line[stop] == '"')
 			stop += skip_quotes(line);
-		else if (line[stop] == '(')
-			stop += skip_parenthesis(line);
 		else
 			stop++;
 	}
@@ -51,25 +49,20 @@ int	remove_redirections(char *line)
 {
 	int	i;
 
-	i = 0;
-	i += ft_skip_spaces(line);
-	while (line[i] == '>' || line[i] == '<')
-		line[i++] = ' ';
-	i += ft_skip_spaces(line + i);
-	while (line[i] && !ismeta(line[i]) && !ft_isspace(line[i]))
+	line += ft_skip_spaces(line);
+	while (*line == '>' || *line == '<')
+		*line++ = ' ';
+	line += ft_skip_spaces(line);
+	while (*line && !ismeta(*line) && !ft_isspace(*line))
 	{
-		if (line[i] == '\'' || line[i] == '"')
-		{
-			ft_memset(line + i, ' ', skip_quotes(line + i));
-			i += skip_quotes(line + i);
-		}
-		else if (line[i] == '(')
-		{
-			ft_memset(line + i, ' ', skip_parenthesis(line + i));
-			i += skip_parenthesis(line + i);
-		}
+		if (*line == '\'' || *line == '"')
+			i = skip_quotes(line);
+		else if (*line == '(')
+			i = skip_parenthesis(line);
 		else
-			line[i++] = ' ';
+			i = 1;
+		ft_memset(line, ' ', i);
+		line += i;
 	}
 	return (i);
 }
