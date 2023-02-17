@@ -6,12 +6,13 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 15:38:38 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 00:09:47 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 18:32:39 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <string.h>
+#include <unistd.h>
 
 static int	ismeta(char c)
 {
@@ -92,6 +93,5 @@ int	parse_redirections(char *line, t_proc *proc, t_list *env)
 		if (ret)
 			return (ret);
 	}
-	printf("finished parsing redirections. fd_in %d\n", proc->fd_in);
 	return (0);
 }

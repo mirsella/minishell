@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/15 23:44:26 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 18:36:32 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	g_exit_code;
+// because the exit codes are between 0 and 255. it overflow if > 255
+unsigned char	g_exit_code;
 
 int	init_shell(t_list **env, char **envp)
 {
 	char	**env_tab;
+	char	*exitcode;
 
 	g_exit_code = 0;
 	call_sigaction();
@@ -33,15 +35,15 @@ int	init_shell(t_list **env, char **envp)
 			return (perror("malloc"), -1);
 	}
 	else
-		*env = NULL;
+	{
+		*env = ft_lstnew(ft_strdup(""));
+		if (!(*env) || !(*env)->content)
+			return (perror("malloc"), -1);
+	}
+	exitcode = ft_itoa(g_exit_code);
+	set_env_var(*env, "?", exitcode);
+	free(exitcode);
 	return (0);
-}
-
-// only add to history if the line doesn't start with a space
-void	add_history_filter(char *line)
-{
-	if (!ft_isspace(*line))
-		add_history(line);
 }
 
 int	handle_line(char *line, t_list *env)
@@ -50,6 +52,7 @@ int	handle_line(char *line, t_list *env)
 	t_proc	*procs;
 
 	procs = NULL;
+	g_exit_code = 0;
 	ret = parse(line, env, &procs, NULL);
 	if (ret)
 		return (procs_free(&procs), ret);
@@ -72,11 +75,14 @@ int	prompt_loop(t_list *env)
 			break ;
 		if (!*(line + ft_skip_spaces(line)))
 			continue ;
-		add_history_filter(line);
+		if (!ft_isspace(*line))
+			add_history(line);
 		ret = handle_line(line, env);
 		if (ret < 0)
 			break ;
-		else if (ret > 1)
+		if (set_exit_code_to_env(env))
+			break ;
+		if (ret > 1)
 			continue ;
 	}
 	free(line);

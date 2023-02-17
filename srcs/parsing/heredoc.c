@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 00:32:20 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 17:58:05 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,13 @@ struct	s_chars {
 	char	*joined;
 };
 
-static int	ismeta(char c)
-{
-	return (c == '>' || c == '<' || c == '|' || c == '&');
-}
-
 int	set_heredoc_delim(char *line, char **delim, int *expand)
 {
 	struct s_chars	chars;
 
 	*expand = 1;
 	chars.str = NULL;
-	while (*line && !ismeta(*line) && !isspace(*line))
+	while (*line && !ft_strchr("<>|&", *line) && !isspace(*line))
 	{
 		if (*line == '\'' || *line == '"')
 		{
@@ -53,6 +48,31 @@ int	set_heredoc_delim(char *line, char **delim, int *expand)
 	return (0);
 }
 
+int	prompt_null_line(char *delim)
+{
+	if (g_exit_code == 128 + SIGINT)
+		return (1);
+	printf("minishell: warning: %s. wanted `%s'\n",
+		"here-document delimited by end-of-file (wanted `", delim);
+	return (0);
+}
+
+char	*get_line(char *delim)
+{
+	char	*line;
+	char	*tmp;
+
+	ft_putstr("> ");
+	line = ft_get_next_line(STDIN_FILENO, 0);
+	if (!line)
+		return (prompt_null_line(delim), NULL);
+	tmp = ft_substr(line, 0, ft_strlen(line) - 1);
+	free(line);
+	if (!tmp)
+		return (NULL);
+	return (tmp);
+}
+
 int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 {
 	char	*line;
@@ -61,39 +81,23 @@ int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 	line = "";
 	while (line)
 	{
-		line = readline("> ");
+		line = get_line(delim);
 		if (!line)
-			return (printf("minishell: warning: %s. wanted `%s'\n",
-					"here-document delimited by end-of-line", delim), 0);
+			return (-1);
 		if (ft_strcmp(line, delim) == 0)
-			return (free(line), 0);
+			return (free(line), ft_get_next_line(STDIN_FILENO, 1), 0);
 		if (expand)
 			tmp = expand_vars(line, env);
 		else
 			tmp = ft_strdup(line);
 		free(line);
 		if (!tmp)
-			return (-1);
-		ft_putstr_fd(tmp, fd);
-		ft_putstr_fd("\n", fd);
+			return (ft_get_next_line(STDIN_FILENO, 1), -1);
+		ft_putendl_fd(tmp, fd);
 		free(tmp);
 	}
+	ft_get_next_line(STDIN_FILENO, 1);
 	return (0);
-}
-
-void	print_fd(int fd)
-{
-	char	buf[1024];
-	int		ret;
-
-	ret = 1;
-	printf("printing heredoc at fd %d\n", fd);
-	printf("you should disable this function if you want the fd to not be empty for the execution\n");
-	while (ret)
-	{
-		ret = read(fd, buf, 1024);
-		write(1, buf, ret);
-	}
 }
 
 int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
@@ -113,6 +117,5 @@ int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 	free(delim);
 	close(pipes[1]);
 	proc->fd_in = pipes[0];
-	print_fd(pipes[0]);
 	return (0);
 }

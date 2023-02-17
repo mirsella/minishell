@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:13:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/09 15:57:51 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 16:19:03 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ void	sig_handler(int signo, siginfo_t *info, void *context)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_exit_code = 130;
+		g_exit_code = 128 + SIGINT;
 	}
 	else if (signo == SIGQUIT)
 	{
+		if (info->si_code == SI_KERNEL) // need to look more into it
+			printf("Quit (core dumped)\n");
+		g_exit_code = 128 + SIGQUIT;
 	}
 }
 

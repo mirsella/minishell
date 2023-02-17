@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 00:33:16 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 17:58:05 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,10 @@ int	parse_line_to_proc(char *line, t_proc *proc, t_list *env)
 	{
 		ret = parse_redirections(line, proc, env);
 		if (ret)
-			return (ret);
+			return (g_exit_code = 1, ret);
 		ret = parse_command(proc->line, proc, env);
 	}
+	if (ret)
+		g_exit_code = 1;
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:01:02 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/16 14:38:50 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 17:54:55 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	parse(char *line, t_list *env, t_proc **first, t_proc *last_proc)
 	int				ret;
 
 	if (check_unclosed_and_invalid_pipeline(line))
-		return (1);
+		return (g_exit_code = 1, 1);
 	while (*line)
 	{
 		cmd = line;

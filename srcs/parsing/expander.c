@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 23:42:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 00:01:00 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 17:41:49 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,16 @@ char	*expand_var(t_list *env, char *line, int *index)
 	char	*tmp;
 
 	stop = 1;
-	while (line[stop] && !ismeta(line[stop]) && !isspace(line[stop]))
+	if (line[1] == '?')
 		stop++;
+	else
+		while (line[stop] && !ismeta(line[stop]) && !isspace(line[stop]))
+			stop++;
 	*index += stop;
 	if (stop == 1)
 		return (ft_strdup("$"));
 	tmp = ft_substr(line, 1, stop - 1);
-	var = get_env_value(env, tmp);
+	var = get_env_var(env, tmp);
 	free(tmp);
 	if (!var)
 		return (ft_strdup(""));

@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 23:14:50 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 23:13:42 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 18:41:29 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	check_unclosed_and_invalid_pipeline(char *line)
 	int				seen_word;
 	t_next_pipeline	type;
 
-	if (check_unclosed(line) < 0)
+	if (check_unclosed(line))
 		return (1);
 	while (*line)
 	{

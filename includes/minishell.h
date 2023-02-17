@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 00:29:56 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/17 18:36:32 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 # define PROMPT "minishell$ "
 
-extern int	g_exit_code;
+extern unsigned char	g_exit_code;
 
 typedef enum e_next_pipeline
 {
@@ -101,7 +101,10 @@ int				skip_parenthesis(char *line);
 int				check_unclosed_and_invalid_pipeline(char *line);
 
 // env.c
-char			*get_env_value(t_list *env, char *variable);
+int				set_env_var(t_list *env, char *variable, char *value);
+int				replace_env_var(t_list *env, char *variable, char *value);
+char			*get_env_var(t_list *env, char *variable);
+int				set_exit_code_to_env(t_list *env);
 
 // parsing/parse_redirections.c
 char			*get_redirect_word_expand(char *line, int *ret, t_list *env);
@@ -150,5 +153,10 @@ int				execute(t_proc *procs, t_list *env);
 
 // builtin/builtin.c
 int				isbuiltin(char *cmd);
+
+// parsing/stat.c
+int				is_file_executable(char *path);
+int				is_file_readable(char *path);
+int				is_file_writable(char *path);
 
 #endif
