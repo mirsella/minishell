@@ -6,30 +6,31 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 16:23:07 by dly               #+#    #+#             */
-/*   Updated: 2023/02/17 17:15:13 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/20 17:49:49 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	echo(t_proc *proc)
+int	builtin_echo(t_proc *proc)
 {
-	int	option;
+	int		option;
+	t_list	*tmp;
 
 	option = 0;
-	proc->args = proc->args->next;
-	if (!proc->args)
+	tmp = proc->args->next;
+	if (!tmp->content)
 		return (ft_putstr_fd("\n", proc->fd_out), 0);
-	if (!ft_strcmp(proc->args->content, "-n"))
+	if (!ft_strcmp(tmp->content, "-n"))
 	{
 		option = 1;
-		proc->args = proc->args->next;
+		tmp = tmp->next;
 	}
-	while (proc->args)
+	while (tmp)
 	{
-		ft_putstr_fd(proc->args->content, proc->fd_out);
-		proc->args = proc->args->next;
-		if (proc->args)
+		ft_putstr_fd(tmp->content, proc->fd_out);
+		tmp = tmp->next;
+		if (tmp)
 			write(proc->fd_out, " ", 1);
 	}
 	if (!option)

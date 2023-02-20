@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 22:56:25 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/14 15:34:09 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/20 17:44:10 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,3 +31,23 @@ int	isbuiltin(char *cmd)
 	else
 		return (0);
 }
+
+// int	exec_builtin(t_proc *proc)
+// {
+// 	if (ft_strcmp(proc->path, "echo") == 0)
+// 		return (builtin_echo(proc));
+// 	else if (ft_strcmp(proc->path, "cd") == 0)
+// 		return (builtin_cd(proc));
+// 	else if (ft_strcmp(proc->path, "pwd") == 0)
+// 		return (builtin_pwd(proc));
+// 	else if (ft_strcmp(proc->path, "export") == 0)
+// 		return (builtin_export(proc));
+// 	else if (ft_strcmp(proc->path, "unset") == 0)
+// 		return (builtin_unset(proc));
+// 	else if (ft_strcmp(proc->path, "env") == 0)
+// 		return (builtin_env(proc));
+// 	else if (ft_strcmp(proc->path, "exit") == 0)
+// 		return (builtin_exit(proc));
+// 	else
+// 		return (0);
+// }

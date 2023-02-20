@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 18:36:32 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/20 17:42:25 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,9 @@ int				execute(t_proc *procs, t_list *env);
 
 // builtin/builtin.c
 int				isbuiltin(char *cmd);
+
+// builtin/echo.c
+int				builtin_echo(t_proc *proc);
 
 // parsing/stat.c
 int				is_file_executable(char *path);
