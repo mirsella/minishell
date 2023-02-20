@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/20 23:20:21 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/20 23:53:00 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void			exit_shell_error(t_list *env, char *msg);
 // logging.c
 int				print_syntax_error(char *message, char optional);
 int				print_error(char *msg, char *optional);
-int				print_error_char(char *msg, char optional);
 
 // lstproc.c
 int				create_and_push_proc(
@@ -101,9 +100,9 @@ int				skip_parenthesis(char *line);
 int				check_unclosed_and_invalid_pipeline(char *line);
 
 // env.c
-int				set_env_var(t_list *env, char *variable, char *value);
-int				replace_env_var(t_list *env, char *variable, char *value);
 char			*get_env_var(t_list *env, char *variable);
+int				replace_env_var(t_list *env, char *variable, char *value);
+int				add_env_var(t_list *env, char *variable, char *value);
 int				set_exit_code_to_env(t_list *env);
 int				remove_env_var(t_list *env, char *variable);
 
@@ -157,6 +156,12 @@ int				isbuiltin(char *cmd);
 
 // builtin/echo.c
 int				builtin_echo(t_proc *proc);
+
+// builtin/unset.c
+int				builtin_unset(t_proc *proc, t_list *env);
+
+// builtin/export.c
+int				builtin_export(t_proc *proc, t_list *env);
 
 // parsing/stat.c
 int				is_file_executable(char *path);
