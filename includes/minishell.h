@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/20 17:42:25 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/20 23:20:21 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int				set_env_var(t_list *env, char *variable, char *value);
 int				replace_env_var(t_list *env, char *variable, char *value);
 char			*get_env_var(t_list *env, char *variable);
 int				set_exit_code_to_env(t_list *env);
+int				remove_env_var(t_list *env, char *variable);
 
 // parsing/parse_redirections.c
 char			*get_redirect_word_expand(char *line, int *ret, t_list *env);

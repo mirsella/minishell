@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/17 18:52:34 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/20 20:50:56 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ unsigned char	g_exit_code;
 int	init_shell(t_list **env, char **envp)
 {
 	char	**env_tab;
-	char	*exitcode;
+	char	*tmp;
+	t_list	*lst;
 
 	g_exit_code = 0;
 	call_sigaction();
@@ -34,15 +35,13 @@ int	init_shell(t_list **env, char **envp)
 		if (!(*env))
 			return (perror("malloc"), -1);
 	}
-	else
-	{
-		*env = ft_lstnew(ft_strdup(""));
-		if (!(*env) || !(*env)->content)
-			return (perror("malloc"), -1);
-	}
-	exitcode = ft_itoa(g_exit_code);
-	set_env_var(*env, "?", exitcode);
-	free(exitcode);
+	tmp = ft_strdup("?=0");
+	if (!tmp)
+		return (perror("malloc"), -1);
+	lst = ft_lstnew(tmp);
+	if (!lst)
+		return (perror("malloc"), -1);
+	ft_lstadd_front(env, lst);
 	return (0);
 }
 

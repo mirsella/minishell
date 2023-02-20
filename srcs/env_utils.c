@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 16:43:39 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 18:52:34 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/20 23:18:20 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,3 +83,25 @@ int	set_exit_code_to_env(t_list *env)
 	return (0);
 }
 
+// first var is always ? so we can start at the second item
+int	remove_env_var(t_list *env, char *variable)
+{
+	t_list	*tmp;
+	t_list	*prev;
+
+	tmp = env->next;
+	prev = env;
+	while (tmp)
+	{
+		if (ft_strncmp(tmp->content, variable, ft_strlen(variable)) == 0
+			&& *(char *)(tmp->content + ft_strlen(variable)) == '=')
+		{
+			prev->next = tmp->next;
+			ft_lstdelone(tmp, free);
+			return (0);
+		}
+		prev = tmp;
+		tmp = tmp->next;
+	}
+	return (0);
+}
