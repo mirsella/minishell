@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/21 15:51:40 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/21 16:23:19 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,7 @@ int	init_shell(t_list **env, char **envp)
 		if (!(*env))
 			return (perror("malloc"), -1);
 	}
-	tmp = ft_strdup("?=0");
-	if (!tmp)
-		return (perror("malloc"), -1);
-	lst = ft_lstnew(tmp);
+	lst = ft_lstnew(NULL);
 	if (!lst)
 		return (perror("malloc"), -1);
 	ft_lstadd_front(env, lst);
