@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/21 00:03:36 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:52:30 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	print_procs(t_proc *procs, t_list *env, int layer)
 		else
 			next_pipeline = "INVALID";
 		ret = parse_line_to_proc(tmp->line, tmp, env);
-		set_exit_code_to_env(env);
 		if (ret)
 			return (ret);
 		if (tmp->type == SUBSHELL)

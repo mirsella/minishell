@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 16:43:39 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/21 00:03:28 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:50:43 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,6 @@ int	add_env_var(t_list *env, char *variable, char *value)
 			return (perror("malloc"), -1);
 		ft_lstadd_back(&env, new);
 	}
-	return (0);
-}
-
-int	set_exit_code_to_env(t_list *env)
-{
-	char	*exitcode;
-
-	exitcode = ft_itoa(g_exit_code);
-	if (add_env_var(env, "?", exitcode))
-		return (free(exitcode), -1);
-	free(exitcode);
 	return (0);
 }
 

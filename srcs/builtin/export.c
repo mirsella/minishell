@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:27:37 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/20 23:57:37 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/21 00:04:43 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	builtin_export(t_proc *proc, t_list *env)
 			return (1);
 		}
 		variable = ft_strndup(tmp->content,
-			ft_strchr(tmp->content, '=') - (char *)tmp->content);
+				ft_strchr(tmp->content, '=') - (char *)tmp->content);
 		value = ft_strdup(ft_strchr(tmp->content, '=') + 1);
 		if (add_env_var(env, variable, value))
 			return (free(variable), free(value), -1);

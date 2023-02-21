@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/20 23:53:00 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:50:43 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ int				check_unclosed_and_invalid_pipeline(char *line);
 char			*get_env_var(t_list *env, char *variable);
 int				replace_env_var(t_list *env, char *variable, char *value);
 int				add_env_var(t_list *env, char *variable, char *value);
-int				set_exit_code_to_env(t_list *env);
 int				remove_env_var(t_list *env, char *variable);
 
 // parsing/parse_redirections.c

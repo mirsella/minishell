@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/20 23:51:09 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:51:40 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	handle_line(char *line, t_list *env)
 	t_proc	*procs;
 
 	procs = NULL;
-	g_exit_code = 0;
 	ret = parse(line, env, &procs, NULL);
 	if (ret)
 		return (procs_free(&procs), ret);
@@ -78,8 +77,6 @@ int	prompt_loop(t_list *env)
 			add_history(line);
 		ret = handle_line(line, env);
 		if (ret < 0)
-			break ;
-		if (set_exit_code_to_env(env))
 			break ;
 		if (ret > 1)
 			continue ;
