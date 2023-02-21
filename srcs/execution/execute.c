@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
+/*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/21 15:52:30 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/21 20:51:32 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,7 @@ int	print_procs(t_proc *procs, t_list *env, int layer)
 int	execute(t_proc *procs, t_list *env)
 {
 	print_procs(procs, env, 0);
+	open_pipe(procs);
+	process(procs, env);
 	return (0);
 }

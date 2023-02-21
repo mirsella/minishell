@@ -48,14 +48,16 @@ static int	recursive_and_or(t_proc *tmp, t_proc *proc, t_list *env)
 {
 	if (proc->next_pipeline == AND)
 	{
-		while (tmp->next)
-		{
-			if (tmp->exit_code != 0)
-				return (0);
-			if (tmp->next_pipeline == AND || tmp->next_pipeline == OR)
-				break ;
-			tmp = tmp->next;
-		}
+		if (proc->exit_code != 0)
+			return (0);
+		// while (tmp->next)
+		// {
+		// 	if (tmp->exit_code != 0)
+		// 		return (0);
+		// 	if (tmp->next_pipeline == AND || tmp->next_pipeline == OR)
+		// 		break ;
+		// 	tmp = tmp->next;
+		// }
 	}
 	if (proc->next_pipeline == OR)
 	{
