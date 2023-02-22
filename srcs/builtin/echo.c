@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 16:23:07 by dly               #+#    #+#             */
-/*   Updated: 2023/02/20 17:49:49 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/22 16:19:57 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	builtin_echo(t_proc *proc)
 
 	option = 0;
 	tmp = proc->args->next;
-	if (!tmp->content)
+	if (!tmp)
 		return (ft_putstr_fd("\n", proc->fd_out), 0);
 	if (!ft_strcmp(tmp->content, "-n"))
 	{

@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/21 20:51:32 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/22 18:41:00 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,23 @@ int	print_procs(t_proc *procs, t_list *env, int layer)
 			return (ret);
 		if (tmp->type == SUBSHELL)
 		{
-			printf("%*cSUBSHELL: next_pipeline: %s, fd_in: %d, fd_out: %d\n", layer, ' ',
-				next_pipeline, tmp->fd_in, tmp->fd_out);
+			// printf("%*cSUBSHELL: next_pipeline: %s, fd_in: %d, fd_out: %d\n", layer, ' ',
+				// next_pipeline, tmp->fd_in, tmp->fd_out);
 			ret = print_procs(tmp->procs, env, layer + 4);
 			if (ret)
 				return (ret);
 		}
 		else
 		{
-			printf("%*cCOMMAND: '%s', next_pipeline: %s, fd_in: %d, fd_out: %d,\n", layer, ' ',
-				tmp->path, next_pipeline, tmp->fd_in, tmp->fd_out);
+			// printf("%*cCOMMAND: '%s', next_pipeline: %s, fd_in: %d, fd_out: %d,\n", layer, ' ',
+				// tmp->path, next_pipeline, tmp->fd_in, tmp->fd_out);
 			if (tmp->args)
 			{
 				args = tmp->args;
 				while (args)
 				{
-					printf("%*cARG: '%s'\n", layer + 2, ' ',
-						(char *)args->content);
+					// printf("%*cARG: '%s'\n", layer + 2, ' ',
+						// (char *)args->content);
 					args = args->next;
 				}
 			}

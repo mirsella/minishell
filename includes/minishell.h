@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/21 20:17:55 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/22 16:12:57 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ int				execute(t_proc *procs, t_list *env);
 
 // builtin/builtin.c
 int				isbuiltin(char *cmd);
+int				exec_builtin(t_proc *proc, t_list *env);
 
 // builtin/echo.c
 int				builtin_echo(t_proc *proc);
@@ -166,7 +167,7 @@ int				builtin_export(t_proc *proc, t_list *env);
 int				builtin_cd(t_proc *proc, t_list *env);
 
 // builtin/exit.c
-void			builtin_exit(t_proc *proc, t_list *env);
+int			builtin_exit(t_proc *proc, t_list *env);
 
 // builtin/ft_env.c
 int				builtin_env(t_proc *proc, t_list *env);

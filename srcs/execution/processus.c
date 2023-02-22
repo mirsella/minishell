@@ -17,11 +17,15 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 {
 	if (proc->next_pipeline == PIPE)
 		assign_pipe_cmd(proc);
+	// printf("%s in : %d  et out : %d\n pipe[0] %d  et pipe[1] %d\n",proc->path, proc->fd_in, proc->fd_out, proc->pipes[0], proc->pipes[1 ]);
+	if (isbuiltin(proc->path))
+	{
+		proc->exit_code = exec_builtin(proc, env);
+		return ;
+	}
 	proc->pid = fork();
 	if (!proc->pid)
 	{
-		if (isbuiltin(proc->line))
-			exit(0);
 		if (double_dup2(proc->fd_in, proc->fd_out) == -1)
 			exit(1);
 		close_pipe(tmp);
@@ -70,6 +74,7 @@ static int	recursive_and_or(t_proc *tmp, t_proc *proc, t_list *env)
 			tmp = tmp->next;
 		}
 	}
+	open_pipe(proc);
 	process(proc->next, env);
 	return (0);
 }
@@ -85,6 +90,12 @@ int	process(t_proc *proc, t_list *env)
 		{
 			assign_pipe_subshell(proc->procs, proc, env);
 			process(proc->procs, env);
+			if (proc->next_pipeline == AND || proc->next_pipeline == OR)
+			{
+				process(proc->next, env);
+				return (0);
+				// break ;
+			}
 			proc = proc->next;
 			if (!proc)
 				return (0);

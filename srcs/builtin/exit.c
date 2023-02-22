@@ -6,13 +6,13 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:38:04 by dly               #+#    #+#             */
-/*   Updated: 2023/02/21 20:13:48 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/22 16:12:46 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	builtin_exit(t_proc *proc, t_list *env)
+int	builtin_exit(t_proc *proc, t_list *env)
 {
 	int	exit_int;
 
@@ -22,4 +22,5 @@ void	builtin_exit(t_proc *proc, t_list *env)
 	free_shell_data(env);
 	procs_free(&proc);
 	exit(exit_int);
+	return (0);
 }
