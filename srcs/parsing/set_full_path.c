@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 22:45:08 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 18:05:11 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/22 20:46:16 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	set_full_path(t_list *env, char *cmd, char **full_path)
 		if (is_file_executable(cmd))
 			return (*full_path = ft_strdup(cmd), 0);
 		g_exit_code = 126;
-		return (1);
+		return (0);
 	}
 	tmp = search_path(env, cmd);
 	if (!tmp)
@@ -71,7 +71,7 @@ int	set_full_path(t_list *env, char *cmd, char **full_path)
 	{
 		free(tmp);
 		g_exit_code = 127;
-		return (print_error(cmd, "command not found"), 1);
+		return (print_error(cmd, "command not found"), 0);
 	}
 	*full_path = tmp;
 	return (0);
