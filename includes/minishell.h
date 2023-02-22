@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
+/*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/21 15:50:43 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/22 16:12:57 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ int				execute(t_proc *procs, t_list *env);
 
 // builtin/builtin.c
 int				isbuiltin(char *cmd);
+int				exec_builtin(t_proc *proc, t_list *env);
 
 // builtin/echo.c
 int				builtin_echo(t_proc *proc);
@@ -162,9 +163,31 @@ int				builtin_unset(t_proc *proc, t_list *env);
 // builtin/export.c
 int				builtin_export(t_proc *proc, t_list *env);
 
+// builtin/cd.c
+int				builtin_cd(t_proc *proc, t_list *env);
+
+// builtin/exit.c
+int			builtin_exit(t_proc *proc, t_list *env);
+
+// builtin/ft_env.c
+int				builtin_env(t_proc *proc, t_list *env);
+
+// builtin/pwd.c
+int				builtin_pwd(t_proc *proc);
+
 // parsing/stat.c
 int				is_file_executable(char *path);
 int				is_file_readable(char *path);
 int				is_file_writable(char *path);
+
+// execute/pipe.c
+int				double_dup2(int in, int out);
+int				open_pipe(t_proc *proc);
+void			close_pipe(t_proc *proc);
+void			assign_pipe_cmd(t_proc *proc);
+void			assign_pipe_subshell(t_proc *tmp, t_proc *proc, t_list *env);
+
+// execute/processus.c
+int				process(t_proc *proc, t_list *env);
 
 #endif

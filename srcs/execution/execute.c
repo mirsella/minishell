@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
+/*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/21 15:52:30 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/22 18:41:00 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,23 @@ int	print_procs(t_proc *procs, t_list *env, int layer)
 			return (ret);
 		if (tmp->type == SUBSHELL)
 		{
-			printf("%*cSUBSHELL: next_pipeline: %s, fd_in: %d, fd_out: %d\n", layer, ' ',
-				next_pipeline, tmp->fd_in, tmp->fd_out);
+			// printf("%*cSUBSHELL: next_pipeline: %s, fd_in: %d, fd_out: %d\n", layer, ' ',
+				// next_pipeline, tmp->fd_in, tmp->fd_out);
 			ret = print_procs(tmp->procs, env, layer + 4);
 			if (ret)
 				return (ret);
 		}
 		else
 		{
-			printf("%*cCOMMAND: '%s', next_pipeline: %s, fd_in: %d, fd_out: %d,\n", layer, ' ',
-				tmp->path, next_pipeline, tmp->fd_in, tmp->fd_out);
+			// printf("%*cCOMMAND: '%s', next_pipeline: %s, fd_in: %d, fd_out: %d,\n", layer, ' ',
+				// tmp->path, next_pipeline, tmp->fd_in, tmp->fd_out);
 			if (tmp->args)
 			{
 				args = tmp->args;
 				while (args)
 				{
-					printf("%*cARG: '%s'\n", layer + 2, ' ',
-						(char *)args->content);
+					// printf("%*cARG: '%s'\n", layer + 2, ' ',
+						// (char *)args->content);
 					args = args->next;
 				}
 			}
@@ -65,5 +65,7 @@ int	print_procs(t_proc *procs, t_list *env, int layer)
 int	execute(t_proc *procs, t_list *env)
 {
 	print_procs(procs, env, 0);
+	open_pipe(procs);
+	process(procs, env);
 	return (0);
 }
