@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/21 20:0 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/23 23:48:25 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ static int recursive_and_or(t_proc *tmp, t_proc *proc, t_list *env)
 {
 	// (void)tmp;
 	// printf("%d\n", proc->exit_code);
-	t_proc *test;
-	test = proc;
+	// t_proc *test;
+	// test = proc;
 	if (proc->next_pipeline == AND)
 	{
 		if (proc->exit_code != 0)

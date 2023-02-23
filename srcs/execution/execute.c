@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/23 19:31:42 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 00:12:19 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,10 @@ int	print_procs(t_proc *procs, t_list *env, int layer)
 int	execute(t_proc *procs, t_list *env)
 {
 	print_procs(procs, env, 0);
-	open_pipe(procs);
+	if (open_pipe(procs))
+		return (-1);
+	printf("before process\n");
 	process(procs, env);
-	// procs_free(&procs);
+	printf("after process\n");
 	return (0);
 }

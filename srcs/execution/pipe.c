@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 11:51:18 by dly               #+#    #+#             */
-/*   Updated: 2023/02/22 18:27:36 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/23 23:55:24 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	open_pipe(t_proc *proc)
 	while (proc)
 	{
 		if (proc->type == SUBSHELL)
-			open_pipe(proc->procs);
+			if (open_pipe(proc->procs))
+				return (-1);
 		if (proc->next_pipeline == PIPE)
 		{
 			if (pipe(proc->pipes) == -1)
