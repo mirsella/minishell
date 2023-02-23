@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/23 18:52:54 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/23 19:31:42 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@ int	print_procs(t_proc *procs, t_list *env, int layer)
 {
 	t_proc	*tmp;
 	t_list	*args;
-	char	*next_pipeline;
+	// char	*next_pipeline;
 	int		ret;
 
 	tmp = procs;
 	while (tmp)
 	{
-		if (tmp->next_pipeline == PIPE)
-			next_pipeline = "PIPE";
-		else if (tmp->next_pipeline == OR)
-			next_pipeline = "OR";
-		else if (tmp->next_pipeline == AND)
-			next_pipeline = "AND";
-		else
-			next_pipeline = "INVALID";
+		// if (tmp->next_pipeline == PIPE)
+		// 	next_pipeline = "PIPE";
+		// else if (tmp->next_pipeline == OR)
+		// 	next_pipeline = "OR";
+		// else if (tmp->next_pipeline == AND)
+		// 	next_pipeline = "AND";
+		// else
+		// 	next_pipeline = "INVALID";
 		ret = parse_line_to_proc(tmp->line, tmp, env);
 		if (ret)
 			return (ret);
