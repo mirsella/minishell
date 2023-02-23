@@ -56,8 +56,10 @@ static void wait_loop(t_proc *proc)
 
 static int recursive_and_or(t_proc *tmp, t_proc *proc, t_list *env)
 {
-	(void)tmp;
+	// (void)tmp;
 	// printf("%d\n", proc->exit_code);
+	t_proc *test;
+	test = proc;
 	if (proc->next_pipeline == AND)
 	{
 		if (proc->exit_code != 0)
@@ -83,6 +85,11 @@ static int recursive_and_or(t_proc *tmp, t_proc *proc, t_list *env)
 		// 		break;
 		// 	tmp = tmp->next;
 		// }
+	}
+	while (tmp)
+	{
+		parse_line_to_proc(tmp->line, tmp, env);
+		tmp = tmp->next;
 	}
 	open_pipe(proc);
 	process(proc->next, env);
