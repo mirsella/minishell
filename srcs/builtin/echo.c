@@ -6,11 +6,29 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 16:23:07 by dly               #+#    #+#             */
-/*   Updated: 2023/02/22 16:19:57 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/23 18:16:45 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	is_flag_n(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '-')
+		i++;
+	else
+		return (0);
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 int	builtin_echo(t_proc *proc)
 {
@@ -21,14 +39,18 @@ int	builtin_echo(t_proc *proc)
 	tmp = proc->args->next;
 	if (!tmp)
 		return (ft_putstr_fd("\n", proc->fd_out), 0);
-	if (!ft_strcmp(tmp->content, "-n"))
+	while (tmp && is_flag_n(tmp->content))
 	{
 		option = 1;
 		tmp = tmp->next;
 	}
 	while (tmp)
 	{
-		ft_putstr_fd(tmp->content, proc->fd_out);
+		if (write(proc->fd_out, tmp->content, ft_strlen(tmp->content)) == -1)
+		{
+			proc->exit_code = 1;
+			g_exit_code = 1;
+		}
 		tmp = tmp->next;
 		if (tmp)
 			write(proc->fd_out, " ", 1);

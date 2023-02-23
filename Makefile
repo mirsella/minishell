@@ -35,4 +35,7 @@ $(LIBFT):
 
 bonus: all
 
+leak:
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=rl_leaks.txt ./minishell
+
 .PHONY: all clean fclean re bonus

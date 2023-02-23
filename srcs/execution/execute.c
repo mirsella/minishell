@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/22 18:41:00 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/23 18:17:35 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ int	execute(t_proc *procs, t_list *env)
 	print_procs(procs, env, 0);
 	open_pipe(procs);
 	process(procs, env);
+	// procs_free(&procs);
 	return (0);
 }
