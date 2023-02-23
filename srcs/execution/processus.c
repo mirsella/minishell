@@ -96,12 +96,12 @@ int process(t_proc *proc, t_list *env)
 	tmp = proc;
 	while (proc)
 	{
-		if (!proc->path)
+		if (!proc->path && proc->type == COMMAND)
 		{
 			proc->exit_code = 127;
 			g_exit_code = 127;
 		}
-		else if (proc->path)
+		else if (proc->path || proc->type == SUBSHELL)
 		{
 			if (proc->type == SUBSHELL)
 			{
@@ -121,7 +121,7 @@ int process(t_proc *proc, t_list *env)
 			{
 				child(tmp, proc, env);
 			}
-			}
+		}
 		if (proc->next_pipeline == AND || proc->next_pipeline == OR)
 			break;
 		proc = proc->next;
