@@ -6,12 +6,11 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/24 19:42:20 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/24 19:52:30 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include "sys/wait.h" // waitpid
 
 static void child(t_proc *tmp, t_proc *proc, t_list *env)
 {
@@ -146,11 +145,3 @@ int process(t_proc *proc, t_list *env)
 		recursive_and_or(proc, env, 1);
 	return (0);
 }
-
-/*	1. ! is at the moment assigned as a command, but it shouldn't
-	2. > < >> << if failed, need to exit/stop exec and g_code_exit = 2
-	3. \ need to ignore the env_var. ex: echo \$HOME     output = $HOME instead of /homes/......
-	4. echo in /dev/full , no enough space to write in, check return of write()
-	5. export david=d && echo $david	need to reparse after each && or || to get the env_var
-
- */

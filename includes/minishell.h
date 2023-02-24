@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 16:22:43 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 19:47:33 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "sys/types.h" // pid_t
 # include "dirent.h" // opendir, readdir, closedir
 # include <limits.h> // PATH_MAX
+# include "sys/wait.h" // waitpid
 
 # define PROMPT "minishell$ "
 
