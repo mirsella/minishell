@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 16:44:40 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:49:25 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,8 @@ void	procs_free(t_proc **proc)
 
 	if (!proc || !*proc)
 		return ;
-	printf("given %s to procs free\n", (*proc)->line);
 	if ((*proc)->prev)
 		*proc = get_first_proc(*proc);
-	printf("procs freeing %s\n", (*proc)->line);
 	while (*proc)
 	{
 		tmp = *proc;
