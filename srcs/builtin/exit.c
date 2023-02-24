@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:38:04 by dly               #+#    #+#             */
-/*   Updated: 2023/02/24 16:47:57 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 20:13:49 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	ft_is_valid(const char *str)
 
 int	builtin_exit(t_proc *proc, t_list *env)
 {
-	unsigned char exit_code;
+	unsigned char	exit_code;
 
 	exit_code = 0;
 	ft_putstr_fd("exit\n", 2);

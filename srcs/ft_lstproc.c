@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 20:07:02 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 20:13:06 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,21 @@ t_proc	*new_proc(void)
 	return (new);
 }
 
+void	proc_free(t_proc *proc)
+{
+	if (proc->line)
+		free(proc->line);
+	if (proc->args)
+		ft_lstclear(&proc->args, free);
+	if (proc->path)
+		free(proc->path);
+	if (proc->fd_in > 2)
+		close(proc->fd_in);
+	if (proc->fd_out > 2)
+		close(proc->fd_out);
+	free(proc);
+}
+
 void	procs_free(t_proc **proc)
 {
 	t_proc	*tmp;
@@ -71,22 +86,12 @@ void	procs_free(t_proc **proc)
 	{
 		tmp = *proc;
 		*proc = (*proc)->next;
-		if (tmp->line)
-			free(tmp->line);
-		if (tmp->args)
-			ft_lstclear(&tmp->args, free);
-		if (tmp->path)
-			free(tmp->path);
 		if (tmp->procs)
 		{
 			tmp->procs->prev = NULL;
 			procs_free(&tmp->procs);
 		}
-		if (tmp->fd_in > 2)
-			close(tmp->fd_in);
-		if (tmp->fd_out > 2)
-			close(tmp->fd_out);
-		free(tmp);
+		proc_free(tmp);
 	}
 	*proc = NULL;
 }
