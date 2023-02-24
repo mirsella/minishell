@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/24 11:10:38 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 19:42:20 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,44 +54,54 @@ static void wait_loop(t_proc *proc)
 	}
 }
 
-static int recursive_and_or(t_proc *tmp, t_proc *proc, t_list *env)
+static int	is_true(t_proc *proc ,int is_subshell)
 {
-	// (void)tmp;
-	// printf("%d\n", proc->exit_code);
-	// t_proc *test;
-	// test = proc;
-	if (proc->next_pipeline == AND)
+	while (proc)
 	{
-		if (proc->exit_code != 0)
-			return (0);
-		// while (tmp->next)
-		// {
-		// 	if (tmp->exit_code != 0)
-		// 		return (0);
-		// 	if (tmp->next_pipeline == AND || tmp->next_pipeline == OR)
-		// 		break ;
-		// 	tmp = tmp->next;
-		// }
+		if (proc->next_pipeline == AND)
+		{
+			if (proc->exit_code != 0)
+				return (0);
+			if (is_subshell != 2 && proc->next && proc->next->exit_code != 0)
+				return (0);
+		}
+		if (proc->next_pipeline == OR)
+		{
+			if (proc->exit_code == 0)
+				return (1);
+			if (is_subshell != 2 && proc->next && proc->next->exit_code == 0)
+				return (1);
+		}
+		if (!is_subshell)
+			break ;
+		proc = proc->next;
 	}
-	if (proc->next_pipeline == OR)
+	return (1);	
+}
+
+static int recursive_and_or(t_proc *proc, t_list *env, int need_open)
+{
+	t_proc *tmp;
+	int		is_subshell;
+
+	tmp = proc;
+	is_subshell = 2;
+	if (proc->prev)
 	{
-		if (proc->exit_code == 0)
-			return (0);
-		// while (tmp)
-		// {
-		// 	if (tmp->exit_code == 0)
-		// 		return (0);
-		// 	if (tmp->next_pipeline == AND || tmp->next_pipeline == OR)
-		// 		break;
-		// 	tmp = tmp->next;
-		// }
+		tmp = proc->prev;
+		is_subshell = 0;
 	}
-	while (tmp)
+	if (proc->procs)
 	{
-		// parse_line_to_proc(tmp->line, tmp, env);
-		tmp = tmp->next;
+		tmp = proc->procs;
+		is_subshell = 1;
 	}
-	open_pipe(proc);
+	if (!is_true(tmp, is_subshell) && proc->next_pipeline == AND)
+		return (0);
+	if (is_true(tmp, is_subshell) && proc->next_pipeline == OR)
+		return (0);
+	if (need_open)
+		open_pipe(proc);
 	process(proc->next, env);
 	return (0);
 }
@@ -117,18 +127,15 @@ int process(t_proc *proc, t_list *env)
 				process(proc->procs, env);
 				if (proc->next_pipeline == AND || proc->next_pipeline == OR)
 				{
-					process(proc->next, env);
+					recursive_and_or(proc, env, 0);
 					return (0);
-					// break ;
 				}
 				proc = proc->next;
 				if (!proc)
 					return (0);
 			}
-			if (proc->type == COMMAND)
-			{
+			if (proc->type == COMMAND && proc->fd_in != -1 && proc->fd_out != -1)
 				child(tmp, proc, env);
-			}
 		}
 		if (proc->next_pipeline == AND || proc->next_pipeline == OR)
 			break;
@@ -136,9 +143,7 @@ int process(t_proc *proc, t_list *env)
 	}
 	wait_loop(tmp);
 	if (proc)
-	{
-		recursive_and_or(tmp, proc, env);
-	}
+		recursive_and_or(proc, env, 1);
 	return (0);
 }
 
