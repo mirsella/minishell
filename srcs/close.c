@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:49:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 18:25:06 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:12:59 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	exit_shell(t_list *env)
 
 void	exit_shell_error(t_list *env, char *msg)
 {
-	print_error(msg, 0);
+	print_errorendl(msg, 0);
 	free_shell_data(env);
 	exit(g_exit_code);
 }

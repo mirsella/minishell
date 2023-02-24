@@ -6,12 +6,11 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 13:42:25 by dly               #+#    #+#             */
-/*   Updated: 2023/02/21 20:15:23 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/24 15:26:58 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <limits.h> // PATH_MAX
 
 static int	update_oldpwd(t_list *env)
 {

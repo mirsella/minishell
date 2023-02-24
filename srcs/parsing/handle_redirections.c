@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 22:31:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 18:33:20 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:15:12 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	open_reading_file(char *filename, t_proc *proc)
 		close(proc->fd_in);
 	proc->fd_in = open(filename, O_RDONLY);
 	if (proc->fd_in < 0)
-		print_error(filename, strerror(errno));
+		print_errorendl(filename, strerror(errno));
 	return (0);
 }
 
@@ -40,7 +40,7 @@ int	open_writing_file(char *filename, t_proc *proc, int append_flag)
 	else
 		proc->fd_out = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (proc->fd_out < 0)
-		print_error(filename, strerror(errno));
+		print_errorendl(filename, strerror(errno));
 	return (0);
 }
 

@@ -6,12 +6,11 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:27:37 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/23 19:32:11 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 15:26:58 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <unistd.h>
 
 int	is_valid_identifier(char *str)
 {

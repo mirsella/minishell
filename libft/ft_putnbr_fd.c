@@ -6,34 +6,48 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 23:13:50 by mirsella          #+#    #+#             */
-/*   Updated: 2022/11/13 16:16:11 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 15:44:30 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include <unistd.h>
 
-void	ft_putnbr_fd(int n, int fd)
+static int	count_bytes(int *counter, int byteswrotes)
+{
+	if (!counter)
+		return (0);
+	if (byteswrotes < 0 || *counter < 0)
+		*counter = -1;
+	else
+		*counter += byteswrotes;
+	return (byteswrotes);
+}
+
+int	ft_putnbr_fd(int n, int fd)
 {
 	char	c;
+	int		i;
 
+	i = 0;
 	if (n == -2147483648)
-	{
-		write(fd, "-2147483648", 11);
-		return ;
-	}
+		return (write(fd, "-2147483648", 11));
 	if (n < 0)
 	{
-		write(fd, "-", 1);
+		if (count_bytes(&i, ft_putchar_fd('-', fd)) == -1)
+			return (i);
 		n = -n;
 	}
 	if (n > 9)
 	{
-		ft_putnbr_fd(n / 10, fd);
-		ft_putnbr_fd(n % 10, fd);
+		if (count_bytes(&i, ft_putnbr_fd(n / 10, fd)) == -1)
+			return (i);
+		count_bytes(&i, ft_putnbr_fd(n % 10, fd));
 	}
 	else
 	{
 		c = n + '0';
-		write(fd, &c, 1);
+		count_bytes(&i, ft_putchar_fd(c, fd));
 	}
+	return (i);
 }

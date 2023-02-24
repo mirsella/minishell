@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 17:20:38 by dly               #+#    #+#             */
-/*   Updated: 2023/02/23 17:19:32 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/24 16:13:19 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ int	builtin_pwd(t_proc *proc)
 
 	if (!getcwd(buf, PATH_MAX))
 		return (-1);
-	ft_putendl_fd(buf, proc->fd_out);
+	if (ft_putendl_fd(buf, proc->fd_out) == -1)
+	{
+		print_errorendl("write", strerror(errno));
+		return (1);
+	}
 	return (0);
 }

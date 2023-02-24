@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/22 16:12:57 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/24 16:12:44 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "errno.h" // errno
 # include "sys/types.h" // pid_t
 # include "dirent.h" // opendir, readdir, closedir
+# include <limits.h> // PATH_MAX
 
 # define PROMPT "minishell$ "
 
@@ -84,6 +85,7 @@ void			exit_shell_error(t_list *env, char *msg);
 
 // logging.c
 int				print_syntax_error(char *message, char optional);
+int				print_errorendl(char *msg, char *optional);
 int				print_error(char *msg, char *optional);
 
 // lstproc.c

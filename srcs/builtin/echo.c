@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 16:23:07 by dly               #+#    #+#             */
-/*   Updated: 2023/02/23 18:16:45 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/24 16:16:11 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ static int	is_flag_n(char *str)
 	return (1);
 }
 
+int	putnewline(int fd)
+{
+	if (ft_putchar_fd('\n', fd) == -1)
+		return (print_errorendl("echo: write error", strerror(errno)));
+	return (0);
+}
+
 int	builtin_echo(t_proc *proc)
 {
 	int		option;
@@ -38,7 +45,7 @@ int	builtin_echo(t_proc *proc)
 	option = 0;
 	tmp = proc->args->next;
 	if (!tmp)
-		return (ft_putstr_fd("\n", proc->fd_out), 0);
+		return (putnewline(proc->fd_out));
 	while (tmp && is_flag_n(tmp->content))
 	{
 		option = 1;
@@ -46,16 +53,14 @@ int	builtin_echo(t_proc *proc)
 	}
 	while (tmp)
 	{
-		if (write(proc->fd_out, tmp->content, ft_strlen(tmp->content)) == -1)
-		{
-			proc->exit_code = 1;
-			g_exit_code = 1;
-		}
+		if (ft_putstr_fd(tmp->content, proc->fd_out) == -1)
+			return (print_errorendl("echo: write error", strerror(errno)));
 		tmp = tmp->next;
 		if (tmp)
-			write(proc->fd_out, " ", 1);
+			if (ft_putchar_fd(' ', proc->fd_out) == -1)
+				return (print_errorendl("echo: write error", strerror(errno)));
 	}
 	if (!option)
-		write(proc->fd_out, "\n", 1);
+		return (putnewline(proc->fd_out));
 	return (0);
 }

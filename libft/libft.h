@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 22:35:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 11:11:48 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 15:31:33 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ void				ft_lstadd_front(t_list **alst, t_list *newel);
 void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstdelone(t_list *lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
-void				ft_putchar_fd(char c, int fd);
-void				ft_putendl_fd(char *s, int fd);
-void				ft_putnbr_fd(int n, int fd);
-void				ft_putstr_fd(char *s, int fd);
+int					ft_putchar_fd(char c, int fd);
+int					ft_putendl_fd(char *s, int fd);
+int					ft_putnbr_fd(int n, int fd);
+int					ft_putstr_fd(char *s, int fd);
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 
 #endif

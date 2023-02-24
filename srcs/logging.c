@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 00:13:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/20 23:37:32 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:14:24 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,19 @@ int	print_syntax_error(char *message, char optional)
 	return (1);
 }
 
+int	print_errorendl(char *msg, char *optional)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+	if (optional)
+	{
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(optional, STDERR_FILENO);
+	}
+	ft_putchar_fd('\n', STDERR_FILENO);
+	return (1);
+}
+
 int	print_error(char *msg, char *optional)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -36,6 +49,5 @@ int	print_error(char *msg, char *optional)
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putstr_fd(optional, STDERR_FILENO);
 	}
-	ft_putstr_fd("\n", STDERR_FILENO);
 	return (1);
 }
