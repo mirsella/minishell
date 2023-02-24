@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 16:49:45 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:55:03 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,23 +59,14 @@ t_proc	*new_proc(void)
 	return (new);
 }
 
-t_proc	*get_first_proc(t_proc *proc)
-{
-	if (!proc)
-		return (NULL);
-	while (proc->prev)
-		proc = proc->prev;
-	return (proc);
-}
-
 void	procs_free(t_proc **proc)
 {
 	t_proc	*tmp;
 
 	if (!proc || !*proc)
 		return ;
-	if ((*proc)->prev)
-		*proc = get_first_proc(*proc);
+	while ((*proc)->prev)
+		*proc = (*proc)->prev;
 	while (*proc)
 	{
 		tmp = *proc;
