@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 16:49:25 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:49:45 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_proc	*new_proc(void)
 	new->pipes[0] = -1;
 	new->pipes[1] = -1;
 	new->next = NULL;
+	new->prev = NULL;
 	new->args = NULL;
 	new->path = NULL;
 	new->line = NULL;
