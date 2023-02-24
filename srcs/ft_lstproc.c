@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/15 23:10:07 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:44:40 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	create_and_push_proc(t_proc **first, t_proc **last_proc, t_proc **proc)
 	new = new_proc();
 	if (!new)
 		return (-1);
+	new->prev = *last_proc;
 	*proc = new;
 	if (!*first)
 		*first = new;
@@ -57,12 +58,25 @@ t_proc	*new_proc(void)
 	return (new);
 }
 
+t_proc	*get_first_proc(t_proc *proc)
+{
+	if (!proc)
+		return (NULL);
+	while (proc->prev)
+		proc = proc->prev;
+	return (proc);
+}
+
 void	procs_free(t_proc **proc)
 {
 	t_proc	*tmp;
 
 	if (!proc || !*proc)
 		return ;
+	printf("given %s to procs free\n", (*proc)->line);
+	if ((*proc)->prev)
+		*proc = get_first_proc(*proc);
+	printf("procs freeing %s\n", (*proc)->line);
 	while (*proc)
 	{
 		tmp = *proc;

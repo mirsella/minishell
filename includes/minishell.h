@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 16:12:44 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 16:22:43 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_proc
 	pid_t			pid;
 	int				exit_code;
 	struct s_proc	*next;
+	struct s_proc	*prev;
 }				t_proc;
 
 // parsing/parse.c
