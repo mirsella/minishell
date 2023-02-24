@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/23 23:48:25 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 11:10:38 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int recursive_and_or(t_proc *tmp, t_proc *proc, t_list *env)
 	}
 	while (tmp)
 	{
-		parse_line_to_proc(tmp->line, tmp, env);
+		// parse_line_to_proc(tmp->line, tmp, env);
 		tmp = tmp->next;
 	}
 	open_pipe(proc);
@@ -103,6 +103,7 @@ int process(t_proc *proc, t_list *env)
 	tmp = proc;
 	while (proc)
 	{
+		parse_line_to_proc(proc->line, proc, env);
 		if (!proc->path && proc->type == COMMAND)
 		{
 			proc->exit_code = 127;
