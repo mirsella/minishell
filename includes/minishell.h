@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 20:14:00 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 21:01:00 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,5 +193,8 @@ void			assign_pipe_subshell(t_proc *tmp, t_proc *proc, t_list *env);
 
 // execute/processus.c
 int				process(t_proc *proc, t_list *env);
+
+// execute/operator.c
+int				recursive_and_or(t_proc *proc, t_list *env, int need_open);
 
 #endif

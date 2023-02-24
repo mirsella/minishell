@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 11:51:18 by dly               #+#    #+#             */
-/*   Updated: 2023/02/23 23:55:24 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/24 21:38:07 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	assign_pipe_subshell(t_proc *tmp, t_proc *proc, t_list *env)
 {
 	if (proc->next_pipeline == PIPE)
 	{
+		if (proc->next->procs)
+			proc->next->procs->fd_in = proc->pipes[0];
 		if (proc->next->fd_in == STDIN_FILENO)
 			proc->next->fd_in = proc->pipes[0];
 		while (proc->procs)
