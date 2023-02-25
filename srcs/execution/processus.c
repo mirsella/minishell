@@ -33,6 +33,11 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 			proc->exit_code = exec_builtin(proc, env);
 			exit(proc->exit_code);
 		}
+		if (tmp)
+		{
+			while (tmp->prev)
+				tmp = tmp->prev;
+		}
 		close_pipe(tmp);
 		if (!access(proc->path, 0))
 			execve(proc->path, ft_lst_to_tab(proc->args), ft_lst_to_tab(env));
@@ -83,8 +88,8 @@ int	process(t_proc *proc, t_list *env)
 			{
 				assign_pipe_subshell(proc->procs, proc, env);
 				process(proc->procs, env);
-				if (proc->next_pipeline == AND || proc->next_pipeline == OR)
-					return (recursive_and_or(proc, env, 0), 0);
+				// if (proc->next_pipeline == AND || proc->next_pipeline == OR)
+				// 	return (recursive_and_or(proc, env, 0), 0);
 			}
 		}
 		if (proc->next_pipeline == AND || proc->next_pipeline == OR)

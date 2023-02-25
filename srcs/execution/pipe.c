@@ -65,6 +65,8 @@ void	assign_pipe_cmd(t_proc *proc)
 
 void	assign_pipe_subshell(t_proc *tmp, t_proc *proc, t_list *env)
 {
+	(void)tmp;
+	(void)env;
 	if (proc->next_pipeline == PIPE)
 	{
 		if (proc->next->procs)
@@ -80,6 +82,6 @@ void	assign_pipe_subshell(t_proc *tmp, t_proc *proc, t_list *env)
 			}
 			proc->procs = proc->procs->next;
 		}
-		process(tmp, env);
+		// process(tmp, env);
 	}
 }

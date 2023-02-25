@@ -28,8 +28,8 @@ void	sig_handler(int signo, siginfo_t *info, void *context)
 	}
 	else if (signo == SIGQUIT)
 	{
-		if (info->si_code == SI_KERNEL) // need to look more into it
-			printf("Quit (core dumped)\n");
+		// if (info->si_code == SI_KERNEL) // need to look more into it
+		// 	printf("Quit (core dumped)\n");
 		g_exit_code = 128 + SIGQUIT;
 	}
 }
