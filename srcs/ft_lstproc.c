@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 20:13:06 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 00:51:48 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,10 @@ void	proc_free(t_proc *proc)
 		close(proc->fd_in);
 	if (proc->fd_out > 2)
 		close(proc->fd_out);
+	if (proc->pipes[0] > 2)
+		close(proc->pipes[0]);
+	if (proc->pipes[1] > 2)
+		close(proc->pipes[1]);
 	free(proc);
 }
 
