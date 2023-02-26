@@ -38,7 +38,7 @@ int	open_pipe(t_proc *proc)
 	return (0);
 }
 
-void	close_pipe(t_proc *proc)
+void	close_pipe1(t_proc *proc)
 {
 	while (proc)
 	{
@@ -50,6 +50,51 @@ void	close_pipe(t_proc *proc)
 			close(proc->pipes[1]);
 		}
 		proc = proc->next;
+	}
+}
+
+void	close_pipe(t_proc *proc)
+{
+	while (proc)
+	{
+		if (proc->next_pipeline == PIPE)
+		{
+			close(proc->pipes[0]);
+			close(proc->pipes[1]);
+		}
+		proc = proc->next;
+	}
+}
+
+void	assign_pipe(t_proc *proc)
+{
+	if (proc->next_pipeline == PIPE)
+	{
+		if (proc->type == COMMAND && proc->fd_out == STDOUT_FILENO)
+		{
+			proc->fd_out = proc->pipes[1];
+		}
+		if (proc->type == SUBSHELL)
+		{
+			while (proc->procs)
+			{
+				if (proc->procs->next_pipeline != PIPE && proc->procs->fd_out == STDOUT_FILENO)
+						proc->procs->fd_out = proc->pipes[1];
+				proc->procs = proc->procs->next;
+			}
+		}
+		if (proc->next->type == COMMAND && proc->next->fd_in == STDIN_FILENO)
+			proc->next->fd_in = proc->pipes[0];
+		if (proc->next->type == SUBSHELL)
+		{
+			if (proc->next->procs->procs)
+			{
+				while (proc->next->procs->procs)
+					proc->next->procs = proc->next->procs->procs;
+			}
+			if (proc->next->procs->fd_in == STDIN_FILENO)
+				proc->next->procs->fd_in = proc->pipes[0];
+		}
 	}
 }
 

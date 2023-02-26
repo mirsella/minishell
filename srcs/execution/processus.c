@@ -12,10 +12,13 @@
 
 #include "../../includes/minishell.h"
 
+void	close_pipe1(t_proc *proc);
+void	assign_pipe(t_proc *proc);
+
 static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 {
-	if (proc->next_pipeline == PIPE)
-		assign_pipe_cmd(proc);
+	// if (proc->next_pipeline == PIPE)
+	// 	assign_pipe_cmd(proc);
 	if (isbuiltin(proc->path) && (!tmp->next || tmp->next_pipeline == AND
 			|| tmp->next_pipeline == OR))
 	{
@@ -23,6 +26,8 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 		g_exit_code = proc->exit_code;
 		return ;
 	}
+//	printf("path : %s  \n pipe[0]: %d && pipe[1]: %d \n fd_in: %d  && fd_out: %d\n\n", proc->path, proc->pipes[0]
+//			,proc->pipes[1], proc->fd_in, proc->fd_out);
 	proc->pid = fork();
 	if (!proc->pid)
 	{
@@ -38,7 +43,7 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 			while (tmp->prev)
 				tmp = tmp->prev;
 		}
-		close_pipe(tmp);
+		close_pipe1(tmp);
 		if (!access(proc->path, 0))
 			execve(proc->path, ft_lst_to_tab(proc->args), ft_lst_to_tab(env));
 		exit(-1);
@@ -58,7 +63,7 @@ static void	wait_loop(t_proc *tmp, t_proc *proc, t_list *env)
 		tmp = tmp->next;
 	}
 	if (proc)
-		recursive_and_or(proc, env, 1);
+		recursive_and_or(proc, env, 0);
 }
 
 int	cmd_not_found(t_proc *proc)
@@ -80,14 +85,18 @@ int	process(t_proc *proc, t_list *env)
 	while (proc)
 	{
 		parse_line_to_proc(proc->line, proc, env);
+	//	printf("path : %s  line: %s \n pipe[0]: %d && pipe[1]: %d \n fd_in: %d  && fd_out: %d\n\n"
+	//		,proc->path, proc->line, proc->pipes[0] ,proc->pipes[1], proc->fd_in, proc->fd_out);
 		if (!cmd_not_found(proc) && (proc->path || proc->type == SUBSHELL))
 		{
+			assign_pipe(proc);
 			if (proc->type == COMMAND && proc->fd_in != -1)
 				child(tmp, proc, env);
 			if (proc->type == SUBSHELL)
 			{
-				assign_pipe_subshell(proc->procs, proc, env);
+				// assign_pipe_subshell(proc->procs, proc, env);
 				process(proc->procs, env);
+				break ;
 				// if (proc->next_pipeline == AND || proc->next_pipeline == OR)
 				// 	return (recursive_and_or(proc, env, 0), 0);
 			}
