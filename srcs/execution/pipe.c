@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 11:51:18 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 01:29:34 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 13:30:33 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	assign_pipe(t_proc *proc)
 			if (tmp->procs)
 			{
 				while (tmp->procs)
-				tmp = tmp->procs;
+					tmp = tmp->procs;
 			}
 			if (tmp->fd_in == STDIN_FILENO)
 				tmp->fd_in = proc->pipes[0];

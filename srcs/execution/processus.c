@@ -6,13 +6,11 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 12:14:15 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 13:30:56 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <stdlib.h>
-#include <string.h>
 
 void	close_pipe1(t_proc *proc);
 void	assign_pipe(t_proc *proc);
