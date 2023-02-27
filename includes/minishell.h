@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 11:03:59 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 12:12:46 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ int				skip_pipeline(t_next_pipeline pipeline_type);
 t_next_pipeline	get_pipeline_type(char *line);
 
 // signals.c
-void			call_sigaction(void);
+void			call_sigaction_process(void);
+void			call_sigaction_readline(void);
 
 // close.c
 void			free_shell_data(t_list *env);

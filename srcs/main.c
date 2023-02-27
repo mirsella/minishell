@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/21 19:44:43 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 12:12:33 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	init_shell(t_list **env, char **envp)
 	t_list	*lst;
 
 	g_exit_code = 0;
-	call_sigaction();
+	call_sigaction_readline();
 	if (*envp)
 	{
 		env_tab = ft_tabdup(envp);
