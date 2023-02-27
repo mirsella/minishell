@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 17:20:38 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 19:04:33 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 22:20:07 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	builtin_pwd(t_proc *proc)
 
 	if (!getcwd(buf, PATH_MAX))
 		return (print_errorendl("error retrieving current directory",
-			strerror(errno)), 1);
+				strerror(errno)), 1);
 	if (ft_putendl_fd(buf, proc->fd_out) == -1)
 	{
 		print_errorendl("write", strerror(errno));

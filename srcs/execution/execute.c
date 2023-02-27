@@ -6,13 +6,11 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 22:13:25 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 22:32:41 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	close_pipe1(t_proc *proc);
 
 void	free_and_exit_child(t_proc *proc, t_list *env, int exit_code)
 {
@@ -52,15 +50,11 @@ int	launch_command(t_proc *proc, t_list *env)
 void	child(t_proc *tmp, t_proc *proc, t_list *env)
 {
 	if (isbuiltin(proc->path) && (!tmp->next || tmp->next_pipeline == AND
-				|| tmp->next_pipeline == OR))
+			|| tmp->next_pipeline == OR))
 	{
 		proc->exit_code = exec_builtin(proc, env);
-		// g_exit_code = proc->exit_code;
 		return ;
 	}
-	// printf("path : %s  \n pipe[0]: %d && pipe[1]: %d \n fd_in: %d  && fd_out: %d\n\n", proc->path, proc->pipes[0]
-	// 		,proc->pipes[1], proc->fd_in, proc->fd_out);
-	// printf("forking line %s\n", proc->line);
 	proc->pid = fork();
 	if (!proc->pid)
 	{
@@ -82,37 +76,33 @@ void	child(t_proc *tmp, t_proc *proc, t_list *env)
 	}
 }
 
-void	wait_loop(t_proc *tmp, t_proc *proc, t_list *env)
+void	wait_loop(t_proc *proc)
 {
 	int	status;
 
-	close_pipe(tmp);
+	close_pipe(proc);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-	while (tmp)
+	while (proc)
 	{
-		if (tmp->type == COMMAND && tmp->path && tmp->pid != -1)
+		if (proc->type == COMMAND && proc->path && proc->pid != -1)
 		{
 			status = 0;
-			waitpid(tmp->pid, &status, 0);
+			waitpid(proc->pid, &status, 0);
 			if (WIFEXITED(status))
-				tmp->exit_code = WEXITSTATUS(status);
+				proc->exit_code = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 			{
-				tmp->exit_code = WTERMSIG(status) + 128;
+				proc->exit_code = WTERMSIG(status) + 128;
 				if (g_exit_code == 131)
 					ft_putstr_fd("Quit: (core dumped)\n", STDERR_FILENO);
 			}
 		}
-		g_exit_code = tmp->exit_code;
-		if (tmp->next_pipeline == AND || tmp->next_pipeline == OR)
+		g_exit_code = proc->exit_code;
+		if (proc->next_pipeline == AND || proc->next_pipeline == OR)
 			break ;
-		tmp = tmp->next;
+		proc = proc->next;
 	}
-	(void)env;
-	(void)proc; // moved to process() bc of norm this function is too long
-	// if (proc)
-	// recursive_and_or(proc, env, 0);
 }
 
 int	execute(t_proc *procs, t_list *env)
