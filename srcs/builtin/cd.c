@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 13:42:25 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 18:04:35 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/27 18:43:14 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,7 @@
 
 static int	update_oldpwd(t_list *env)
 {
-	char	buf[PATH_MAX];
-
-	if (!getcwd(buf, PATH_MAX))
-		return (-1);
-	if (add_env_var(env, "OLDPWD", buf) == -1)
+	if (add_env_var(env, "OLDPWD", get_env_var(env, "PWD")) == -1)
 		return (-1);
 	return (0);
 }
