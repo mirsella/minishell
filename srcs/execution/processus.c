@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 17:35:36 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 18:10:27 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,25 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 
 static void	wait_loop(t_proc *tmp, t_proc *proc, t_list *env)
 {
+	int	status;
+
 	close_pipe(tmp);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	while (tmp)
 	{
-		if (tmp->type == COMMAND && tmp->path)
-			waitpid(tmp->pid, &tmp->exit_code, 0);
-		if (g_exit_code <= 128 && g_exit_code >= 128 + 32)
+		if (tmp->type == COMMAND && tmp->path && tmp->pid != -1)
+		{
+			if (waitpid(tmp->pid, &status, 0) == -1)
+				perror("waitpid");
+			if (WIFEXITED(status))
+				tmp->exit_code = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				tmp->exit_code = WTERMSIG(status) + 128;
+			else
+				tmp->exit_code = 1;
 			g_exit_code = tmp->exit_code;
+		}
 		if (tmp->next_pipeline == AND || tmp->next_pipeline == OR)
 			break ;
 		tmp = tmp->next;
