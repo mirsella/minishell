@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 10:44:59 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 10:45:55 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int	process(t_proc *proc, t_list *env)
 			}
 			if (proc->type == SUBSHELL)
 			{
-				assign_pipe_subshell(proc->procs, proc, env);
+				// assign_pipe_subshell(proc->procs, proc, env);
 				printf("calling process recursively bc of SUBSHELL %s and procs %p\n", proc->line, proc->procs);
 				process(proc->procs, env);
 				break ;
