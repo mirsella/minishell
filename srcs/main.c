@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/27 12:13:19 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:01:46 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ int	prompt_loop(t_list *env)
 	while (1)
 	{
 		free(line);
-		call_sigaction_readline();
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, sigint_handler);
 		line = readline(PROMPT);
 		if (!line)
 			break ;

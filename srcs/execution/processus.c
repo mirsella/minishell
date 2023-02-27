@@ -6,11 +6,12 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 18:10:27 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 18:56:47 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <signal.h>
 
 void	close_pipe1(t_proc *proc);
 void	assign_pipe(t_proc *proc);
@@ -61,15 +62,15 @@ static void	wait_loop(t_proc *tmp, t_proc *proc, t_list *env)
 	{
 		if (tmp->type == COMMAND && tmp->path && tmp->pid != -1)
 		{
-			if (waitpid(tmp->pid, &status, 0) == -1)
-				perror("waitpid");
+			status = 0;
+			waitpid(tmp->pid, &status, 0);
 			if (WIFEXITED(status))
 				tmp->exit_code = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 				tmp->exit_code = WTERMSIG(status) + 128;
-			else
-				tmp->exit_code = 1;
 			g_exit_code = tmp->exit_code;
+			if (g_exit_code == 131)
+				ft_putstr_fd("Quit: (core dumped)\n", STDERR_FILENO);
 		}
 		if (tmp->next_pipeline == AND || tmp->next_pipeline == OR)
 			break ;
