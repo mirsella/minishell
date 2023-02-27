@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 11:18:31 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 12:14:15 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	assign_pipe(t_proc *proc);
 
 static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 {
-	if (proc->next_pipeline == PIPE)
-		assign_pipe_cmd(proc);
 	if (isbuiltin(proc->path) && (!tmp->next || tmp->next_pipeline == AND
 			|| tmp->next_pipeline == OR))
 	{
@@ -43,6 +41,12 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 			proc->exit_code = exec_builtin(proc, env);
 			free_and_exit_child(proc, env, proc->exit_code);
 		}
+		if (tmp && tmp->prev)
+		{
+			while (tmp->prev)
+				tmp = tmp->prev;
+		}
+		close_pipe1(tmp);
 		if (!access(proc->path, 0))
 			execve(proc->path, ft_lst_to_tab(proc->args), ft_lst_to_tab(env));
 		free_and_exit_child(proc, env, -1);
@@ -103,7 +107,6 @@ int	process(t_proc *proc, t_list *env)
 			}
 			if (proc->type == SUBSHELL)
 			{
-				// assign_pipe_subshell(proc->procs, proc, env);
 				// printf("calling process recursively bc of SUBSHELL %s and procs %p\n", proc->line, proc->procs);
 				process(proc->procs, env);
 			}
