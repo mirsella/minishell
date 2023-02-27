@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 13:42:25 by dly               #+#    #+#             */
-/*   Updated: 2023/02/24 15:26:58 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 18:04:35 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ static int	go_to_home(t_list *env)
 		return (-1);
 	home = get_env_var(env, "HOME");
 	if (!home)
-		return (ft_putstr_fd("error HOME is not set\n", 2), -1);
+	{
+		g_exit_code = 1;
+		return (print_errorendl("cd", "HOME no set"), 1);
+	}
 	if (chdir(home) == -1)
 		return (-1);
 	if (update_pwd(env) == -1)
