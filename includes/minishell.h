@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 21:01:00 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/27 00:46:16 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ int				double_dup2(int in, int out);
 int				open_pipe(t_proc *proc);
 void			close_pipe(t_proc *proc);
 void			assign_pipe_cmd(t_proc *proc);
-void			assign_pipe_subshell(t_proc *tmp, t_proc *proc, t_list *env);
+void			assign_pipe_subshell(t_proc *procs, t_proc *proc, t_list *env);
 
 // execute/processus.c
 int				process(t_proc *proc, t_list *env);

@@ -6,19 +6,20 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/24 21:21:33 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/27 01:36:22 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <stdlib.h>
 
 void	close_pipe1(t_proc *proc);
 void	assign_pipe(t_proc *proc);
 
 static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 {
-	// if (proc->next_pipeline == PIPE)
-	// 	assign_pipe_cmd(proc);
+	if (proc->next_pipeline == PIPE)
+		assign_pipe_cmd(proc);
 	if (isbuiltin(proc->path) && (!tmp->next || tmp->next_pipeline == AND
 			|| tmp->next_pipeline == OR))
 	{
@@ -38,12 +39,12 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 			proc->exit_code = exec_builtin(proc, env);
 			exit(proc->exit_code);
 		}
-		if (tmp)
-		{
-			while (tmp->prev)
-				tmp = tmp->prev;
-		}
-		close_pipe1(tmp);
+		// if (tmp)
+		// {
+		// 	while (tmp->prev)
+		// 		tmp = tmp->prev;
+		// }
+		// close_pipe1(tmp);
 		if (!access(proc->path, 0))
 			execve(proc->path, ft_lst_to_tab(proc->args), ft_lst_to_tab(env));
 		exit(-1);
@@ -85,8 +86,8 @@ int	process(t_proc *proc, t_list *env)
 	while (proc)
 	{
 		parse_line_to_proc(proc->line, proc, env);
-	//	printf("path : %s  line: %s \n pipe[0]: %d && pipe[1]: %d \n fd_in: %d  && fd_out: %d\n\n"
-	//		,proc->path, proc->line, proc->pipes[0] ,proc->pipes[1], proc->fd_in, proc->fd_out);
+		// printf("path : %s  line: %s \n pipe[0]: %d && pipe[1]: %d \n fd_in: %d  && fd_out: %d\n\n"
+		// 	,proc->path, proc->line, proc->pipes[0] ,proc->pipes[1], proc->fd_in, proc->fd_out);
 		if (!cmd_not_found(proc) && (proc->path || proc->type == SUBSHELL))
 		{
 			assign_pipe(proc);
@@ -94,7 +95,7 @@ int	process(t_proc *proc, t_list *env)
 				child(tmp, proc, env);
 			if (proc->type == SUBSHELL)
 			{
-				// assign_pipe_subshell(proc->procs, proc, env);
+				assign_pipe_subshell(proc->procs, proc, env);
 				process(proc->procs, env);
 				break ;
 				// if (proc->next_pipeline == AND || proc->next_pipeline == OR)

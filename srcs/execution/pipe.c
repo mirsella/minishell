@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 11:51:18 by dly               #+#    #+#             */
-/*   Updated: 2023/02/24 21:38:07 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/27 01:29:34 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	close_pipe(t_proc *proc)
 
 void	assign_pipe(t_proc *proc)
 {
+	t_proc	*tmp;
+
 	if (proc->next_pipeline == PIPE)
 	{
 		if (proc->type == COMMAND && proc->fd_out == STDOUT_FILENO)
@@ -76,24 +78,26 @@ void	assign_pipe(t_proc *proc)
 		}
 		if (proc->type == SUBSHELL)
 		{
-			while (proc->procs)
+			tmp = proc->procs;
+			while (tmp)
 			{
-				if (proc->procs->next_pipeline != PIPE && proc->procs->fd_out == STDOUT_FILENO)
-						proc->procs->fd_out = proc->pipes[1];
-				proc->procs = proc->procs->next;
+				if (tmp->next_pipeline != PIPE && tmp->fd_out == STDOUT_FILENO)
+						tmp->fd_out = proc->pipes[1];
+				tmp = tmp->next;
 			}
 		}
 		if (proc->next->type == COMMAND && proc->next->fd_in == STDIN_FILENO)
 			proc->next->fd_in = proc->pipes[0];
 		if (proc->next->type == SUBSHELL)
 		{
-			if (proc->next->procs->procs)
+			tmp = proc->next->procs;
+			if (tmp->procs)
 			{
-				while (proc->next->procs->procs)
-					proc->next->procs = proc->next->procs->procs;
+				while (tmp->procs)
+					tmp = tmp->procs;
 			}
-			if (proc->next->procs->fd_in == STDIN_FILENO)
-				proc->next->procs->fd_in = proc->pipes[0];
+			if (tmp->fd_in == STDIN_FILENO)
+				tmp->fd_in = proc->pipes[0];
 		}
 	}
 }
@@ -108,9 +112,11 @@ void	assign_pipe_cmd(t_proc *proc)
 	}
 }
 
-void	assign_pipe_subshell(t_proc *tmp, t_proc *proc, t_list *env)
+void	assign_pipe_subshell(t_proc *procs, t_proc *proc, t_list *env)
 {
-	(void)tmp;
+	t_proc *tmp;
+
+	(void)procs;
 	(void)env;
 	if (proc->next_pipeline == PIPE)
 	{
@@ -118,15 +124,16 @@ void	assign_pipe_subshell(t_proc *tmp, t_proc *proc, t_list *env)
 			proc->next->procs->fd_in = proc->pipes[0];
 		if (proc->next->fd_in == STDIN_FILENO)
 			proc->next->fd_in = proc->pipes[0];
-		while (proc->procs)
+		tmp = proc->procs;
+		while (tmp)
 		{
-			if (proc->procs->next_pipeline != PIPE)
+			if (tmp->next_pipeline != PIPE)
 			{
-				if (proc->procs->fd_out == STDOUT_FILENO)
-					proc->procs->fd_out = proc->pipes[1];
+				if (tmp->fd_out == STDOUT_FILENO)
+					tmp->fd_out = proc->pipes[1];
 			}
-			proc->procs = proc->procs->next;
+			tmp = proc->procs->next;
 		}
-		// process(tmp, env);
+		// process(procs, env);
 	}
 }
