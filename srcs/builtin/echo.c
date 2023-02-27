@@ -17,6 +17,8 @@ static int	is_flag_n(char *str)
 	int	i;
 
 	i = 0;
+	if (str[i] == '-' && str[i + 1] != 'n')
+		return (0);
 	if (str[i] == '-')
 		i++;
 	else
