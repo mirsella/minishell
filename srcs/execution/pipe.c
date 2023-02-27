@@ -34,7 +34,7 @@ void	close_pipe1(t_proc *proc)
 	while (proc)
 	{
 		if (proc->type == SUBSHELL)
-			close_pipe(proc->procs);
+			close_pipe1(proc->procs);
 		if (proc->next_pipeline == PIPE)
 		{
 			close(proc->pipes[0]);
