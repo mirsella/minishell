@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 00:04:13 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 00:09:54 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,6 @@ int	set_heredoc_delim(char *line, char **delim, int *expand)
 	return (0);
 }
 
-int	prompt_null_line(char *delim)
-{
-	if (g_exit_code == 128 + SIGINT)
-		return (1);
-	printf("minishell: warning: %s. wanted `%s'\n",
-		"here-document delimited by end-of-file (wanted `", delim);
-	return (0);
-}
-
 char	*get_line(char *delim)
 {
 	char	*line;
@@ -65,7 +56,13 @@ char	*get_line(char *delim)
 	ft_putstr("> ");
 	line = ft_get_next_line(STDIN_FILENO, 0);
 	if (!line)
-		return (prompt_null_line(delim), NULL);
+	{
+		if (g_exit_code == 128 + SIGINT)
+			return (NULL);
+		printf("minishell: warning: %s. wanted `%s'\n",
+			"here-document delimited by end-of-file (wanted `", delim);
+		return (NULL);
+	}
 	tmp = ft_substr(line, 0, ft_strlen(line) - 1);
 	free(line);
 	if (!tmp)
