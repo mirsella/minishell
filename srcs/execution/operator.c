@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 20:59:21 by dly               #+#    #+#             */
-/*   Updated: 2023/02/24 21:02:15 by dly              ###   ########.fr       */
+/*   Updated: 2023/02/27 22:41:30 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,14 @@ int	recursive_and_or(t_proc *proc, t_list *env, int need_open)
 	if (need_open)
 		open_pipe(proc);
 	process(proc->next, env);
+	return (0);
+}
+
+int	double_dup2(int in, int out)
+{
+	if (dup2(in, STDIN_FILENO) == -1)
+		return (-1);
+	if (dup2(out, STDOUT_FILENO) == -1)
+		return (-1);
 	return (0);
 }

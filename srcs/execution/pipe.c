@@ -6,20 +6,11 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 11:51:18 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 22:31:42 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 22:41:30 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	double_dup2(int in, int out)
-{
-	if (dup2(in, STDIN_FILENO) == -1)
-		return (-1);
-	if (dup2(out, STDOUT_FILENO) == -1)
-		return (-1);
-	return (0);
-}
 
 int	open_pipe(t_proc *proc)
 {

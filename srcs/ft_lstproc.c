@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 22:52:18 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 12:16:08 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 22:40:28 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,13 @@ void	proc_free(t_proc *proc)
 	if (proc->pipes[1] > 2)
 		close(proc->pipes[1]);
 	free(proc);
+}
+
+int	get_status_of_last_proc(t_proc *proc)
+{
+	while (proc->next)
+		proc = proc->next;
+	return (proc->exit_code);
 }
 
 void	procs_free(t_proc **proc)

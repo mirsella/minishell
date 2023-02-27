@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 22:32:47 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 22:41:30 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int				create_and_push_proc(
 					t_proc **first, t_proc **last_proc, t_proc **proc);
 t_proc			*new_proc(void);
 void			procs_free(t_proc **proc);
+int				get_status_of_last_proc(t_proc *proc);
 
 // parsing/skipping.c
 int				skip_quotes(char *line);
@@ -152,12 +153,6 @@ int				parse_line_to_proc(char *line, t_proc *proc, t_list *env);
 // parsing/set_full_path.c
 int				set_full_path(t_list *env, char *cmd, char **full_path);
 
-// execution/execute.c
-void			free_and_exit_child(t_proc *proc, t_list *env, int exit_code);
-void			wait_loop(t_proc *proc);
-void			child(t_proc *tmp, t_proc *proc, t_list *env);
-int				execute(t_proc *procs, t_list *env);
-
 // builtin/builtin.c
 int				isbuiltin(char *cmd);
 int				exec_builtin(t_proc *proc, t_list *env);
@@ -188,16 +183,24 @@ int				is_file_executable(char *path, int print_error);
 int				is_file_readable(char *path);
 int				is_file_writable(char *path);
 
+// execution/execute.c
+void			free_and_exit_child(t_proc *proc, t_list *env, int exit_code);
+void			wait_loop(t_proc *proc);
+void			child(t_proc *tmp, t_proc *proc, t_list *env);
+int				execute(t_proc *procs, t_list *env);
+
 // execute/pipe.c
 int				double_dup2(int in, int out);
 int				open_pipe(t_proc *proc);
 void			close_pipe1(t_proc *proc);
 void			close_pipe(t_proc *proc);
+void			assign_pipe(t_proc *proc);
 
 // execute/processus.c
 int				process(t_proc *proc, t_list *env);
 
 // execute/operator.c
 int				recursive_and_or(t_proc *proc, t_list *env, int need_open);
+int				double_dup2(int in, int out);
 
 #endif
