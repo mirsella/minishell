@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 13:30:56 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 14:55:49 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 	if (!proc->pid)
 	{
 		if (double_dup2(proc->fd_in, proc->fd_out) == -1)
-		{
-			printf("double_dup2: %s\n", strerror(errno));
 			free_and_exit_child(proc, env, 1);
-		}
 		if (isbuiltin(proc->path))
 		{
 			proc->exit_code = exec_builtin(proc, env);
@@ -60,7 +57,8 @@ static void	wait_loop(t_proc *tmp, t_proc *proc, t_list *env)
 	{
 		if (tmp->type == COMMAND && tmp->path)
 			waitpid(tmp->pid, &tmp->exit_code, 0);
-		g_exit_code = tmp->exit_code;
+		if (g_exit_code <= 128 && g_exit_code >= 128 + 32)
+			g_exit_code = tmp->exit_code;
 		if (tmp->next_pipeline == AND || tmp->next_pipeline == OR)
 			break ;
 		tmp = tmp->next;

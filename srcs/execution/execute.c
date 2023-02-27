@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 11:03:28 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 14:34:10 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	execute(t_proc *procs, t_list *env)
 {
 	if (open_pipe(procs))
 		return (-1);
+	call_sigaction_process();
 	process(procs, env);
 	return (0);
 }

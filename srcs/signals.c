@@ -6,13 +6,11 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:13:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 13:08:07 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 14:46:29 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <readline/readline.h>
-#include <readline/rltypedefs.h>
 
 void	sig_handler_readline(int signo, siginfo_t *info, void *context)
 {
@@ -22,12 +20,13 @@ void	sig_handler_readline(int signo, siginfo_t *info, void *context)
 	{
 		ft_putchar('\n');
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		rl_replace_line("", STDIN_FILENO);
 		rl_redisplay();
 		g_exit_code = 128 + SIGINT;
 	}
 	else if (signo == SIGQUIT)
 	{
+		rl_redisplay();
 		g_exit_code = 128 + SIGQUIT;
 	}
 }
@@ -66,7 +65,7 @@ void	call_sigaction_process(void)
 	struct sigaction	sa;
 
 	sa.sa_flags = SA_SIGINFO;
-	sa.sa_sigaction = sig_handler_readline;
+	sa.sa_sigaction = sig_handler_process;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
