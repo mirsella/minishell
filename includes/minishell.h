@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 12:12:46 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 12:14:37 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_proc
 	int				fd_in;
 	int				fd_out;
 	int				pipes[2];
+	int				*from_pipe;
 	pid_t			pid;
 	int				exit_code;
 	struct s_proc	*next;
