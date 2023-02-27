@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 18:56:47 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:41:16 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 			|| tmp->next_pipeline == OR))
 	{
 		proc->exit_code = exec_builtin(proc, env);
-		g_exit_code = proc->exit_code;
+		// g_exit_code = proc->exit_code;
 		return ;
 	}
 	// printf("path : %s  \n pipe[0]: %d && pipe[1]: %d \n fd_in: %d  && fd_out: %d\n\n", proc->path, proc->pipes[0]
@@ -82,13 +82,10 @@ static void	wait_loop(t_proc *tmp, t_proc *proc, t_list *env)
 
 int	cmd_not_found(t_proc *proc)
 {
-	if (!proc->path && proc->type == COMMAND
-			&& proc->fd_in != STDIN_FILENO && proc->fd_out != STDOUT_FILENO)
+	if (!proc->path && proc->type == COMMAND)
 	{
-		// if (proc->exit_code == 0)
-		// 	proc->exit_code = 127;
 		proc->exit_code = 127;
-		g_exit_code = proc->exit_code;
+		// g_exit_code = proc->exit_code;
 		return (1);
 	}
 	return (0);
@@ -127,6 +124,8 @@ int	process(t_proc *proc, t_list *env)
 		}
 		if (proc->next_pipeline == AND || proc->next_pipeline == OR)
 			break ;
+		if (!proc->next)
+			g_exit_code = proc->exit_code;
 		proc = proc->next;
 	}
 	wait_loop(tmp, proc, env);

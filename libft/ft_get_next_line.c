@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 14:54:00 by mirsella          #+#    #+#             */
-/*   Updated: 2023/01/03 23:17:15 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:46:34 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ char	*ft_get_next_line(int fd, int freee)
 	if (freee == 1)
 	{
 		free(storage);
+		storage = NULL;
 		return (NULL);
 	}
 	if (fd < 0 || BUFFER_SIZE <= 0)

@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:09:33 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 15:53:54 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:38:26 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,12 @@ int	parse_command(char *line, t_proc *proc, t_list *env)
 	full_path = NULL;
 	ret = set_full_path(env, cmd, &full_path);
 	free(cmd);
-	if (ret)
+	if (ret < 0)
 		return (ret);
-	proc->path = full_path;
+	if (ret > 0)
+		proc->exit_code = ret;
+	else
+		proc->path = full_path;
 	return (0);
 }
 
@@ -121,10 +124,10 @@ int	parse_line_to_proc(char *line, t_proc *proc, t_list *env)
 	{
 		ret = parse_redirections(line, proc, env);
 		if (ret)
-			return (g_exit_code = 1, ret);
+			return (proc->exit_code = 1, ret);
 		ret = parse_command(proc->line, proc, env);
 	}
 	if (ret)
-		g_exit_code = 1;
+		proc->exit_code = 1;
 	return (ret);
 }

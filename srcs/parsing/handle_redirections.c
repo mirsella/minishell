@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 22:31:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 16:15:12 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:38:59 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	ismeta(char c)
 int	open_reading_file(char *filename, t_proc *proc)
 {
 	if (is_file_readable(filename) == 0)
-		return (proc->fd_in = -1, g_exit_code = 1, 0);
+		return (proc->fd_in = -1, proc->exit_code = 1, 0);
 	if (proc->fd_in >= 3)
 		close(proc->fd_in);
 	proc->fd_in = open(filename, O_RDONLY);
@@ -32,7 +32,7 @@ int	open_reading_file(char *filename, t_proc *proc)
 int	open_writing_file(char *filename, t_proc *proc, int append_flag)
 {
 	if (!is_file_writable(filename))
-		return (proc->fd_in = -1, g_exit_code = 1, 0);
+		return (proc->fd_in = -1, proc->exit_code = 1, 0);
 	if (proc->fd_out >= 3)
 		close(proc->fd_out);
 	if (append_flag)
