@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 14:55:49 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 17:21:34 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ static void	wait_loop(t_proc *tmp, t_proc *proc, t_list *env)
 
 int	cmd_not_found(t_proc *proc)
 {
-	if (!proc->path && proc->type == COMMAND)
+	if (!proc->path && proc->type == COMMAND
+			&& proc->fd_in != STDIN_FILENO && proc->fd_out != STDOUT_FILENO)
 	{
 		proc->exit_code = 127;
 		g_exit_code = 127;
