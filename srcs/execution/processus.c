@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 10:40:07 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 10:44:59 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,13 @@ int	process(t_proc *proc, t_list *env)
 
 	tmp = proc;
 	if (proc)
-		printf("process type %d line %s\n", proc->type, proc->line);
+		printf("in process type %d line %s\n", proc->type, proc->line);
 	else
 		printf("proc is NULL\n");
 	while (proc)
 	{
 		parse_line_to_proc(proc->line, proc, env);
-		printf("filled proc type %d line %s and path %s\n", proc->type, proc->line, proc->path);
+		printf("parselinetoproc filled proc type %d line %s and path %s\n", proc->type, proc->line, proc->path);
 		if (proc->type == SUBSHELL)
 			printf("  procs: %p\n", proc->procs);
 		// printf("path : %s  line: %s \n pipe[0]: %d && pipe[1]: %d \n fd_in: %d  && fd_out: %d\n\n"
