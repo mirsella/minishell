@@ -67,7 +67,7 @@ void	close_pipe(t_proc *proc)
 			close(proc->from_pipe[0]);
 			close(proc->from_pipe[1]);
 		}
-
+		// printf("[0]:%d [1]:%d\n", proc->pipes[0],proc->pipes[0]);
 		proc = proc->next;
 	}
 }
@@ -103,7 +103,7 @@ void	assign_pipe(t_proc *proc)
 			if (tmp->procs)
 			{
 				while (tmp->procs)
-					tmp = tmp->procs;
+				tmp = tmp->procs;
 			}
 			if (tmp->fd_in == STDIN_FILENO)
 				tmp->fd_in = proc->pipes[0];

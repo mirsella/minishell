@@ -25,6 +25,7 @@ all: $(NAME)
 $(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 
+
  
 clean:
 	rm -f $(OBJS)

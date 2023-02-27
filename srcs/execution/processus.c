@@ -12,6 +12,7 @@
 
 #include "../../includes/minishell.h"
 #include <stdlib.h>
+#include <string.h>
 
 void	close_pipe1(t_proc *proc);
 void	assign_pipe(t_proc *proc);
@@ -41,6 +42,7 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 			proc->exit_code = exec_builtin(proc, env);
 			free_and_exit_child(proc, env, proc->exit_code);
 		}
+		close_pipe(tmp);
 		if (tmp && tmp->prev)
 		{
 			while (tmp->prev)
