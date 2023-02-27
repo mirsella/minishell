@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 00:46:16 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 11:03:59 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int				parse_line_to_proc(char *line, t_proc *proc, t_list *env);
 int				set_full_path(t_list *env, char *cmd, char **full_path);
 
 // execution/execute.c
-int				print_procs(t_proc *procs, t_list *env, int layer);
+void			free_and_exit_child(t_proc *proc, t_list *env, int exit_code);
 int				execute(t_proc *procs, t_list *env);
 
 // builtin/builtin.c

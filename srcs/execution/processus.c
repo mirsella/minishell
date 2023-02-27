@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 10:45:55 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 11:04:47 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,25 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 		g_exit_code = proc->exit_code;
 		return ;
 	}
-//	printf("path : %s  \n pipe[0]: %d && pipe[1]: %d \n fd_in: %d  && fd_out: %d\n\n", proc->path, proc->pipes[0]
-//			,proc->pipes[1], proc->fd_in, proc->fd_out);
+	// printf("path : %s  \n pipe[0]: %d && pipe[1]: %d \n fd_in: %d  && fd_out: %d\n\n", proc->path, proc->pipes[0]
+	// 		,proc->pipes[1], proc->fd_in, proc->fd_out);
 	printf("forking line %s\n", proc->line);
 	proc->pid = fork();
 	if (!proc->pid)
 	{
-		printf("before double dup2 %d %d\n", proc->fd_in, proc->fd_out);
 		if (double_dup2(proc->fd_in, proc->fd_out) == -1)
 		{
 			printf("double_dup2: %s\n", strerror(errno));
-			exit(1);
+			free_and_exit_child(proc, env, 1);
 		}
-		printf("after double dup2\n");
 		if (isbuiltin(proc->path))
 		{
 			proc->exit_code = exec_builtin(proc, env);
-			exit(proc->exit_code);
+			free_and_exit_child(proc, env, proc->exit_code);
 		}
-		// if (tmp)
-		// {
-		// 	while (tmp->prev)
-		// 		tmp = tmp->prev;
-		// }
-		// close_pipe1(tmp);
-		printf("execve line %s\n", proc->line);
 		if (!access(proc->path, 0))
 			execve(proc->path, ft_lst_to_tab(proc->args), ft_lst_to_tab(env));
-		exit(-1);
+		free_and_exit_child(proc, env, -1);
 	}
 }
 
