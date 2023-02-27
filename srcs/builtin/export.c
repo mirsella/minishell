@@ -6,11 +6,18 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:27:37 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 15:26:58 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 17:48:07 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	print_invalid_identifier(char *str)
+{
+	g_exit_code = 1;
+	print_error("export", str);
+	ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+}
 
 int	is_valid_identifier(char *str)
 {
@@ -25,15 +32,9 @@ int	is_valid_identifier(char *str)
 			return (0);
 		i++;
 	}
+	if (!str[i])
+		return (0);
 	return (1);
-}
-
-void	print_invalid_identifier(char *str)
-{
-	g_exit_code = 1;
-	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-	ft_putstr_fd(str, STDERR_FILENO);
-	ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
 }
 
 int	builtin_export(t_proc *proc, t_list *env)
@@ -48,10 +49,7 @@ int	builtin_export(t_proc *proc, t_list *env)
 	while (tmp)
 	{
 		if (!is_valid_identifier(tmp->content))
-		{
-			print_invalid_identifier(tmp->content);
-			return (1);
-		}
+			break ;
 		variable = ft_strndup(tmp->content,
 				ft_strchr(tmp->content, '=') - (char *)tmp->content);
 		value = ft_strdup(ft_strchr(tmp->content, '=') + 1);
