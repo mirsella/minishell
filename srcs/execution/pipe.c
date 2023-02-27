@@ -62,6 +62,12 @@ void	close_pipe(t_proc *proc)
 			close(proc->pipes[0]);
 			close(proc->pipes[1]);
 		}
+		if (proc->from_pipe)
+		{
+			close(proc->from_pipe[0]);
+			close(proc->from_pipe[1]);
+		}
+
 		proc = proc->next;
 	}
 }
@@ -87,7 +93,10 @@ void	assign_pipe(t_proc *proc)
 			}
 		}
 		if (proc->next->type == COMMAND && proc->next->fd_in == STDIN_FILENO)
+		{
+			proc->next->from_pipe = proc->pipes;
 			proc->next->fd_in = proc->pipes[0];
+		}
 		if (proc->next->type == SUBSHELL)
 		{
 			tmp = proc->next->procs;
@@ -98,6 +107,7 @@ void	assign_pipe(t_proc *proc)
 			}
 			if (tmp->fd_in == STDIN_FILENO)
 				tmp->fd_in = proc->pipes[0];
+			tmp->from_pipe = proc->pipes;
 		}
 	}
 }
