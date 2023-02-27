@@ -6,20 +6,49 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 19:55:43 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 20:47:59 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <signal.h>
+#include <stdio.h>
 
 void	close_pipe1(t_proc *proc);
 void	assign_pipe(t_proc *proc);
 
+int	launch_command(t_proc *proc, t_list *env)
+{
+	char	**args;
+	char	**envp;
+
+	args = ft_lst_to_tab(proc->args);
+	if (!args)
+		return (perror("malloc"), -1);
+	envp = ft_lst_to_tab(env);
+	if (!envp)
+		return (free(args), perror("malloc"), -1);
+	if (execve(proc->path, args, envp) == -1)
+	{
+		print_errorendl(proc->path, strerror(errno));
+		ft_free_tab(args);
+		ft_free_tab(envp);
+		if (errno == ENOENT)
+			return (127);
+		else if (errno == EACCES)
+			return (126);
+		else
+			return (1);
+	}
+	ft_free_tab(args);
+	ft_free_tab(envp);
+	return (1);
+}
+
 static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 {
 	if (isbuiltin(proc->path) && (!tmp->next || tmp->next_pipeline == AND
-			|| tmp->next_pipeline == OR))
+				|| tmp->next_pipeline == OR))
 	{
 		proc->exit_code = exec_builtin(proc, env);
 		// g_exit_code = proc->exit_code;
@@ -45,9 +74,7 @@ static void	child(t_proc *tmp, t_proc *proc, t_list *env)
 				tmp = tmp->prev;
 		}
 		close_pipe1(tmp);
-		if (!access(proc->path, 0))
-			execve(proc->path, ft_lst_to_tab(proc->args), ft_lst_to_tab(env));
-		free_and_exit_child(proc, env, -1);
+		free_and_exit_child(proc, env, launch_command(proc, env));
 	}
 }
 

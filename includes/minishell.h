@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 19:00:41 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 20:25:26 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ int				builtin_env(t_proc *proc, t_list *env);
 int				builtin_pwd(t_proc *proc);
 
 // parsing/stat.c
-int				is_file_executable(char *path);
+int				is_file_executable(char *path, int print_error);
 int				is_file_readable(char *path);
 int				is_file_writable(char *path);
 
