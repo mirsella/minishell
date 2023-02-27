@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 17:58:05 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:50:03 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 	int		ret;
 	int		expand;
 
+	signal(SIGQUIT, SIG_IGN);
 	ret = set_heredoc_delim(line, &delim, &expand);
 	if (ret)
 		return (ret);

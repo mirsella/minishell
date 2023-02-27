@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 22:31:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 19:38:59 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:54:17 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	output_redirection(char *line, t_proc *proc, t_list *env)
 		return (print_syntax_error("unexpected token ", *(line)), 1);
 	filename = get_redirect_word_expand(line, &ret, env);
 	if (ret)
-		return (ret);
+		return (proc->exit_code = ret, ret);
 	ret = open_writing_file(filename, proc, append);
 	free(filename);
 	return (ret);

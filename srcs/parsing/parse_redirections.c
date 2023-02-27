@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 15:38:38 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/24 19:53:40 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:53:44 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_redirect_word_expand(char *line, int *ret, t_list *env)
 	char	*tmp;
 
 	if (*(line + ft_skip_spaces(line)) == 0)
-		return (*ret = 1, print_syntax_error("near empty redirect", 0), NULL);
+		return (*ret = 2, print_syntax_error("near empty redirect", 0), NULL);
 	stop = 0;
 	while (line[stop] && !ismeta(line[stop]) && !ft_isspace(line[stop]))
 	{

@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 19:41:16 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:55:43 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ int	cmd_not_found(t_proc *proc)
 {
 	if (!proc->path && proc->type == COMMAND)
 	{
-		proc->exit_code = 127;
+		if (proc->exit_code == 0)
+			proc->exit_code = 127;
 		// g_exit_code = proc->exit_code;
 		return (1);
 	}
