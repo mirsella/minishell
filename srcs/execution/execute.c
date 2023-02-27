@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 22:32:41 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 23:08:56 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	wait_loop(t_proc *proc)
 			else if (WIFSIGNALED(status))
 			{
 				proc->exit_code = WTERMSIG(status) + 128;
-				if (g_exit_code == 131)
+				if (proc->exit_code == 131)
 					ft_putstr_fd("Quit: (core dumped)\n", STDERR_FILENO);
 			}
 		}

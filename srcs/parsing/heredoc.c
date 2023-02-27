@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 19:50:03 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 00:04:13 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,13 @@ int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 	return (0);
 }
 
+void	sigint_heredoc_handler(int sig)
+{
+	(void)sig;
+	g_exit_code = 128 + SIGINT;
+	ft_putstr("\n> ");
+}
+
 int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 {
 	int		pipes[2];
@@ -108,6 +115,7 @@ int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 	int		expand;
 
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, &sigint_heredoc_handler);
 	ret = set_heredoc_delim(line, &delim, &expand);
 	if (ret)
 		return (ret);
