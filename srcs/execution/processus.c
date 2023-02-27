@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 20:47:59 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/27 21:11:37 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,21 @@ static void	wait_loop(t_proc *tmp, t_proc *proc, t_list *env)
 			if (WIFEXITED(status))
 				tmp->exit_code = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
+			{
 				tmp->exit_code = WTERMSIG(status) + 128;
-			g_exit_code = tmp->exit_code;
-			if (g_exit_code == 131)
-				ft_putstr_fd("Quit: (core dumped)\n", STDERR_FILENO);
+				if (g_exit_code == 131)
+					ft_putstr_fd("Quit: (core dumped)\n", STDERR_FILENO);
+			}
 		}
+		g_exit_code = tmp->exit_code;
 		if (tmp->next_pipeline == AND || tmp->next_pipeline == OR)
 			break ;
 		tmp = tmp->next;
 	}
-	if (proc)
-		recursive_and_or(proc, env, 0);
+	(void)env;
+	(void)proc; // moved to process() bc of norm this function is too long
+	// if (proc)
+		// recursive_and_or(proc, env, 0);
 }
 
 int	cmd_not_found(t_proc *proc)
@@ -113,7 +117,8 @@ int	cmd_not_found(t_proc *proc)
 	{
 		if (proc->exit_code == 0)
 			proc->exit_code = 127;
-		// g_exit_code = proc->exit_code;
+		else if (proc->exit_code == -1)
+			proc->exit_code = 0;
 		return (1);
 	}
 	return (0);
@@ -152,10 +157,10 @@ int	process(t_proc *proc, t_list *env)
 		}
 		if (proc->next_pipeline == AND || proc->next_pipeline == OR)
 			break ;
-		if (!proc->next)
-			g_exit_code = proc->exit_code;
 		proc = proc->next;
 	}
 	wait_loop(tmp, proc, env);
+	if (proc)
+		recursive_and_or(proc, env, 0);
 	return (0);
 }
