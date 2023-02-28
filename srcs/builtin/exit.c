@@ -6,20 +6,53 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:38:04 by dly               #+#    #+#             */
-/*   Updated: 2023/02/28 16:34:26 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 16:51:50 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+// check if number at str fits in long long
+int	check_if_numeric(char *str, int neg)
+{
+	int	i;
+
+	i = 0;
+	while (ft_isdigit(str[i]))
+		i++;
+	if (i > 19)
+		return (0);
+	if (i == 19)
+	{
+		if (neg % 2 == 0)
+		{
+			if (ft_strcmp(str, "9223372036854775807") > 0)
+				return (0);
+		}
+		else
+		{
+			if (ft_strcmp(str, "9223372036854775808") > 0)
+				return (0);
+		}
+	}
+	return (1);
+}
 static int	ft_is_valid(const char *str)
 {
 	size_t	i;
+	int		neg;
 
 	i = 0;
 	i += ft_skip_spaces((char *)str);
+	neg = 0;
 	while (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			neg++;
 		i++;
+	}
+	if (!check_if_numeric((char *)str + i, neg))
+		return (0);
 	if (!str[i])
 		return (0);
 	while (ft_isdigit(str[i]))
