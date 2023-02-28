@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 23:42:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 11:24:27 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 13:40:26 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,33 @@ struct s_chars
 	char	*expanded;
 };
 
-static int	ismeta(char c)
+int	get_identifier_stop(char *line)
 {
-	return (c == '\'' || c == '"' || c == '$');
+	int				stop;
+	struct s_chars	chars;
+
+	stop = 1;
+	chars.tmp = ft_substr(line, 1, stop);
+	if (!chars.tmp)
+		return (-1);
+	chars.str = ft_strjoin(chars.tmp, "=");
+	free(chars.tmp);
+	if (!chars.str)
+		return (-1);
+	while (is_valid_identifier(chars.str) && line[stop])
+	{
+		stop++;
+		free(chars.str);
+		chars.tmp = ft_substr(line, 1, stop);
+		if (!chars.tmp)
+			return (-1);
+		chars.str = ft_strjoin(chars.tmp, "=");
+		free(chars.tmp);
+		if (!chars.str)
+			return (-1);
+	}
+	free(chars.str);
+	return (stop - 1);
 }
 
 char	*expand_var(t_list *env, char *line, int *index)
@@ -36,8 +60,9 @@ char	*expand_var(t_list *env, char *line, int *index)
 		*index += 2;
 		return (ft_itoa(g_exit_code));
 	}
-	while (line[stop] && !ismeta(line[stop]) && !isspace(line[stop]))
-		stop++;
+	stop += get_identifier_stop(line);
+	if (stop == -1)
+		return (NULL);
 	*index += stop;
 	if (stop == 1)
 		return (ft_strdup("$"));
