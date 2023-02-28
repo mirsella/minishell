@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 11:17:41 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 11:36:01 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ int				builtin_echo(t_proc *proc);
 int				builtin_unset(t_proc *proc, t_list *env);
 
 // builtin/export.c
+int				is_valid_identifier(char *str);
 int				builtin_export(t_proc *proc, t_list *env);
 
 // builtin/cd.c
