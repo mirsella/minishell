@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 15:48:42 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:58:24 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 	int		ret;
 	int		expand;
 
-	ret = 0;
 	ret = set_heredoc_delim(line, &delim, &expand);
 	if (ret)
 		return (ret);
