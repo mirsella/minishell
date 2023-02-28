@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:38:04 by dly               #+#    #+#             */
-/*   Updated: 2023/02/28 16:51:50 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 16:53:24 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	check_if_numeric(char *str, int neg)
 	}
 	return (1);
 }
+
 static int	ft_is_valid(const char *str)
 {
 	size_t	i;
