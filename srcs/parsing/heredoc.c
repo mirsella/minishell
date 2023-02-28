@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
+/*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 00:09:54 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 13:33: by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ struct	s_chars {
 	char	*joined;
 };
 
+void	sigint_heredoc_handler(int sig)
+{
+	(void)sig;
+	g_exit_code = 128 + SIGINT;
+	// ft_putstr("\n> ");
+}
 int	set_heredoc_delim(char *line, char **delim, int *expand)
 {
 	struct s_chars	chars;
@@ -48,13 +54,40 @@ int	set_heredoc_delim(char *line, char **delim, int *expand)
 	return (0);
 }
 
+// int	prompt_loop(t_list *env)
+// {
+// 	char	*line;
+// 	int		ret;
+
+// 	line = NULL;
+// 	while (1)
+// 	{
+// 		line = readline();
+// 		if (!line)
+// 			break ;
+// 		if (!*(line + ft_skip_spaces(line)))
+// 			continue ;
+// 		if (!ft_isspace(*line))
+// 			add_history(line);
+// 		ret = handle_line(line, env);
+// 		if (ret < 0)
+// 			break ;
+// 		if (ret > 1)
+// 			continue ;
+// 	}
+// 	free(line);
+// 	return (0);
+// }
+
 char	*get_line(char *delim)
 {
 	char	*line;
 	char	*tmp;
 
-	ft_putstr("> ");
-	line = ft_get_next_line(STDIN_FILENO, 0);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, &sigint_heredoc_handler);
+	rl_getc_function = getc;
+	line = readline("> ");
 	if (!line)
 	{
 		if (g_exit_code == 128 + SIGINT)
@@ -63,7 +96,7 @@ char	*get_line(char *delim)
 			"here-document delimited by end-of-file (wanted `", delim);
 		return (NULL);
 	}
-	tmp = ft_substr(line, 0, ft_strlen(line) - 1);
+	tmp = ft_substr(line, 0, ft_strlen(line));
 	free(line);
 	if (!tmp)
 		return (NULL);
@@ -82,27 +115,22 @@ int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 		if (!line)
 			return (-1);
 		if (ft_strcmp(line, delim) == 0)
-			return (free(line), ft_get_next_line(STDIN_FILENO, 1), 0);
+			return (free(line), 0);
 		if (expand)
 			tmp = expand_vars(line, env);
 		else
 			tmp = ft_strdup(line);
 		free(line);
 		if (!tmp)
-			return (ft_get_next_line(STDIN_FILENO, 1), -1);
+			return (-1);
 		ft_putendl_fd(tmp, fd);
 		free(tmp);
 	}
-	ft_get_next_line(STDIN_FILENO, 1);
+	// ft_get_next_line(STDIN_FILENO, 1);
 	return (0);
 }
 
-void	sigint_heredoc_handler(int sig)
-{
-	(void)sig;
-	g_exit_code = 128 + SIGINT;
-	ft_putstr("\n> ");
-}
+
 
 int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 {
