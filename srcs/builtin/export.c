@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:27:37 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 13:42:56 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:11:31 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	print_invalid_identifier(char *str)
 	return (1);
 }
 
-int	is_valid_identifier(char *str)
+static int	is_valid_identifier(char *str)
 {
 	int	i;
 

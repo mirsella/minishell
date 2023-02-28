@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 23:42:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 13:40:26 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:21:53 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,40 @@ struct s_chars
 	char	*expanded;
 };
 
+static int	is_valid_identifier(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(str[i]) && str[i] != '_')
+		return (0);
+	while (str[i])
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	get_identifier_stop(char *line)
 {
-	int				stop;
-	struct s_chars	chars;
+	int		stop;
+	char	*tmp;
 
 	stop = 1;
-	chars.tmp = ft_substr(line, 1, stop);
-	if (!chars.tmp)
+	tmp = ft_substr(line, 1, stop);
+	if (!tmp)
 		return (-1);
-	chars.str = ft_strjoin(chars.tmp, "=");
-	free(chars.tmp);
-	if (!chars.str)
-		return (-1);
-	while (is_valid_identifier(chars.str) && line[stop])
+	while (is_valid_identifier(tmp) && line[stop])
 	{
 		stop++;
-		free(chars.str);
-		chars.tmp = ft_substr(line, 1, stop);
-		if (!chars.tmp)
-			return (-1);
-		chars.str = ft_strjoin(chars.tmp, "=");
-		free(chars.tmp);
-		if (!chars.str)
+		free(tmp);
+		tmp = ft_substr(line, 1, stop);
+		if (!tmp)
 			return (-1);
 	}
-	free(chars.str);
+	free(tmp);
 	return (stop - 1);
 }
 

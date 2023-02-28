@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 16:43:39 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 14:18:44 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:14:21 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,23 @@ int	replace_env_var(t_list *env, char *variable, char *newcontent)
 	return (0);
 }
 
+size_t	ft_strlen_null(char *str)
+{
+	if (!str)
+		return (0);
+	return (ft_strlen(str));
+}
+
 int	add_env_var(t_list *env, char *variable, char *value)
 {
 	char	*tmp;
 	t_list	*new;
 
-	if (!value)
-		value = "";
-	tmp = calloc(ft_strlen(variable) + ft_strlen(value) + 2, sizeof(char));
+	tmp = calloc(ft_strlen(variable) + ft_strlen_null(value) + 2, sizeof(char));
 	if (!tmp)
 		return (perror("malloc"), -1);
 	ft_strlcat(tmp, variable, ft_strlen(variable) + 1);
-	if (*value)
+	if (value)
 	{
 		ft_strlcat(tmp, "=", ft_strlen(variable) + 2);
 		ft_strlcat(tmp, value, ft_strlen(variable) + ft_strlen(value) + 2);
