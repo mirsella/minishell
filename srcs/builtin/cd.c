@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 13:42:25 by dly               #+#    #+#             */
-/*   Updated: 2023/02/28 14:47:17 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:54:10 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,16 @@ static int	go_to_path(char *path, t_list *env)
 
 	if (update_oldpwd(env) == -1)
 		return (-1);
+	if (ft_strcmp(path, "-") == 0)
+	{
+		path = get_env_var(env, "OLDPWD");
+		if (!path)
+		{
+			ft_putstr_fd("cd: OLDPWD not set\n", 2);
+			return (-1);
+		}
+		ft_putendl_fd(path, 1);
+	}
 	if (chdir(path) == -1)
 	{
 		ft_putstr_fd("cd: ", 2);
