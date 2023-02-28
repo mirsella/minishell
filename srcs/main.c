@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/28 13:50:34 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:36:41 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,11 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	if (!isatty(STDIN_FILENO))
+	{
+		print_errorendl("minishell: stdin is not a tty", NULL);
+		exit(1);
+	}
 	if (init_shell(&env, envp))
 		exit_shell(env);
 	prompt_loop(env);
