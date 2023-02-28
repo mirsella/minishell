@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 14:11:56 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:20:43 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	sigint_heredoc_handler(int sig)
 {
 	(void)sig;
 	g_exit_code = 128 + SIGINT;
-	// ft_putstr("\n> ");
 }
+
 int	set_heredoc_delim(char *line, char **delim, int *expand)
 {
 	struct s_chars	chars;
@@ -130,8 +130,6 @@ int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 	}
 	return (0);
 }
-
-
 
 int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 {

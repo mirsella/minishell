@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 14:06:17 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:18:50 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	wait_loop(t_proc *proc)
 	int	status;
 
 	close_pipe(proc);
-	// signal(SIGINT, SIG_IGN);
 	signal(SIGINT, &sigint_process);
 	signal(SIGQUIT, SIG_IGN);
 	while (proc)

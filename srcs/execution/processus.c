@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/28 14:17:19 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:23:29 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,33 @@ int	cmd_not_found(t_proc *proc)
 int	fill_procs(t_proc *proc, t_list *env)
 {
 	int		ret;
-	
+
 	ret = 0;
 	while (proc)
 	{
 		ret = parse_line_to_proc(proc->line, proc, env);
 		if (ret)
-		{
-			printf("parse_line_to_proc returned %d with '%s'\n", ret, proc->line);
 			return (ret);
-		}
 		if (proc->next_pipeline == AND || proc->next_pipeline == OR)
 			break ;
 		proc = proc->next;
 	}
 	return (ret);
+}
+
+void	handle_proc(t_proc *proc, t_proc *tmp, t_list *env)
+{
+	if (!cmd_not_found(proc) && (proc->path || proc->type == SUBSHELL))
+	{
+		assign_pipe(proc);
+		if (proc->type == COMMAND && proc->fd_in != -1)
+			child(tmp, proc, env);
+		if (proc->type == SUBSHELL)
+		{
+			process(proc->procs, env);
+			proc->exit_code = get_status_of_last_proc(proc->procs);
+		}
+	}
 }
 
 int	process(t_proc *proc, t_list *env)
@@ -68,19 +80,7 @@ int	process(t_proc *proc, t_list *env)
 		return (ret);
 	while (proc)
 	{
-		// (void)ret;
-		// parse_line_to_proc(proc->line, proc, env);
-		if (!cmd_not_found(proc) && (proc->path || proc->type == SUBSHELL))
-		{
-			assign_pipe(proc);
-			if (proc->type == COMMAND && proc->fd_in != -1)
-				child(tmp, proc, env);
-			if (proc->type == SUBSHELL)
-			{
-				process(proc->procs, env);
-				proc->exit_code = get_status_of_last_proc(proc->procs);
-			}
-		}
+		handle_proc(proc, tmp, env);
 		if (proc->next_pipeline == AND || proc->next_pipeline == OR)
 			break ;
 		proc = proc->next;

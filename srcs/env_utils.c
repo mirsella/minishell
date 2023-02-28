@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 16:43:39 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 13:28:51 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:18:44 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ int	remove_env_var(t_list *env, char *variable)
 	while (tmp)
 	{
 		if (ft_strncmp(tmp->content, variable, ft_strlen(variable)) == 0
-				&& (*(char *)(tmp->content + ft_strlen(variable)) == '='
-					|| *(char *)(tmp->content + ft_strlen(variable)) == 0))
+			&& (*(char *)(tmp->content + ft_strlen(variable)) == '='
+			|| *(char *)(tmp->content + ft_strlen(variable)) == 0))
 		{
 			prev->next = tmp->next;
 			ft_lstdelone(tmp, free);
