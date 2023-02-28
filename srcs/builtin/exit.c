@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:38:04 by dly               #+#    #+#             */
-/*   Updated: 2023/02/24 20:13:49 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 16:25:59 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	ft_is_valid(const char *str)
 
 int	builtin_exit(t_proc *proc, t_list *env)
 {
-	unsigned char	exit_code;
+	unsigned int	exit_code;
 
 	exit_code = 0;
 	ft_putstr_fd("exit\n", 2);
@@ -48,10 +48,12 @@ int	builtin_exit(t_proc *proc, t_list *env)
 			print_errorendl(proc->path, "too many arguments");
 			return (1);
 		}
-		exit_code += ft_atoi(proc->args->next->content);
+		exit_code = ft_atoll(proc->args->next->content) % 256;
 	}
 	free_shell_data(env);
 	procs_free(&proc);
+	printf("%u\n", exit_code);
+	sleep(1);
 	exit(exit_code);
 	return (0);
 }
