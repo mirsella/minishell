@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 23:42:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/21 15:51:02 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 11:24:27 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,20 @@ char	*get_in_quote(char *line, int *index)
 		stop++;
 	*index += stop + 1;
 	tmp = ft_substr(line, 1, stop - 1);
+	return (tmp);
+}
+
+char	*expand_quote(char *line, int *index, t_list *env)
+{
+	char	*tmp;
+
+	tmp = NULL;
+	if (*line == '"')
+		tmp = expand_vars_in_double_quote(line, index, env);
+	else if (*line == '\'')
+	{
+		tmp = ft_substr(line, 0, skip_quotes(line));
+		*index += skip_quotes(line);
+	}
 	return (tmp);
 }

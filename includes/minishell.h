@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 10:44:21 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 11:17:41 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,9 +131,10 @@ char			*expand_vars_in_double_quote(
 char			*remove_quotes(char *line);
 char			*expand_everything(char *str, t_list *env);
 
-// parsing/expanders.c
+// parsing/expander.c
 char			*expand_var(t_list *env, char *str, int *index);
 char			*get_in_quote(char *str, int *index);
+char			*expand_quote(char *line, int *index, t_list *env);
 
 // parsing/expand_wildcard.c
 int				is_wildcard(char *line);
