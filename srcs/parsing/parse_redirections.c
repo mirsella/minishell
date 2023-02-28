@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 15:38:38 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 16:04:58 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 18:21:05 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,28 +69,44 @@ int	remove_redirections(char *line)
 	return (i);
 }
 
-int	parse_redirections(char *line, t_proc *proc, t_list *env)
+int	handle_redirections(char *line, t_proc *proc, int *index, t_list *env)
 {
 	int	ret;
 
 	ret = 0;
-	while (*line)
+	if (*line == '>')
 	{
-		line += ft_skip_spaces(line);
-		if (!*line)
+		ret = output_redirection(line + 1, proc, env);
+		*index += remove_redirections(line);
+	}
+	else if (*line == '<')
+	{
+		ret = input_redirection(line + 1, proc, env);
+		*index += remove_redirections(line);
+	}
+	return (ret);
+}
+
+int	parse_redirections(char *line, t_proc *proc, t_list *env)
+{
+	int	ret;
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		i += ft_skip_spaces(line + i);
+		if (!line[i])
 			break ;
-		if (*line == '>')
-		{
-			ret = output_redirection(line + 1, proc, env);
-			line += remove_redirections(line);
-		}
-		else if (*line == '<')
-		{
-			ret = input_redirection(line + 1, proc, env);
-			line += remove_redirections(line);
-		}
+		ret = 0;
+		if (line[i] == '>' || line[i] == '<')
+			ret = handle_redirections(line + i, proc, &i, env);
+		else if (line[i] == '(')
+			i += skip_parenthesis(line + i);
+		else if (line[i] == '\'' || line[i] == '"')
+			i += skip_quotes(line + i);
 		else
-			line++;
+			i++;
 		if (ret)
 			return (ret);
 	}
