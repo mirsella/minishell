@@ -6,11 +6,12 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 22:45:08 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 20:26:23 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 10:54:15 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <string.h>
 
 char	*test_paths(char **paths, char *cmd)
 {
@@ -59,6 +60,8 @@ int	set_full_path(t_list *env, char *cmd, char **full_path)
 		return (*full_path = ft_strdup(cmd), 0);
 	if (access(cmd, F_OK) == 0)
 	{
+		if (strcmp(cmd, "..") == 0 || strcmp(cmd, ".") == 0)
+			return (print_errorendl(cmd, "command not found"));
 		if (is_file_executable(cmd, 1))
 			return (*full_path = ft_strdup(cmd), 0);
 		return (126);
