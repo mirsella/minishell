@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:01:01 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 10:44:04 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:06:17 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,11 @@ void	wait_loop(t_proc *proc)
 
 int	execute(t_proc *procs, t_list *env)
 {
+	int	ret;
+
 	if (open_pipe(procs))
 		return (-1);
 	signal(SIGQUIT, SIG_DFL);
-	process(procs, env);
-	return (0);
+	ret = process(procs, env);
+	return (ret);
 }

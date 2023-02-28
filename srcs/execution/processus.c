@@ -6,12 +6,11 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/28 11:18:54 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:05:55 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <unistd.h>
 
 int	cmd_not_found(t_proc *proc)
 {
@@ -38,14 +37,34 @@ int	cmd_not_found(t_proc *proc)
 	return (0);
 }
 
+int	fill_procs(t_proc *proc, t_list *env)
+{
+	int		ret;
+	
+	ret = 0;
+	while (proc)
+	{
+		ret = parse_line_to_proc(proc->line, proc, env);
+		if (ret)
+			return (ret);
+		if (proc->next_pipeline == AND || proc->next_pipeline == OR)
+			break ;
+		proc = proc->next;
+	}
+	return (ret);
+}
+
 int	process(t_proc *proc, t_list *env)
 {
 	t_proc	*tmp;
+	int		ret;
 
 	tmp = proc;
 	while (proc)
 	{
-		parse_line_to_proc(proc->line, proc, env);
+		ret = fill_procs(proc, env);
+		if (ret)
+			return (ret);
 		if (!cmd_not_found(proc) && (proc->path || proc->type == SUBSHELL))
 		{
 			assign_pipe(proc);
