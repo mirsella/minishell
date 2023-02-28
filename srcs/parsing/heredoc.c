@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 13:33: by dly              ###   ########.fr       */
+/*   Updated: 2023/02/28 14:07:59 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ char	*get_line(char *delim)
 	{
 		if (g_exit_code == 128 + SIGINT)
 			return (NULL);
-		printf("minishell: warning: %s. wanted `%s'\n",
-			"here-document delimited by end-of-file (wanted `", delim);
+		printf("minishell: warning: %s wanted `%s'\n",
+			"here-document delimited by end-of-file", delim);
 		return (NULL);
 	}
 	tmp = ft_substr(line, 0, ft_strlen(line));
@@ -126,7 +126,6 @@ int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 		ft_putendl_fd(tmp, fd);
 		free(tmp);
 	}
-	// ft_get_next_line(STDIN_FILENO, 1);
 	return (0);
 }
 
