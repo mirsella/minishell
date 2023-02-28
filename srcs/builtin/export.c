@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:27:37 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 10:57:26 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 11:30:17 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	builtin_export(t_proc *proc, t_list *env)
 	char	*variable;
 	char	*value;
 
-	if (!proc->args)
+	if (!proc->args->next)
 		return (builtin_env(proc, env));
 	tmp = proc->args->next;
 	while (tmp)
