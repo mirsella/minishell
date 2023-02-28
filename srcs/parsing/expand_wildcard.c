@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 21:44:30 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/17 00:30:50 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 13:39:05 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,23 +89,22 @@ char	*expand_wildcards(char *line)
 
 	i = 0;
 	str = ft_strdup("");
-	if (!str)
-		return (perror("malloc"), NULL);
 	while (line[i])
 	{
 		if (is_wildcard(line + i))
 			tmp = expand_wildcard(line + i, &i);
 		else if (line[i] == '\'' || line[i] == '"')
+		{
 			tmp = ft_substr(line, i, skip_quotes(line + i));
+			i += skip_quotes(line + i);
+		}
 		else
 			tmp = ft_strdup((char []){line[i++], 0});
-		if (line[i] == '\'' || line[i] == '"')
-			i += skip_quotes(line + i);
 		if (!tmp)
 			return (free(str), NULL);
 		str = ft_strjoin_free(str, tmp);
 		if (!str)
-			return (perror("malloc"), NULL);
+			return (NULL);
 	}
 	return (str);
 }

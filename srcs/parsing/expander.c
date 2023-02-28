@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 23:42:59 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 12:08:42 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 13:40:26 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	get_identifier_stop(char *line)
 	free(chars.tmp);
 	if (!chars.str)
 		return (-1);
-	printf("checking %s\n", chars.str);
 	while (is_valid_identifier(chars.str) && line[stop])
 	{
 		stop++;

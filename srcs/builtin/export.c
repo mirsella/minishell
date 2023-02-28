@@ -6,17 +6,20 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 23:27:37 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 11:30:52 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 13:42:56 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <stdio.h>
 
-void	print_invalid_identifier(char *str)
+int	print_invalid_identifier(char *str)
 {
 	g_exit_code = 1;
-	print_error("export", str);
+	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+	return (1);
 }
 
 int	is_valid_identifier(char *str)
@@ -32,9 +35,19 @@ int	is_valid_identifier(char *str)
 			return (0);
 		i++;
 	}
-	if (!str[i])
-		return (0);
 	return (1);
+}
+
+char	*get_variable(char *line)
+{
+	char	*variable;
+	int		i;
+
+	i = 0;
+	while (line[i] && line[i] != '=')
+		i++;
+	variable = ft_strndup(line, i);
+	return (variable);
 }
 
 int	builtin_export(t_proc *proc, t_list *env)
@@ -43,21 +56,25 @@ int	builtin_export(t_proc *proc, t_list *env)
 	char	*variable;
 	char	*value;
 
-	tmp = proc->args->next;
-	if (!tmp)
+	tmp = proc->args;
+	if (!tmp->next)
 		return (builtin_env(proc, env));
-	while (tmp)
+	while (tmp->next)
 	{
-		if (!is_valid_identifier(tmp->content))
-			break ;
-		variable = ft_strndup(tmp->content,
-				ft_strchr(tmp->content, '=') - (char *)tmp->content);
-		value = ft_strdup(ft_strchr(tmp->content, '=') + 1);
+		tmp = tmp->next;
+		if (!is_valid_identifier(tmp->content)
+			&& print_invalid_identifier(tmp->content))
+			continue ;
+		variable = get_variable(tmp->content);
+		value = NULL;
+		if (ft_strchr(tmp->content, '='))
+			value = ft_strdup(ft_strchr(tmp->content, '=') + 1);
+		if (!variable)
+			return (perror("malloc"), -1);
 		if (add_env_var(env, variable, value))
 			return (free(variable), free(value), -1);
 		free(variable);
 		free(value);
-		tmp = tmp->next;
 	}
 	return (0);
 }
