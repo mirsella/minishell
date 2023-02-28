@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 14:20:43 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:48:42 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,31 +54,6 @@ int	set_heredoc_delim(char *line, char **delim, int *expand)
 	return (0);
 }
 
-// int	prompt_loop(t_list *env)
-// {
-// 	char	*line;
-// 	int		ret;
-
-// 	line = NULL;
-// 	while (1)
-// 	{
-// 		line = readline();
-// 		if (!line)
-// 			break ;
-// 		if (!*(line + ft_skip_spaces(line)))
-// 			continue ;
-// 		if (!ft_isspace(*line))
-// 			add_history(line);
-// 		ret = handle_line(line, env);
-// 		if (ret < 0)
-// 			break ;
-// 		if (ret > 1)
-// 			continue ;
-// 	}
-// 	free(line);
-// 	return (0);
-// }
-
 int	get_line(char *delim, char **str)
 {
 	char	*line;
@@ -91,10 +66,10 @@ int	get_line(char *delim, char **str)
 	if (!line)
 	{
 		if (g_exit_code == 128 + SIGINT)
-			return (1);
+			return (-1);
 		printf("minishell: warning: %s wanted `%s'\n",
 			"here-document delimited by end-of-file", delim);
-		return (0);
+		return (1);
 	}
 	tmp = ft_substr(line, 0, ft_strlen(line));
 	free(line);
@@ -114,8 +89,10 @@ int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 	while (line)
 	{
 		ret = get_line(delim, &line);
-		if (ret)
+		if (ret < 0)
 			return (1);
+		if (ret > 0)
+			return (0);
 		if (ft_strcmp(line, delim) == 0)
 			return (free(line), 0);
 		if (expand)
