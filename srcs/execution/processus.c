@@ -6,20 +6,33 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 22:40:45 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 10:33:13 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <unistd.h>
 
 int	cmd_not_found(t_proc *proc)
 {
+	char	buffer[1024];
+	int		ret;
+
 	if (!proc->path && proc->type == COMMAND)
 	{
 		if (proc->exit_code == 0)
 			proc->exit_code = 127;
 		else if (proc->exit_code == -1)
 			proc->exit_code = 0;
+		if (proc->fd_in != STDIN_FILENO && proc->fd_out != STDOUT_FILENO)
+		{
+			ret = 1;
+			while (ret)
+			{
+				ret = read(proc->fd_in, &buffer, 1024);
+				write(proc->fd_out, &buffer, ret);
+			}
+		}
 		return (1);
 	}
 	return (0);
