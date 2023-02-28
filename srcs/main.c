@@ -6,7 +6,7 @@
 /*   By: lgillard <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:53:10 by lgillard          #+#    #+#             */
-/*   Updated: 2023/02/28 15:36:41 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/02/28 16:12:10 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	init_shell(t_list **env, char **envp)
 	t_list	*lst;
 
 	g_exit_code = 0;
+	*env = NULL;
 	if (*envp)
 	{
 		env_tab = ft_tabdup(envp);
