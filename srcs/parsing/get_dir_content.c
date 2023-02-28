@@ -6,7 +6,7 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 16:14:35 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/13 11:26:23 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:46:17 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,6 @@ t_list	*get_lst_of_dir(char *path)
 	}
 	if (closedir(dir))
 		return (perror("closedir"), NULL);
-	ft_lstsort(&files, strcmp);
+	ft_lstsort(&files, ft_strcmp);
 	return (files);
 }
