@@ -6,11 +6,17 @@
 /*   By: mirsella <mirsella@protonmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:13:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 00:00:52 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 10:43:43 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	sigint_process(int signo)
+{
+	(void)signo;
+	ft_putchar('\n');
+}
 
 void	sigint_handler(int signo)
 {

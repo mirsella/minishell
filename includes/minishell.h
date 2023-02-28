@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 08:57:17 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/27 22:41:30 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/02/28 10:44:21 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ int				skip_pipeline(t_next_pipeline pipeline_type);
 t_next_pipeline	get_pipeline_type(char *line);
 
 // signals.c
+void			sigint_process(int signo);
 void			sigint_handler(int signo);
-void			call_sigaction(void);
 
 // close.c
 void			free_shell_data(t_list *env);
