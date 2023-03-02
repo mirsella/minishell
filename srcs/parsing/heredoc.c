@@ -6,14 +6,11 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/02/28 16:09:34 by dly              ###   ########.fr       */
+/*   Updated: 2023/03/02 19:59:59 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 struct	s_chars {
 	char	*tmp;
@@ -66,10 +63,10 @@ int	get_line(char *delim, char **str)
 	if (!line)
 	{
 		if (g_exit_code == 128 + SIGINT)
-			return (-1);
+			return (1);
 		printf("minishell: warning: %s wanted `%s'\n",
 			"here-document delimited by end-of-file", delim);
-		return (1);
+		return (2);
 	}
 	tmp = ft_substr(line, 0, ft_strlen(line));
 	free(line);
@@ -89,10 +86,8 @@ int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 	while (line)
 	{
 		ret = get_line(delim, &line);
-		if (ret < 0)
-			return (1);
-		if (ret > 0)
-			return (0);
+		if (ret)
+			return (ret);
 		if (ft_strcmp(line, delim) == 0)
 			return (free(line), 0);
 		if (expand)
@@ -102,7 +97,8 @@ int	read_until_delim(char *delim, int expand, int fd, t_list *env)
 		free(line);
 		if (!tmp)
 			return (-1);
-		ft_putendl_fd(tmp, fd);
+		if (ft_putendl_fd(tmp, fd) == -1)
+			return (perror("write"), free(tmp), -1);
 		free(tmp);
 	}
 	return (0);
@@ -124,6 +120,8 @@ int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 		g_exit_code = 0;
 	proc->fd_in = pipes[0];
 	ret = read_until_delim(delim, expand, pipes[1], env);
+	if (ret == 2)
+		ret = 0;
 	free(delim);
 	close(pipes[1]);
 	proc->fd_in = pipes[0];
