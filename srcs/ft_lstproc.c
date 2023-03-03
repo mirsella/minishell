@@ -40,7 +40,7 @@ t_proc	*new_proc(void)
 {
 	t_proc	*new;
 
-	new = calloc(sizeof(t_proc), 1);
+	new = ft_calloc(sizeof(t_proc), 1);
 	if (!new)
 		return (perror("malloc"), NULL);
 	new->type = COMMAND;

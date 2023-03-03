@@ -61,7 +61,7 @@ int	add_env_var(t_list *env, char *variable, char *value)
 	char	*tmp;
 	t_list	*new;
 
-	tmp = calloc(ft_strlen(variable) + ft_strlen_null(value) + 2, sizeof(char));
+	tmp = ft_calloc(ft_strlen(variable) + ft_strlen_null(value) + 2, sizeof(char));
 	if (!tmp)
 		return (perror("malloc"), -1);
 	ft_strlcat(tmp, variable, ft_strlen(variable) + 1);

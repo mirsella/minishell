@@ -62,7 +62,7 @@ char	**ft_splitword(const char *s, const char *word)
 	int		wordcount;
 	char	**tab;
 
-	tab = calloc(sizeof(char *), (count_words(s, word) + 1));
+	tab = ft_calloc(sizeof(char *), (count_words(s, word) + 1));
 	if (!tab)
 		return (NULL);
 	i = 0;

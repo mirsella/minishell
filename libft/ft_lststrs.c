@@ -79,7 +79,7 @@ char	*ft_lst_to_str(t_list *lst)
 		size += ft_strlen(tmp->content);
 		tmp = tmp->next;
 	}
-	str = calloc(sizeof(char), size + 1);
+	str = ft_calloc(sizeof(char), size + 1);
 	if (!str)
 		return (NULL);
 	while (lst)
