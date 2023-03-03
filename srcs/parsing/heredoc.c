@@ -6,11 +6,12 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/03/03 12:10:50 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/03/03 17:26:48 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <stdio.h>
 
 struct	s_chars {
 	char	*tmp;
@@ -115,7 +116,7 @@ int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 	if (ret)
 		return (ret);
 	if (pipe(pipes) == -1)
-		return (-1);
+		return (perror("pipe"), -1);
 	if (g_exit_code == 130)
 		g_exit_code = 0;
 	ret = read_until_delim(delim, expand, pipes[1], env);

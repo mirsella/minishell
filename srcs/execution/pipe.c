@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 11:51:18 by dly               #+#    #+#             */
-/*   Updated: 2023/03/03 14:16:22 by dly              ###   ########.fr       */
+/*   Updated: 2023/03/03 17:26:48 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	open_pipe(t_proc *proc)
 		if (proc->next_pipeline == PIPE)
 		{
 			if (pipe(proc->pipes) == -1)
-				return (-1);
+				return (perror("pipe"), -1);
 		}
 		proc = proc->next;
 	}
