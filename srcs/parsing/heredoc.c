@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/03/03 10:53:27 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/03/03 12:10:50 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 		return (-1);
 	if (g_exit_code == 130)
 		g_exit_code = 0;
-	proc->fd_in = pipes[0];
 	ret = read_until_delim(delim, expand, pipes[1], env);
 	if (ret == 2)
 		ret = 0;

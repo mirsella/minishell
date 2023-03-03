@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:17:06 by dly               #+#    #+#             */
-/*   Updated: 2023/02/28 14:23:29 by lgillard         ###   ########.fr       */
+/*   Updated: 2023/03/03 13:44:52 by lgillard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	fill_procs(t_proc *proc, t_list *env)
 
 void	handle_proc(t_proc *proc, t_proc *tmp, t_list *env)
 {
+	if (proc->fd_in == -1 || proc->fd_out == -1)
+		return ;
 	if (!cmd_not_found(proc) && (proc->path || proc->type == SUBSHELL))
 	{
 		assign_pipe(proc);
