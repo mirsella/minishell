@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 11:51:18 by dly               #+#    #+#             */
-/*   Updated: 2023/02/27 22:41:30 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/03/03 14:16:22 by dly              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,22 @@ void	close_pipe(t_proc *proc)
 	}
 }
 
+void	assign_redir(t_proc *proc)
+{
+	t_proc	*tmp;
+
+	if (proc->fd_out > 2 && proc->next_pipeline != PIPE &&  proc->type == SUBSHELL)
+	{
+		tmp = proc->procs;
+		while (tmp)
+		{
+			if (tmp->next_pipeline != PIPE && tmp->fd_out == STDOUT_FILENO)
+					tmp->fd_out = proc->fd_out;
+			tmp = tmp->next;
+		}
+	}
+}
+
 void	assign_pipe_2(t_proc *proc)
 {
 	t_proc	*tmp;
@@ -89,12 +105,11 @@ void	assign_pipe(t_proc *proc)
 {
 	t_proc	*tmp;
 
+	assign_redir(proc);
 	if (proc->next_pipeline == PIPE)
 	{
 		if (proc->type == COMMAND && proc->fd_out == STDOUT_FILENO)
-		{
 			proc->fd_out = proc->pipes[1];
-		}
 		if (proc->type == SUBSHELL)
 		{
 			tmp = proc->procs;
