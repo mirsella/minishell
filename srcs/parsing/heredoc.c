@@ -6,7 +6,7 @@
 /*   By: dly <dly@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 13:51:48 by mirsella          #+#    #+#             */
-/*   Updated: 2023/03/02 19:59:59 by mirsella         ###   ########.fr       */
+/*   Updated: 2023/03/03 10:53:27 by mirsella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,8 @@ int	heredoc_redirection(char *line, t_proc *proc, t_list *env)
 		ret = 0;
 	free(delim);
 	close(pipes[1]);
+	if (proc->fd_in > 2)
+		close(proc->fd_in);
 	proc->fd_in = pipes[0];
 	return (ret);
 }
